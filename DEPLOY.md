@@ -22,10 +22,13 @@ sélectionnez le dépôt, puis renseignez la commande et le répertoire ci-dessu
 
 ## 2. Placeholders à renseigner
 
-| Emplacement | Placeholder | Remplacer par |
-| --- | --- | --- |
-| `src/pages/index.astro` | `https://example.com/` (`canonical`) | domaine de production |
-| `README.md` | URL/dépôt si placeholder présent | dépôt et domaine réels |
+Chaque page définit une URL `canonical` en `https://example.com/…` — à remplacer par le domaine de production :
+
+| Emplacement | Placeholder (`canonical`) |
+| --- | --- |
+| `src/pages/index.astro` | `https://example.com/` |
+| `src/pages/case-8pl-8vl-2026.astro` | `https://example.com/case-8pl-8vl-2026` |
+| `src/pages/guide-credit-impot-dividendes-etrangers.astro` | `https://example.com/guide-credit-impot-dividendes-etrangers` |
 
 ## 3. Tester le build en local
 
