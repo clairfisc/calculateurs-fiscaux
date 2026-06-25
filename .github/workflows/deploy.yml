@@ -41,24 +41,32 @@ jobs:
         run: npm run build
 
       # OVH free hosting : pas de FTPS, mais SFTP dispo sur le port 22 (transfert
-      # chiffré, sans shell). On déploie avec `lftp mirror -R` : gère sous-dossiers
-      # et dotfiles (.htaccess), --delete pour rester propre, --exclude .well-known.
-      # Auth mot de passe via sshpass -e (env SSHPASS) sur le connect-program ssh.
-      # Timeouts + retries bornés → pas de blocage (job plafonné par timeout-minutes).
+      # chiffré, sans shell). Auth par mot de passe via `sshpass -e sftp` (fiable ;
+      # sshpass+lftp ne l'est pas). On génère un batch avec UNE commande put par
+      # entrée de dist/ (le `put -r *` multi-arg est ambigu côté sftp), dotfiles
+      # (.htaccess) inclus explicitement. Destination = cwd distant (www).
       - name: Deploy to OVH (SFTP)
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USER: ${{ secrets.FTP_USER }}
           SSHPASS: ${{ secrets.FTP_PASSWORD }}
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq lftp sshpass openssh-client
-          lftp -c "
-            set sftp:connect-program 'sshpass -e ssh -a -x -p 22 -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null';
-            set sftp:auto-confirm yes;
-            set net:timeout 15;
-            set net:max-retries 2;
-            set net:reconnect-interval-base 5;
-            open sftp://$FTP_USER@$FTP_SERVER;
-            mirror -R --delete --verbose --exclude '\.well-known/' dist/ www/;
-            bye
-          "
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass openssh-client
+          {
+            echo "-mkdir www"
+            echo "cd www"
+            echo "lcd dist"
+            for path in dist/* dist/.htaccess; do
+              [ -e "$path" ] || continue
+              name=$(basename "$path")
+              if [ -d "$path" ]; then echo "put -r $name"; else echo "put $name"; fi
+            done
+            echo "bye"
+          } > sftp-batch
+          echo "----- batch sftp -----"; cat sftp-batch; echo "----------------------"
+          sshpass -e sftp \
+            -oBatchMode=no \
+            -oStrictHostKeyChecking=no \
+            -oUserKnownHostsFile=/dev/null \
+            -oConnectTimeout=20 \
+            -P 22 -b sftp-batch "$FTP_USER@$FTP_SERVER"
