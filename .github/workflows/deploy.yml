@@ -1,0 +1,56 @@
+name: Deploy
+
+# Déploiement du site statique (dist/) vers l'hébergement OVH par FTPS.
+# Déclenché à chaque push sur main, après build + tests.
+#
+# Secrets requis (Settings → Secrets and variables → Actions) :
+#   FTP_SERVER   ex. ftp.clusterXXX.hosting.ovh.net
+#   FTP_USER     identifiant FTP OVH
+#   FTP_PASSWORD mot de passe FTP OVH
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to OVH (FTPS)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./dist/
+          server-dir: ./www/
+          # Ne pas toucher aux fichiers d'infra OVH (validation SSL, etc.)
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.well-known/**

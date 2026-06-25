@@ -1,0 +1,29 @@
+# Hébergement OVH mutualisé (Apache). Fichier servi à la racine de www/.
+# Toutes les directives sont gardées par <IfModule> → aucune erreur 500 si un
+# module manque.
+
+# --- Forcer HTTPS (pattern OVH : X-Forwarded-Proto, évite les boucles) ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# --- En-têtes de sécurité ---
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # HSTS : à activer une fois le HTTPS confirmé stable en prod.
+  # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# --- Cache : assets hashés immuables vs HTML revalidé ---
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?|png|jpe?g|svg|webp|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>

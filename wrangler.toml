@@ -1,9 +1,0 @@
-# Configuration Cloudflare Pages — calculateurs-fiscaux
-#
-# Site Astro 100 % STATIQUE : Cloudflare sert `dist/`. Aucune Pages Function,
-# aucun adaptateur SSR, aucun binding.
-
-name = "calculateurs-fiscaux"
-
-# Répertoire publié par `npm run build` (sortie statique d'Astro).
-pages_build_output_dir = "dist"
