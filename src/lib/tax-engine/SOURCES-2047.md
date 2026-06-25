@@ -3,6 +3,12 @@
 > Vérification effectuée le 2026-06-22 contre les sources **officielles** (formulaire +
 > notice 2047 rev. 2025, BOFiP). Toute valeur non confirmée par une source est marquée
 > `⚠️ à vérifier` dans `rates.ts`.
+>
+> ✅ **Re-validation indépendante le 2026-06-25** (recherche multi-sources + vérification
+> adversariale 3 votes). **Les 10 taux pays de `rates.ts` correspondent verbatim à la notice
+> 2047-NOT 2026** (`2047_5490.pdf`), et la mécanique `205 = 203×204`, `207 = min(205,206)`
+> est confirmée mot pour mot. Oracle gelé en tests (`compute.test.ts`, describe « oracle taux
+> notice »). Voir §6 pour 8VL/8PL et les caveats datés.
 
 ## 1. Sources consultées
 
@@ -173,3 +179,46 @@ sociétés UE/à convention).
 - Le report 2042 porte sur le **montant net** (déduction faite de l'impôt étranger), et il a
   lieu **même si la ligne n'ouvre pas droit à crédit** (forfait `c/` ou retenue nulle) : le
   revenu reste imposable en France. La condition `ouvreDroitCredit` ne concerne que 8VL/8PL.
+
+## 6. Cases 8VL / 8PL et caveats datés (re-validation 2026-06-25)
+
+### 6.1 Mécanique 8VL / 8PL
+
+- **8VL** = total des crédits d'impôt retenus (somme des lignes 207 + 237 + 276), reporté en
+  2042C. C'est le **crédit plafonné** (`min(205,206)`), **pas** la retenue brute. Notice :
+  « Le crédit d'impôt indiqué en 8VL est égal à l'impôt effectivement supporté à l'étranger,
+  dans la limite des taux prévus par les conventions, sans pouvoir excéder l'impôt français
+  afférent à ce revenu. »
+- **8PL (nouveau en 2026)** = **base NETTE** des revenus/plus-values ouvrant droit à crédit
+  (« Montant des plus-values et revenus de capitaux mobiliers **nets** ouvrant droit à crédit
+  d'impôt étranger »), aussi reportée en 2042C. L'administration s'en sert pour calculer
+  l'impôt français théorique et plafonner le crédit.
+  → **Confirme le moteur** : `case8plEur` = somme des montants **nets** (pas le brut).
+  L'hypothèse « 8PL = brut avant abattement 40 % » a été **explicitement réfutée** (vote 0-3)
+  contre la notice (« nets »).
+- **Anomalie « ligne 8VL sans code 8PL » (code 833)** : déclencher en ligne un 8VL sans 8PL
+  associé lève une **incohérence non bloquante** — l'administration peut la corriger ensuite,
+  potentiellement au détriment du contribuable. D'où l'intérêt de toujours produire les deux.
+- Sources : notice 2047-NOT 2026 (`2047_5490.pdf`, section « 8VL et 8PL ») ; formulaire 2026
+  (`2047_5488.pdf`, légende cadre 7) ; forum DGFiP `plus.transformation.gouv.fr` (anomalie).
+
+### 6.2 Caveats datés (à re-vérifier chaque millésime)
+
+- ⏱️ **Millésime** : tous les taux et le champ 8PL sont **spécifiques à revenus 2025 / décl. 2026**.
+  À re-vérifier contre la nouvelle notice chaque année.
+- 🇧🇪 **Belgique** : le plafond conventionnel **15 %** (→ forfait net 17,6 %) est correct pour ce
+  millésime. La **convention de 2021** (qui abaisserait le plafond à **12,8 %**) **n'était pas en
+  vigueur en juin 2026** → recalibrer si l'on cible un millésime ultérieur.
+- 🇺🇸 **W-8BEN** : un W-8BEN valide sécurise la retenue conventionnelle US à **15 %** ; sans lui,
+  retenue statutaire de 30 % mais **seuls 15 % crédités** côté FR (l'excédent n'est pas récupérable
+  via le 2047 — à régulariser auprès de l'IRS). Le moteur reçoit le **net réellement encaissé** et
+  l'**impôt réellement supporté**, donc gère les deux cas via `min(205,206)`.
+
+### 6.3 Question ouverte (non tranchée, même en source officielle)
+
+- ❓ **8PL × abattement 40 %** : lorsqu'un dividende ouvre l'abattement de 40 % (case 2OP, barème),
+  le montant à porter en 8PL est-il le net **avant** ou **après** abattement de 40 % ? La notice dit
+  « nets » (et la lecture « brut » est réfutée), mais l'interaction exacte avec l'abattement n'a pas
+  pu être adossée à un exemple chiffré officiel. Le moteur porte aujourd'hui le **net encaissé**
+  (net de l'impôt étranger, **avant** abattement 40 %). À confirmer via le simulateur officiel
+  impots.gouv.fr sur un cas DE/US/NL avant de s'appuyer dessus pour la génération.
