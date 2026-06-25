@@ -53,8 +53,11 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass openssh-client
           cat > sftp-batch <<'SFTP'
-          put -r dist/* www/
-          put dist/.htaccess www/.htaccess
+          -mkdir www
+          cd www
+          lcd dist
+          put -r *
+          put .htaccess
           bye
           SFTP
           sshpass -e sftp \
