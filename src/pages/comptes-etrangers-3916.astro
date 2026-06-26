@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import ChecklistComptes from "../components/comptes-3916/ChecklistComptes.tsx";
 import Disclaimer from "../components/content/Disclaimer.astro";
+import { ETABLISSEMENTS } from "../lib/comptes-3916";
 
 const title =
   "Quels comptes étrangers déclarer ? Checklist 3916 / 3916-bis (2026)";
@@ -66,6 +67,17 @@ const ogImage = new URL("/og-default.png", Astro.site).href;
             Sources : CGI art. 1649 A, 1649 bis C, 1736 ; BOFiP BOI-CF-CPF-30-20. Outil d'aide informative, ne
             remplace pas la doctrine officielle ni un conseil professionnel.
           </p>
+
+          <nav class="mt-6" aria-label="Par établissement">
+            <h2 class="mb-2 text-base font-semibold text-slate-900">Déclarer un compte par établissement</h2>
+            <ul class="flex flex-wrap gap-x-4 gap-y-1 text-blue-700">
+              {ETABLISSEMENTS.map((e) => (
+                <li>
+                  <a class="underline" href={`/declarer-compte/${e.id}`}>Compte {e.designation}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </article>
       </section>
     </main>
