@@ -7,17 +7,20 @@
  *   2. l'encart open source AGPLv3 invitant à vérifier le code public.
  *
  * Props :
- *   - repoUrl  : URL du dépôt public (défaut : le dépôt GitHub du projet).
- *   - noticeUrl: lien vers la notice officielle 2047.
+ *   - repoUrl   : URL du dépôt public (défaut : le dépôt GitHub du projet).
+ *   - noticeUrl : lien vers la notice/formulaire officiel.
+ *   - formulaireLabel : numéro du formulaire affiché dans le texte (défaut « 2047 »).
  */
 interface Props {
   repoUrl?: string;
   noticeUrl?: string;
+  formulaireLabel?: string;
 }
 
 const {
   repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux",
   noticeUrl = "https://www.impots.gouv.fr/sites/default/files/formulaires/2047/2026/2047_5490.pdf",
+  formulaireLabel = "2047",
 } = Astro.props;
 ---
 
@@ -25,7 +28,7 @@ const {
   <p class="disclaimer__warn">
     <strong>Aide informative, pas un conseil fiscal</strong> — vérifiez chaque
     montant avec la <a href={noticeUrl} rel="noopener" target="_blank"
-      >notice officielle du formulaire 2047</a
+      >notice officielle du formulaire {formulaireLabel}</a
     > ou un professionnel. Cet outil ne se substitue pas à la déclaration officielle.
   </p>
   <p class="disclaimer__oss">

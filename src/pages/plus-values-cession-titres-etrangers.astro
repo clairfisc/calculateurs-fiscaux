@@ -1,0 +1,111 @@
+---
+import "../styles/global.css";
+import CalculateurCessions from "../components/cessions-2074/CalculateurCessions.tsx";
+import Disclaimer from "../components/content/Disclaimer.astro";
+
+const title =
+  "Calculateur gratuit de plus-value de cession (compte-titres étranger, 2074-CMV, cases 3VG/3VH)";
+const description =
+  "Calculez gratuitement vos plus ou moins-values de cession d'actions sur compte-titres étranger : prix moyen pondéré (PMP), change par opération, imputation et report des moins-values, cases 2042 3VG et 3VH. Calcul 100 % local, open source, sans compte ni tracker.";
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL("/og-default.png", Astro.site).href;
+
+const noticeUrl =
+  "https://www.impots.gouv.fr/formulaire/2074/declaration-des-plus-ou-moins-values-realisee";
+const ficheCmvUrl =
+  "https://www.impots.gouv.fr/sites/default/files/formulaires/2074-cmv/2026/2074-cmv_5494.pdf";
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body class="bg-slate-50 text-slate-900">
+    <main>
+      <!-- Calculateur : îlot React hydraté côté client -->
+      <CalculateurCessions client:load />
+
+      <!-- Contenu / SEO -->
+      <section class="mx-auto w-full max-w-4xl px-4 pb-10">
+        <Disclaimer
+          noticeUrl={noticeUrl}
+          formulaireLabel="2074"
+        />
+
+        <article class="prose-sm mt-2 text-sm leading-relaxed text-slate-700">
+          <h2 class="mb-2 text-base font-semibold text-slate-900">
+            Comment se calcule une plus-value de cession de titres ?
+          </h2>
+          <p class="mb-3">
+            La plus ou moins-value est la différence entre le <strong
+              >prix de cession net des frais</strong
+            > et le <strong>prix de revient</strong> (prix d'acquisition majoré des
+            frais d'acquisition). Pour des titres de même nature achetés à des prix
+            différents, on retient le <strong>prix moyen pondéré (PMP)</strong> ; une
+            cession partielle laisse le PMP inchangé sur le reliquat. Pour des opérations
+            en devise, chaque prix est converti en euros au cours du jour de
+            l'opération (acquisition et cession à leur propre date).
+          </p>
+          <p class="mb-3">
+            Par défaut, la plus-value est imposée au <strong
+              >prélèvement forfaitaire unique (PFU, 12,8 %)</strong
+            >, sans abattement. Les <strong>moins-values</strong> de l'année s'imputent
+            sur les plus-values de même nature, puis le reliquat est reportable sur les
+            <strong>10 années suivantes</strong>. La plus-value nette va en case
+            <span class="font-mono font-semibold">3VG</span>, la moins-value de l'année
+            non imputée en case <span class="font-mono font-semibold">3VH</span> de la
+            déclaration 2042-C ; le détail se reporte sur le formulaire
+            <a class="text-blue-700 underline" href={noticeUrl} rel="noopener" target="_blank"
+              >2074</a
+            > et la fiche
+            <a class="text-blue-700 underline" href={ficheCmvUrl} rel="noopener" target="_blank"
+              >2074-CMV</a
+            >.
+          </p>
+          <p class="mb-3 text-slate-500">
+            L'abattement pour durée de détention (50 % / 65 %) ne concerne que les titres
+            acquis <strong>avant 2018</strong> et seulement sur option pour le barème
+            progressif (case 2OP). Le PEA, les produits dérivés et les opérations sur
+            titres (splits, fusions) sont hors périmètre de cet outil.
+          </p>
+        </article>
+
+        <nav class="mt-6 text-sm" aria-label="Autres calculateurs">
+          <h2 class="mb-2 text-base font-semibold text-slate-900">Autres calculateurs</h2>
+          <ul class="list-inside list-disc text-blue-700">
+            <li>
+              <a class="underline" href="/"
+                >Crédit d'impôt sur dividendes étrangers (2047, 8VL, 8PL)</a
+              >
+            </li>
+            <li>
+              <a class="underline" href="/guide-credit-impot-dividendes-etrangers"
+                >Guide : crédit d'impôt, cases 2047, 8VL et 8PL</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </main>
+  </body>
+</html>
