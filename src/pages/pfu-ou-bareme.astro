@@ -1,0 +1,95 @@
+---
+import "../styles/global.css";
+import ComparateurPfuBareme from "../components/ComparateurPfuBareme.tsx";
+
+const title =
+  "PFU ou barème : comparateur flat tax vs case 2OP (2026) — gratuit";
+const description =
+  "Comparez gratuitement le PFU (flat tax 30 % / 31,4 % en 2026) et l'option pour le barème progressif (case 2OP) sur vos dividendes, intérêts et plus-values. Abattement 40 %, CSG déductible. Calcul 100 % local, open source, sans compte ni tracker.";
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL("/og-default.png", Astro.site).href;
+const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body class="bg-slate-50 text-slate-900">
+    <main>
+      <!-- Comparateur : îlot React hydraté côté client -->
+      <ComparateurPfuBareme client:load />
+
+      <!-- Contenu / SEO -->
+      <section class="mx-auto w-full max-w-4xl px-4 pb-10">
+        <article class="prose prose-slate max-w-none text-sm leading-relaxed text-slate-700">
+          <h2 class="text-base font-semibold text-slate-900">PFU ou barème : comment choisir ?</h2>
+          <p>
+            Vos revenus du capital (dividendes, intérêts, plus-values de cession de titres) sont
+            imposés par défaut au <strong>prélèvement forfaitaire unique (PFU)</strong>, aussi
+            appelé <em>flat tax</em> : <strong>12,8 % d'impôt sur le revenu + prélèvements
+            sociaux</strong>. Les prélèvements sociaux passent de 17,2 % (revenus 2025) à
+            <strong>18,6 % en 2026</strong> (CSG portée à 10,6 %), soit un PFU global de
+            <strong>30 % puis 31,4 %</strong>.
+          </p>
+          <p>
+            Vous pouvez à la place opter pour le <strong>barème progressif</strong> en cochant la
+            <strong>case 2OP</strong>. Ce choix devient intéressant quand votre tranche marginale
+            (TMI) est faible : il ouvre l'<strong>abattement de 40 % sur les dividendes éligibles</strong>
+            et la <strong>déduction d'une fraction de CSG (6,8 %)</strong>. En contrepartie, l'impôt
+            est calculé à votre taux marginal, ce qui est défavorable au-delà d'une certaine TMI.
+          </p>
+          <p>
+            Règle générale : à <strong>TMI 0 % ou 11 %</strong>, le barème est souvent gagnant ; à
+            partir de <strong>30 %</strong>, le PFU reprend l'avantage. Le comparateur ci-dessus
+            chiffre votre cas précis. L'option 2OP est <strong>globale</strong> (tous vos revenus du
+            capital) et, pour les revenus 2026, devient <strong>révocable</strong>.
+          </p>
+        </article>
+
+        <aside class="mt-8 rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed text-slate-700">
+          <p class="m-0">
+            <strong>Aide informative, pas un conseil fiscal</strong> — ce comparateur estime l'impôt
+            au barème à votre TMI et ne remplace pas le
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href="https://www.service-public.gouv.fr/particuliers/vosdroits/F34913">simulateur officiel</a>
+            ni un professionnel.
+          </p>
+          <p class="m-0 mt-3 text-slate-600">
+            <strong>Open source (AGPLv3)</strong> — taux, règles et logique sont publics&nbsp;:
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href={repoUrl}>voir le code</a>.
+            Aucune donnée ne quitte votre navigateur ; zéro compte, zéro tracker.
+          </p>
+        </aside>
+
+        <nav class="mt-6 text-sm" aria-label="Calculateurs">
+          <h2 class="mb-2 text-base font-semibold text-slate-900">Autres calculateurs</h2>
+          <ul class="list-inside list-disc text-blue-700">
+            <li>
+              <a class="underline" href="/">Crédit d'impôt sur dividendes étrangers (2047, 8VL/8PL)</a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </main>
+  </body>
+</html>
