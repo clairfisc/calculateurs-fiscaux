@@ -22,9 +22,46 @@ const LIBELLE_TMI: Record<number, string> = {
 };
 
 const LIBELLE_MILLESIME: Record<Millesime, string> = {
-  2025: "Revenus 2025 (déclaration 2026) — PFU 30 %",
-  2026: "Revenus 2026 (déclaration 2027) — PFU 31,4 %",
+  2025: "Revenus 2025 (déclaration 2026)",
+  2026: "Revenus 2026 (déclaration 2027)",
 };
+
+/** Formate un taux en points de base en pourcentage français (3140 → « 31,4 % »). */
+const fmtPct = (bp: number): string =>
+  new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 }).format(bp / 100) + " %";
+
+/**
+ * Légende des taux PFU applicables pour l'année choisie. Le PFU n'est PAS uniforme :
+ * la hausse CSG 2026 frappe les plus-values mobilières dès 2025 mais pas les
+ * dividendes/intérêts (cf. SOURCES-PFU-BAREME.md §2bis) — d'où l'affichage par type.
+ */
+function LegendeTaux({ millesime }: { millesime: Millesime }) {
+  const p = PARAMETRES[millesime];
+  const uniforme = p.psPlacementBp === p.psPatrimoineBp;
+  const ligne = (libelle: string, psBp: number) => (
+    <li className="flex justify-between gap-3">
+      <span>{libelle}</span>
+      <span className="font-mono text-slate-900">
+        PFU {fmtPct(1280 + psBp)} <span className="text-slate-400">(dont PS {fmtPct(psBp)})</span>
+      </span>
+    </li>
+  );
+  return (
+    <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+      <p className="mb-1 font-medium text-slate-700">Taux PFU applicables pour {millesime}</p>
+      <ul className="flex flex-col gap-0.5">
+        {uniforme
+          ? ligne("Tous revenus du capital", p.psPlacementBp)
+          : (
+            <>
+              {ligne("Dividendes & intérêts", p.psPlacementBp)}
+              {ligne("Plus-values mobilières", p.psPatrimoineBp)}
+            </>
+          )}
+      </ul>
+    </div>
+  );
+}
 
 /** Champ de montant en euros, libellé + aide courte. */
 function ChampMontant({
@@ -208,6 +245,8 @@ export default function ComparateurPfuBareme() {
             </select>
           </div>
         </div>
+
+        <LegendeTaux millesime={millesime} />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <ChampMontant
