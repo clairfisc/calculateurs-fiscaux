@@ -251,8 +251,8 @@ export default function ComparateurPfuBareme() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <ChampMontant
             id="dividendes"
-            libelle="Dividendes éligibles"
-            aide="Actions de sociétés (abattement 40 % au barème)."
+            libelle="Dividendes (brut)"
+            aide="Montant brut perçu. L'abattement de 40 % est appliqué automatiquement — au barème seulement."
             valeur={dividendes}
             onChange={setDividendes}
           />
@@ -294,6 +294,15 @@ export default function ComparateurPfuBareme() {
             />
           </div>
 
+          {dividendesCents > 0 && (
+            <p className="rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-800">
+              <strong>Abattement de 40 % sur les dividendes</strong> : au barème, vos{" "}
+              {formateEurosEntiers(Math.round(dividendesCents / 100))} de dividendes ne sont imposés
+              que sur {formateEurosEntiers(Math.trunc((dividendesCents * 6000) / 10000 / 100))}{" "}
+              (60 %). Au PFU, aucun abattement : l'impôt porte sur le montant brut.
+            </p>
+          )}
+
           {resultat.economieCsgDeductibleEur > 0 && (
             <p className="rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-800">
               L'option barème inclut une économie liée à la CSG déductible (6,8 %) de{" "}
@@ -321,6 +330,13 @@ export default function ComparateurPfuBareme() {
             <strong>L'option barème (case 2OP) est globale</strong> : elle s'applique à
             l'ensemble de vos revenus du capital de l'année, pas à un placement isolé.
           </li>
+          {dividendesCents > 0 && (
+            <li>
+              Les dividendes saisis sont supposés <strong>éligibles à l'abattement de 40 %</strong>
+              {" "}(actions de sociétés à l'IS, UE ou à convention). Certains produits (ETF/fonds
+              distribuants, etc.) n'y ont pas droit — à vérifier avant de retenir le barème.
+            </li>
+          )}
           <li>
             {revocable ? (
               <>
