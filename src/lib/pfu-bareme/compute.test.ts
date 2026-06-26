@@ -57,8 +57,10 @@ describe("comparateur PFU vs barème — oracle (SOURCES-PFU-BAREME.md §7)", ()
     expect(r.gagnant).toBe("pfu");
   });
 
-  it("O5 — TMI 41 %, 10 000 € de plus-values (pas d'abattement v0) : PFU gagne", () => {
+  it("O5 — TMI 41 %, 10 000 € de plus-values 2025 (PS 18,6 % rétroactif) : PFU gagne", () => {
     const r = compareRegimes(input({ tmiBp: 4100, plusValuesCents: eur(10_000) }));
+    // Plus-value = revenu du patrimoine → PS 18,6 % dès 2025 (§2bis), pas 17,2 %.
+    expect(r.pfu.psEur).toBe(1860);
     // Barème IR = 41 % × 10 000 − 41 % × 680 = 4 100 − 278,80 = 3 821,20 → 3 821 €.
     expect(r.bareme.irEur).toBe(3821);
     expect(r.pfu.irEur).toBe(1280);
@@ -74,6 +76,26 @@ describe("comparateur PFU vs barème — oracle (SOURCES-PFU-BAREME.md §7)", ()
     expect(r.bareme.totalEur).toBe(3456);
     expect(r.gagnant).toBe("pfu");
     expect(r.ecartEur).toBe(316);
+  });
+
+  it("O8 — millésime 2025, 10 000 € de plus-values : PS 18,6 % (rétroactif), PFU total 3 140 €", () => {
+    // Fait générateur différencié (§2bis) : les plus-values mobilières 2025 sont DÉJÀ à 18,6 %.
+    const r = compareRegimes(input({ millesime: 2025, tmiBp: 3000, plusValuesCents: eur(10_000) }));
+    expect(r.pfu.psEur).toBe(1860);
+    expect(r.pfu.totalEur).toBe(3140); // 1 280 IR + 1 860 PS
+  });
+
+  it("O9 — millésime 2025, 10 000 € de dividendes : PS 17,2 %, PFU total 3 000 €", () => {
+    // Les dividendes 2025 (produits de placement) restent à 30 %.
+    const r = compareRegimes(input({ millesime: 2025, tmiBp: 3000, dividendesEligiblesCents: eur(10_000) }));
+    expect(r.pfu.psEur).toBe(1720);
+    expect(r.pfu.totalEur).toBe(3000); // 1 280 IR + 1 720 PS
+  });
+
+  it("O8/O9 croisé — même montant, plus-value 2025 coûte plus cher que dividende 2025 en PS", () => {
+    const pv = compareRegimes(input({ millesime: 2025, plusValuesCents: eur(10_000) }));
+    const div = compareRegimes(input({ millesime: 2025, dividendesEligiblesCents: eur(10_000) }));
+    expect(pv.pfu.psEur).toBeGreaterThan(div.pfu.psEur); // 1 860 > 1 720
   });
 });
 
@@ -108,25 +130,26 @@ describe("comparateur PFU vs barème — bornes & invariants", () => {
 });
 
 describe("comparateur PFU vs barème — paramètres millésimes (oracle taux)", () => {
-  it("2025 : PS 17,2 %, PFU 30 %, option 2OP irrévocable", () => {
+  it("2025 : placement 17,2 % (PFU 30 %), patrimoine 18,6 % (PFU 31,4 %), 2OP irrévocable", () => {
     expect(PARAMETRES[2025]).toEqual({
-      prelevementsSociauxBp: 1720,
-      pfuTotalBp: 3000,
+      psPlacementBp: 1720,
+      psPatrimoineBp: 1860,
       option2opRevocable: false,
     });
   });
 
-  it("2026 : PS 18,6 %, PFU 31,4 %, option 2OP révocable", () => {
+  it("2026 : tout à 18,6 % (PFU 31,4 %), option 2OP révocable", () => {
     expect(PARAMETRES[2026]).toEqual({
-      prelevementsSociauxBp: 1860,
-      pfuTotalBp: 3140,
+      psPlacementBp: 1860,
+      psPatrimoineBp: 1860,
       option2opRevocable: true,
     });
   });
 
-  it("part IR du PFU = 12,8 % implicite dans les deux millésimes (pfuTotal − PS)", () => {
-    expect(PARAMETRES[2025].pfuTotalBp - PARAMETRES[2025].prelevementsSociauxBp).toBe(1280);
-    expect(PARAMETRES[2026].pfuTotalBp - PARAMETRES[2026].prelevementsSociauxBp).toBe(1280);
+  it("part IR du PFU = 12,8 % implicite (PFU placement 2025 = 30 % → 30 − 17,2)", () => {
+    expect(3000 - PARAMETRES[2025].psPlacementBp).toBe(1280);
+    expect(3140 - PARAMETRES[2025].psPatrimoineBp).toBe(1280);
+    expect(3140 - PARAMETRES[2026].psPlacementBp).toBe(1280);
   });
 
   it("les TMI proposables couvrent les 5 tranches du barème", () => {

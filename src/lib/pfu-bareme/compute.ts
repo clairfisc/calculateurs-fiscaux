@@ -47,8 +47,12 @@ export function compareRegimes(input: ComparateurInput): ComparaisonResult {
 
   const brutTotal = D + I + PV;
 
-  // Prélèvements sociaux : même base brute, même taux dans les deux régimes.
-  const psCents = appliqueBp(brutTotal, params.prelevementsSociauxBp);
+  // Prélèvements sociaux : même base brute, même montant dans les deux régimes, MAIS le taux
+  // dépend de la catégorie (fait générateur différencié, SOURCES §2bis) — les plus-values
+  // mobilières (patrimoine) subissent la hausse 18,6 % dès 2025, pas les dividendes/intérêts.
+  const psPlacementCents = appliqueBp(D + I, params.psPlacementBp);
+  const psPatrimoineCents = appliqueBp(PV, params.psPatrimoineBp);
+  const psCents = psPlacementCents + psPatrimoineCents;
 
   // --- PFU : IR forfaitaire 12,8 % sur le brut.
   const irPfuCents = appliqueBp(brutTotal, PFU_IR_BP);

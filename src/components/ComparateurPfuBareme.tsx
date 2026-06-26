@@ -243,7 +243,7 @@ export default function ComparateurPfuBareme() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <CarteRegime
               titre="PFU (flat tax)"
-              sousTitre={millesime === 2026 ? "12,8 % IR + 18,6 % PS = 31,4 %" : "12,8 % IR + 17,2 % PS = 30 %"}
+              sousTitre="12,8 % IR + prélèvements sociaux (17,2 % ou 18,6 %)"
               regime={resultat.pfu}
               gagnant={resultat.gagnant === "pfu"}
             />
@@ -294,6 +294,13 @@ export default function ComparateurPfuBareme() {
               </>
             )}
           </li>
+          {plusValuesCents > 0 && millesime === 2025 && (
+            <li>
+              <strong>Plus-values 2025</strong> : elles subissent <strong>déjà la CSG à 10,6 %</strong>
+              {" "}(prélèvements sociaux 18,6 %), contrairement aux dividendes et intérêts 2025 restés
+              à 17,2 % — la hausse LFSS 2026 est rétroactive pour les plus-values mobilières.
+            </li>
+          )}
           {plusValuesCents > 0 && (
             <li>
               Les <strong>plus-values</strong> sont prises à 100 % : l'abattement pour durée de
