@@ -44,12 +44,14 @@ changer de tranche** (garde-fou affiché).
 ## 2. LA décision structurante : le PFU change de taux selon le millésime
 
 Le comparateur est **paramétré par année de perception** des revenus. Deux millésimes coexistent
-en juin 2026 (saison déclarative 2026 = revenus 2025 ; revenus 2026 déclarés en 2027) :
+en juin 2026 (saison déclarative 2026 = revenus 2025 ; revenus 2026 déclarés en 2027). ⚠️ Le PFU
+total **dépend aussi de la nature du revenu** pour le millésime 2025 (voir §2bis) :
 
-| Année des revenus | PFU total | Part IR | Part PS | CSG déductible (barème) | 2OP révocable ? |
+| Année · nature | PFU total | Part IR | Part PS | CSG déductible (barème) | 2OP révocable ? |
 |---|---|---|---|---|---|
-| **2025** (décl. 2026) | **30,0 %** | 12,8 % | **17,2 %** | 6,8 % | **Non** (irrévocable) |
-| **2026** (décl. 2027) | **31,4 %** | 12,8 % | **18,6 %** | 6,8 % | **Oui** (révocable) |
+| **2025** dividendes / intérêts | **30,0 %** | 12,8 % | **17,2 %** | 6,8 % | **Non** (irrévocable) |
+| **2025** plus-values mobilières | **31,4 %** | 12,8 % | **18,6 %** | 6,8 % | **Non** (irrévocable) |
+| **2026** (tous revenus) | **31,4 %** | 12,8 % | **18,6 %** | 6,8 % | **Oui** (révocable) |
 
 ### Citations
 
@@ -62,10 +64,35 @@ en juin 2026 (saison déclarative 2026 = revenus 2025 ; revenus 2026 déclarés 
 passe de 9,2 % à 10,6 %** (+1,4 pt), portant les PS de 17,2 % à 18,6 %. La part IR (12,8 %,
 art. 200 A) est **inchangée depuis 2018**.
 
-> ⚠️ Le taux **31,4 %** s'applique aux **revenus perçus à compter du 1ᵉʳ janvier 2026**
-> (déclarés en 2027). Pour la **saison déclarative en cours (revenus 2025, décl. 2026)**, le PFU
-> reste à **30 %** (PS 17,2 %). Le module **par défaut sur le millésime 2025** tant que la saison
-> 2026 n'est pas ouverte, et expose explicitement les deux.
+## 2bis. Fait générateur différencié — les plus-values 2025 sont DÉJÀ à 18,6 % (point vérifié)
+
+La date d'effet de la hausse CSG **dépend de la catégorie de prélèvements sociaux** du revenu
+(mécanisme classique CSS) — vérifié contre cabinet CMS + Actu-Juridique + doctrine 2026 :
+
+- **Produits de placement** (dividendes, intérêts) — PS **prélevés à la source** au moment du
+  versement (CSS art. L136-7). Fait générateur = **date de versement**. La hausse ne frappe que
+  les revenus **versés à compter du 1ᵉʳ janvier 2026** → un **dividende versé en 2025 reste à
+  17,2 %** (PFU 30 %).
+- **Revenus du patrimoine** (plus-values mobilières de cession de valeurs mobilières — CGI
+  150-0 A) — PS recouvrés **par voie de rôle** l'année suivante (CSS art. L136-6). La mesure
+  s'applique **« à compter de l'imposition des revenus de l'année 2025 »** → une **plus-value
+  mobilière réalisée en 2025 est déjà à 18,6 %** (PFU 31,4 %), bien qu'antérieure à la loi.
+
+> Citation (cabinet CMS) : « Une cession de titres en janvier 2025 supporte le nouveau taux de
+> 18,6 % (appliqué rétroactivement aux revenus 2025). À l'inverse, un dividende de décembre 2025
+> reste à 17,2 % jusqu'aux distributions de 2026. »
+
+→ **Conséquence de modélisation** : le moteur applique le taux PS **par catégorie** :
+`psPlacement` (D + I) et `psPatrimoine` (PV), chacun paramétré par millésime (`rates.ts`,
+`PARAMETRES`). Pour 2025 : placement 17,2 %, patrimoine 18,6 %. Pour 2026 : tout à 18,6 %.
+
+> ⚠️ Hors périmètre du module mais à connaître : revenus fonciers, plus-values **immobilières**,
+> assurance-vie, livrets réglementés, PEL/CEL **restent à CSG 9,2 %** (PS 17,2 %) — non concernés
+> par la hausse. Le module ne traite que RCM + plus-values **mobilières** de droit commun.
+
+> Sources : <https://cms.law/fr/fra/news-information/revenus-du-patrimoine-et-revenus-de-placement-attention-a-la-hausse-de-la-csg> ·
+> <https://www.actu-juridique.fr/fiscalite/fiscal-finances/la-csg-en-hausse-sur-les-revenus-du-capital/> ·
+> LégiFiscal « PLFSS 2026 flat tax 31,4 % adopté ».
 
 ## 3. La fraction de CSG déductible reste 6,8 % (piège vérifié)
 
@@ -104,8 +131,9 @@ Soit, pour un millésime donné, `tIR_pfu = 12,8 %`, `tPS` (17,2 % ou 18,6 %), `
 `tmi` (∈ {0, 11, 30, 41, 45 %}), et les assiettes brutes en euros : `D` (dividendes éligibles),
 `I` (intérêts/autres RCM), `PV` (plus-values mobilières). Tout en **centimes** en interne.
 
-**Prélèvements sociaux (identiques dans les deux régimes, sur le brut) :**
-- `PS = tPS × (D + I + PV)`
+**Prélèvements sociaux (identiques dans les deux régimes, sur le brut, taux par catégorie §2bis) :**
+- `PS = tPS_placement × (D + I) + tPS_patrimoine × PV`
+  (2025 : placement 17,2 %, patrimoine 18,6 % ; 2026 : tout 18,6 %)
 
 **Régime PFU :**
 - `IR_pfu = tIR_pfu × (D + I + PV)` *(brut, aucun abattement)*
@@ -155,9 +183,11 @@ Cas-types vérifiés à la main avec la mécanique du §5 (millésime 2025, PS 1
 | O2 | TMI 11 %, D=10 000 € | **Barème** | barème IR = 11 % × 6 000 − 11 % × 680 = 660 − 74,80 = 585,20 € ; PFU IR = 1 280 € |
 | O3 | TMI 30 %, D=10 000 € | **PFU** | barème IR = 30 % × 6 000 − 30 % × 680 = 1 800 − 204 = 1 596 € ; PFU IR = 1 280 € |
 | O4 | TMI 30 %, I=10 000 € (intérêts) | **PFU** | barème IR = 30 % × 10 000 − 30 % × 680 = 3 000 − 204 = 2 796 € ; PFU IR = 1 280 € |
-| O5 | TMI 41 %, PV=10 000 € | **PFU** | barème IR = 41 % × 10 000 − 41 % × 680 = 4 100 − 278,80 = 3 821,20 € ; PFU IR = 1 280 € |
+| O5 | TMI 41 %, PV=10 000 € (millésime 2025) | **PFU** | PS **18,6 %** = 1 860 € (patrimoine, rétroactif §2bis) ; barème IR = 41 % × 10 000 − 41 % × 680 = 3 821,20 € ; PFU IR = 1 280 € |
 | O6 | millésime **2026**, TMI 30 %, D=10 000 € | **PFU** | PS = 1 860 € (18,6 %) ; PFU total = 1 280 + 1 860 = 3 140 € ; barème total = 1 596 + 1 860 = 3 456 € |
 | O7 | TMI 11 %, D=10 000 € — point de bascule | **Barème** | confirme que la bascule dividendes est entre TMI 11 % et 30 % |
+| O8 | millésime **2025**, PV=10 000 € (plus-value) | — | **PS = 1 860 € (18,6 %)** dès 2025 (patrimoine), PFU total = 1 280 + 1 860 = **3 140 €** — la plus-value 2025 n'est PAS à 30 % |
+| O9 | millésime **2025**, D=10 000 € (dividende) | — | **PS = 1 720 € (17,2 %)**, PFU total = 1 280 + 1 720 = **3 000 €** — le dividende 2025 reste à 30 % |
 
 Bornes de cohérence vérifiées : `PS` identique PFU/barème ; `IR_bareme ≥ 0` ; pour `D=I=PV=0`
 tous les totaux = 0.
