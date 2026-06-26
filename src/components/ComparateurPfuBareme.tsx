@@ -173,6 +173,7 @@ export default function ComparateurPfuBareme() {
   const [dividendes, setDividendes] = useState("");
   const [interets, setInterets] = useState("");
   const [plusValues, setPlusValues] = useState("");
+  const [dividendesEligibles, setDividendesEligibles] = useState(true);
 
   const dividendesCents = toCents(dividendes) ?? 0;
   const interetsCents = toCents(interets) ?? 0;
@@ -184,11 +185,12 @@ export default function ComparateurPfuBareme() {
       compareRegimes({
         millesime,
         tmiBp,
-        dividendesEligiblesCents: dividendesCents,
+        dividendesCents,
+        dividendesEligiblesAbattement40: dividendesEligibles,
         interetsCents,
         plusValuesCents,
       }),
-    [millesime, tmiBp, dividendesCents, interetsCents, plusValuesCents],
+    [millesime, tmiBp, dividendesCents, dividendesEligibles, interetsCents, plusValuesCents],
   );
 
   const revocable = PARAMETRES[millesime].option2opRevocable;
@@ -249,13 +251,29 @@ export default function ComparateurPfuBareme() {
         <LegendeTaux millesime={millesime} />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <ChampMontant
-            id="dividendes"
-            libelle="Dividendes (brut)"
-            aide="Montant brut perçu. L'abattement de 40 % est appliqué automatiquement — au barème seulement."
-            valeur={dividendes}
-            onChange={setDividendes}
-          />
+          <div className="flex flex-col gap-2">
+            <ChampMontant
+              id="dividendes"
+              libelle="Dividendes (brut)"
+              aide="Montant brut perçu."
+              valeur={dividendes}
+              onChange={setDividendes}
+            />
+            <label className="flex items-start gap-2 text-xs text-slate-600">
+              <input
+                type="checkbox"
+                checked={dividendesEligibles}
+                onChange={(e) => setDividendesEligibles(e.target.checked)}
+                className="mt-0.5"
+              />
+              <span>
+                Éligibles à l'abattement de 40 %
+                <span className="block text-slate-400">
+                  Décochez pour les SIIC/foncières, certains ETF/fonds, jetons de présence.
+                </span>
+              </span>
+            </label>
+          </div>
           <ChampMontant
             id="interets"
             libelle="Intérêts / autres RCM"
@@ -294,12 +312,18 @@ export default function ComparateurPfuBareme() {
             />
           </div>
 
-          {dividendesCents > 0 && (
+          {dividendesCents > 0 && dividendesEligibles && (
             <p className="rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-800">
               <strong>Abattement de 40 % sur les dividendes</strong> : au barème, vos{" "}
               {formateEurosEntiers(Math.round(dividendesCents / 100))} de dividendes ne sont imposés
               que sur {formateEurosEntiers(Math.trunc((dividendesCents * 6000) / 10000 / 100))}{" "}
               (60 %). Au PFU, aucun abattement : l'impôt porte sur le montant brut.
+            </p>
+          )}
+          {dividendesCents > 0 && !dividendesEligibles && (
+            <p className="rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800">
+              <strong>Dividendes non éligibles</strong> : pas d'abattement de 40 %. Au barème, ils
+              sont imposés à 100 % (comme des intérêts) — ce qui rend le barème moins intéressant.
             </p>
           )}
 
@@ -330,11 +354,11 @@ export default function ComparateurPfuBareme() {
             <strong>L'option barème (case 2OP) est globale</strong> : elle s'applique à
             l'ensemble de vos revenus du capital de l'année, pas à un placement isolé.
           </li>
-          {dividendesCents > 0 && (
+          {dividendesCents > 0 && dividendesEligibles && (
             <li>
-              Les dividendes saisis sont supposés <strong>éligibles à l'abattement de 40 %</strong>
-              {" "}(actions de sociétés à l'IS, UE ou à convention). Certains produits (ETF/fonds
-              distribuants, etc.) n'y ont pas droit — à vérifier avant de retenir le barème.
+              Vos dividendes sont traités comme <strong>éligibles à l'abattement de 40 %</strong>
+              {" "}(actions de sociétés à l'IS, UE ou à convention). S'ils proviennent d'une
+              SIIC/foncière, d'un ETF/fonds non éligible ou de jetons de présence, décochez la case.
             </li>
           )}
           <li>

@@ -10,7 +10,7 @@ const eur = (n: number): number => Math.round(n * 100);
 const input = (over: Partial<ComparateurInput>): ComparateurInput => ({
   millesime: 2025,
   tmiBp: 3000,
-  dividendesEligiblesCents: 0,
+  dividendesCents: 0,
   interetsCents: 0,
   plusValuesCents: 0,
   ...over,
@@ -18,7 +18,7 @@ const input = (over: Partial<ComparateurInput>): ComparateurInput => ({
 
 describe("comparateur PFU vs barème — oracle (SOURCES-PFU-BAREME.md §7)", () => {
   it("O1 — TMI 0 %, 10 000 € de dividendes : barème gagne de 1 280 € (millésime 2025)", () => {
-    const r = compareRegimes(input({ tmiBp: 0, dividendesEligiblesCents: eur(10_000) }));
+    const r = compareRegimes(input({ tmiBp: 0, dividendesCents: eur(10_000) }));
     // PFU : IR 12,8 % = 1 280 € ; PS 17,2 % = 1 720 € ; total 3 000 €.
     expect(r.pfu.irEur).toBe(1280);
     expect(r.pfu.psEur).toBe(1720);
@@ -31,7 +31,7 @@ describe("comparateur PFU vs barème — oracle (SOURCES-PFU-BAREME.md §7)", ()
   });
 
   it("O2 — TMI 11 %, 10 000 € dividendes : barème gagne (IR barème 585 € < PFU 1 280 €)", () => {
-    const r = compareRegimes(input({ tmiBp: 1100, dividendesEligiblesCents: eur(10_000) }));
+    const r = compareRegimes(input({ tmiBp: 1100, dividendesCents: eur(10_000) }));
     // Barème IR = 11 % × 6 000 − 11 % × 680 = 660 − 74,80 = 585,20 → 585 €.
     expect(r.bareme.irEur).toBe(585);
     expect(r.economieCsgDeductibleEur).toBe(75); // 74,80 → 75
@@ -40,7 +40,7 @@ describe("comparateur PFU vs barème — oracle (SOURCES-PFU-BAREME.md §7)", ()
   });
 
   it("O3 — TMI 30 %, 10 000 € dividendes : PFU gagne (IR barème 1 596 € > PFU 1 280 €)", () => {
-    const r = compareRegimes(input({ tmiBp: 3000, dividendesEligiblesCents: eur(10_000) }));
+    const r = compareRegimes(input({ tmiBp: 3000, dividendesCents: eur(10_000) }));
     // Barème IR = 30 % × 6 000 − 30 % × 680 = 1 800 − 204 = 1 596 €.
     expect(r.bareme.irEur).toBe(1596);
     expect(r.economieCsgDeductibleEur).toBe(204);
@@ -68,7 +68,7 @@ describe("comparateur PFU vs barème — oracle (SOURCES-PFU-BAREME.md §7)", ()
   });
 
   it("O6 — millésime 2026 (PS 18,6 %), TMI 30 %, 10 000 € dividendes : PFU total 3 140 €", () => {
-    const r = compareRegimes(input({ millesime: 2026, tmiBp: 3000, dividendesEligiblesCents: eur(10_000) }));
+    const r = compareRegimes(input({ millesime: 2026, tmiBp: 3000, dividendesCents: eur(10_000) }));
     // PS 2026 = 18,6 % = 1 860 € ; PFU total = 1 280 + 1 860 = 3 140 €.
     expect(r.pfu.psEur).toBe(1860);
     expect(r.pfu.totalEur).toBe(3140);
@@ -87,15 +87,36 @@ describe("comparateur PFU vs barème — oracle (SOURCES-PFU-BAREME.md §7)", ()
 
   it("O9 — millésime 2025, 10 000 € de dividendes : PS 17,2 %, PFU total 3 000 €", () => {
     // Les dividendes 2025 (produits de placement) restent à 30 %.
-    const r = compareRegimes(input({ millesime: 2025, tmiBp: 3000, dividendesEligiblesCents: eur(10_000) }));
+    const r = compareRegimes(input({ millesime: 2025, tmiBp: 3000, dividendesCents: eur(10_000) }));
     expect(r.pfu.psEur).toBe(1720);
     expect(r.pfu.totalEur).toBe(3000); // 1 280 IR + 1 720 PS
   });
 
   it("O8/O9 croisé — même montant, plus-value 2025 coûte plus cher que dividende 2025 en PS", () => {
     const pv = compareRegimes(input({ millesime: 2025, plusValuesCents: eur(10_000) }));
-    const div = compareRegimes(input({ millesime: 2025, dividendesEligiblesCents: eur(10_000) }));
+    const div = compareRegimes(input({ millesime: 2025, dividendesCents: eur(10_000) }));
     expect(pv.pfu.psEur).toBeGreaterThan(div.pfu.psEur); // 1 860 > 1 720
+  });
+
+  it("O10 — TMI 30 %, 10 000 € dividendes NON éligibles : barème sans abattement (IR 2 796 €)", () => {
+    const r = compareRegimes(
+      input({ tmiBp: 3000, dividendesCents: eur(10_000), dividendesEligiblesAbattement40: false }),
+    );
+    // Pas d'abattement 40 % → assiette 100 %, comme des intérêts : 30 % × 10 000 − 30 % × 680 = 2 796 €.
+    expect(r.bareme.irEur).toBe(2796);
+    // Le PFU est inchangé (jamais d'abattement).
+    expect(r.pfu.irEur).toBe(1280);
+    expect(r.pfu.psEur).toBe(1720); // dividende = produit de placement
+    expect(r.gagnant).toBe("pfu");
+  });
+
+  it("O10bis — éligibilité par défaut (true) : l'abattement s'applique sans passer le drapeau", () => {
+    const sansDrapeau = compareRegimes(input({ tmiBp: 3000, dividendesCents: eur(10_000) }));
+    const eligibleExplicite = compareRegimes(
+      input({ tmiBp: 3000, dividendesCents: eur(10_000), dividendesEligiblesAbattement40: true }),
+    );
+    expect(sansDrapeau.bareme.irEur).toBe(1596); // avec abattement
+    expect(eligibleExplicite.bareme.irEur).toBe(1596);
   });
 });
 
@@ -110,14 +131,14 @@ describe("comparateur PFU vs barème — bornes & invariants", () => {
 
   it("les PS sont identiques PFU et barème (même base brute, même taux)", () => {
     const r = compareRegimes(
-      input({ tmiBp: 4500, dividendesEligiblesCents: eur(5_000), interetsCents: eur(3_000), plusValuesCents: eur(2_000) }),
+      input({ tmiBp: 4500, dividendesCents: eur(5_000), interetsCents: eur(3_000), plusValuesCents: eur(2_000) }),
     );
     expect(r.pfu.psEur).toBe(r.bareme.psEur);
   });
 
   it("l'IR barème ne descend jamais sous 0 (plancher CSG déductible)", () => {
     // TMI 0 : l'économie CSG ne peut pas rendre l'IR négatif.
-    const r = compareRegimes(input({ tmiBp: 0, dividendesEligiblesCents: eur(50_000) }));
+    const r = compareRegimes(input({ tmiBp: 0, dividendesCents: eur(50_000) }));
     expect(r.bareme.irEur).toBe(0);
     expect(r.bareme.irEur).toBeGreaterThanOrEqual(0);
   });
