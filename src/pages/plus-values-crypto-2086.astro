@@ -1,0 +1,88 @@
+---
+import "../styles/global.css";
+import Calculateur2086 from "../components/crypto-2086/Calculateur2086.tsx";
+import Disclaimer from "../components/content/Disclaimer.astro";
+
+const title =
+  "Calculateur gratuit de plus-values crypto (formulaire 2086, 150 VH bis)";
+const description =
+  "Calculez gratuitement vos plus-values de cession d'actifs numériques : méthode de la valeur globale du portefeuille (CGI 150 VH bis), exonération 305 €, cases 3AN/3BN de la 2042-C. Calcul 100 % local dans votre navigateur, open source, sans compte ni tracker.";
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL("/og-default.png", Astro.site).href;
+const noticeUrl =
+  "https://www.impots.gouv.fr/sites/default/files/formulaires/2086/2026/2086_5515.pdf";
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body class="bg-slate-50 text-slate-900">
+    <main>
+      <!-- Calculateur : îlot React hydraté côté client -->
+      <Calculateur2086 client:load />
+
+      <!-- Contenu / SEO -->
+      <section class="mx-auto w-full max-w-4xl px-4 pb-10">
+        <Disclaimer noticeUrl={noticeUrl} />
+
+        <article class="mt-6 text-sm leading-relaxed text-slate-700">
+          <h2 class="mb-2 text-base font-semibold text-slate-900">
+            Comment sont calculées les plus-values crypto (méthode 150 VH bis) ?
+          </h2>
+          <p class="mb-3">
+            Pour les particuliers, la plus-value de cession d'actifs numériques se calcule selon la
+            <strong> méthode de la valeur globale du portefeuille</strong> (article 150 VH bis du CGI) :
+          </p>
+          <p class="mb-3 rounded-md bg-white px-3 py-2 font-mono text-xs text-slate-800">
+            plus-value = prix de cession − [ prix total d'acquisition × (prix de cession / valeur
+            globale du portefeuille) ]
+          </p>
+          <ul class="mb-3 list-inside list-disc">
+            <li>
+              Le <strong>prix total d'acquisition</strong> diminue à chaque cession de la quote-part
+              déjà imputée (suivi du capital initial).
+            </li>
+            <li>
+              Si le total de vos prix de cession de l'année <strong>n'excède pas 305 €</strong>, vos
+              plus-values sont exonérées (sinon, imposables dès le premier euro).
+            </li>
+            <li>
+              Les <strong>échanges crypto → crypto</strong> sans soulte ne sont pas imposables
+              (sursis d'imposition).
+            </li>
+            <li>
+              Le résultat net se reporte case <strong>3AN</strong> (plus-value) ou
+              <strong> 3BN</strong> (moins-value) de la déclaration 2042-C. Une moins-value n'est pas
+              reportable sur les années suivantes.
+            </li>
+          </ul>
+          <p>
+            Les revenus de <strong>staking, lending, mining ou airdrops</strong> relèvent de régimes
+            distincts (BNC ou RCM) et ne se déclarent pas sur le 2086.
+          </p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
