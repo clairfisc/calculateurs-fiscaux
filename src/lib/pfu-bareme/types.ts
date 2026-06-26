@@ -27,8 +27,15 @@ export interface ComparateurInput {
   readonly millesime: Millesime;
   /** Taux marginal d'imposition du foyer, en points de base (0 / 1100 / 3000 / 4100 / 4500). */
   readonly tmiBp: number;
-  /** Dividendes **éligibles** à l'abattement de 40 % (barème uniquement), en centimes. */
-  readonly dividendesEligiblesCents: Cents;
+  /** Dividendes (montant brut perçu), en centimes. */
+  readonly dividendesCents: Cents;
+  /**
+   * Les dividendes sont-ils éligibles à l'abattement de 40 % (au barème) ? Défaut : `true`.
+   * `false` → imposés à 100 % au barème, comme des intérêts : cas des SIIC/foncières cotées,
+   * de certains ETF/fonds distribuants, des jetons de présence, ou des sociétés hors
+   * UE/convention. cf. SOURCES-PFU-BAREME.md §4.
+   */
+  readonly dividendesEligiblesAbattement40?: boolean;
   /** Intérêts et autres RCM (aucun abattement), en centimes. */
   readonly interetsCents: Cents;
   /** Plus-values mobilières (aucun abattement v0 — pré-2018 OUT, §6), en centimes. */

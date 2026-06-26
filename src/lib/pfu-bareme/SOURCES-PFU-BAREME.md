@@ -125,6 +125,21 @@ de dividende abattue de 40 % côté IR).
 `dividendes × 60 %`. L'abattement **ne réduit pas** l'assiette des prélèvements sociaux
 (les PS portent toujours sur le **brut**).
 
+**Dividendes NON éligibles (à 100 % au barème) — modélisés via le drapeau
+`dividendesEligiblesAbattement40: false`.** Principaux cas, à signaler à l'utilisateur :
+- **SIIC / foncières cotées (REIT)** : dividendes prélevés sur des bénéfices exonérés d'IS →
+  **exclus** de l'abattement (CGI 158, 3-3°). Cas fréquent en compte-titres.
+- **Certains ETF / fonds distribuants** (SICAV, FCP) : la qualification dépend de la nature des
+  produits redistribués et de l'IFU ; nombre de distributions n'ouvrent pas l'abattement.
+- **Jetons de présence**, distributions non décidées en AG (« distributions irrégulières »),
+  revenus réputés distribués → « autres revenus distribués », non éligibles.
+- Sociétés **hors UE / sans convention** avec clause d'assistance administrative.
+
+> Cohérent avec le module 2047 (`tax-engine`), où le même drapeau `eligibleAbattement40` route le
+> dividende en case **2DC** (éligible) vs **2TS** (non éligible). Le comparateur n'essaie PAS de
+> deviner l'éligibilité : il l'expose en case à cocher (pré-cochée = éligible par défaut, cas
+> majoritaire d'un dividende d'action UE/convention).
+
 ## 5. Mécanique de calcul retenue par le moteur
 
 Soit, pour un millésime donné, `tIR_pfu = 12,8 %`, `tPS` (17,2 % ou 18,6 %), `tCSGd = 6,8 %`,

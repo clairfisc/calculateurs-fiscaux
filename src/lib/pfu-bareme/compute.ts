@@ -40,7 +40,7 @@ function appliqueBp(montantCents: Cents, bp: number): Cents {
  */
 export function compareRegimes(input: ComparateurInput): ComparaisonResult {
   const { millesime, tmiBp } = input;
-  const D = Math.max(0, input.dividendesEligiblesCents);
+  const D = Math.max(0, input.dividendesCents);
   const I = Math.max(0, input.interetsCents);
   const PV = Math.max(0, input.plusValuesCents);
   const params = PARAMETRES[millesime];
@@ -58,8 +58,11 @@ export function compareRegimes(input: ComparateurInput): ComparaisonResult {
   const irPfuCents = appliqueBp(brutTotal, PFU_IR_BP);
   const totalPfuCents = irPfuCents + psCents;
 
-  // --- Barème : abattement 40 % sur dividendes, CSG déductible, IR à la TMI.
-  const assietteIrCents = appliqueBp(D, 10_000 - ABATTEMENT_DIVIDENDES_BP) + I + PV;
+  // --- Barème : abattement 40 % sur dividendes ÉLIGIBLES, CSG déductible, IR à la TMI.
+  // Dividendes non éligibles (SIIC, certains ETF, jetons de présence…) → imposés à 100 %.
+  const abattementBp =
+    input.dividendesEligiblesAbattement40 === false ? 0 : ABATTEMENT_DIVIDENDES_BP;
+  const assietteIrCents = appliqueBp(D, 10_000 - abattementBp) + I + PV;
   const irBrutBaremeCents = appliqueBp(assietteIrCents, tmiBp);
   const csgDeductibleCents = appliqueBp(brutTotal, CSG_DEDUCTIBLE_BP);
   const economieCsgCents = appliqueBp(csgDeductibleCents, tmiBp);
