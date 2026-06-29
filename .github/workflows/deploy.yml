@@ -1,12 +1,12 @@
 name: Deploy
 
-# Déploiement du site statique (dist/) vers l'hébergement OVH par FTPS.
+# Déploiement du site statique (dist/) vers l'hébergement OVH par SFTP (port 22).
 # Déclenché à chaque push sur main, après build + tests.
 #
 # Secrets requis (Settings → Secrets and variables → Actions) :
-#   FTP_SERVER   ex. ftp.clusterXXX.hosting.ovh.net
-#   FTP_USER     identifiant FTP OVH
-#   FTP_PASSWORD mot de passe FTP OVH
+#   FTP_SERVER   hôte SFTP (ex. ssh.clusterXXX.hosting.ovh.net)
+#   FTP_USER     identifiant SFTP OVH
+#   FTP_PASSWORD mot de passe SFTP OVH
 
 on:
   push:
