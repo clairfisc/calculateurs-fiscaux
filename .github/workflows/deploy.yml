@@ -50,6 +50,11 @@ jobs:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USER: ${{ secrets.FTP_USER }}
           SSHPASS: ${{ secrets.FTP_PASSWORD }}
+          # Épinglage de la clé d'hôte (anti-MITM). Optionnel : si défini, la
+          # connexion vérifie l'identité du serveur ; sinon repli non vérifié +
+          # warning. Pour le poser : `ssh-keyscan -p 22 <FTP_SERVER>` → coller la
+          # sortie dans le secret SFTP_KNOWN_HOSTS. Voir DEPLOY.md §3.
+          SFTP_KNOWN_HOSTS: ${{ secrets.SFTP_KNOWN_HOSTS }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass openssh-client
           {
@@ -71,9 +76,18 @@ jobs:
             echo "bye"
           } > sftp-batch
           echo "----- batch sftp -----"; cat sftp-batch; echo "----------------------"
+          # Vérification de l'identité du serveur : stricte si SFTP_KNOWN_HOSTS
+          # est défini (ferme la fenêtre MITM qui pourrait intercepter le mot de
+          # passe), sinon repli non vérifié + warning (migration non bloquante).
+          if [ -n "$SFTP_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$SFTP_KNOWN_HOSTS" > known_hosts
+            HOST_OPTS="-oStrictHostKeyChecking=yes -oUserKnownHostsFile=known_hosts"
+          else
+            echo "::warning::SFTP_KNOWN_HOSTS non défini — identité du serveur non vérifiée (MITM possible). Voir DEPLOY.md §3."
+            HOST_OPTS="-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null"
+          fi
           sshpass -e sftp \
             -oBatchMode=no \
-            -oStrictHostKeyChecking=no \
-            -oUserKnownHostsFile=/dev/null \
+            $HOST_OPTS \
             -oConnectTimeout=20 \
             -P 22 -b sftp-batch "$FTP_USER@$FTP_SERVER"
