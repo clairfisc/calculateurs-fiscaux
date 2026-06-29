@@ -1,5 +1,5 @@
 ---
-import "../styles/global.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Calculateur2086 from "../components/crypto-2086/Calculateur2086.tsx";
 import Disclaimer from "../components/content/Disclaimer.astro";
 
@@ -7,37 +7,11 @@ const title =
   "Calculateur gratuit de plus-values crypto (formulaire 2086, 150 VH bis)";
 const description =
   "Calculez gratuitement vos plus-values de cession d'actifs numériques : méthode de la valeur globale du portefeuille (CGI 150 VH bis), exonération 305 €, cases 3AN/3BN de la 2042-C. Calcul 100 % local dans votre navigateur, open source, sans compte ni tracker.";
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL("/og-default.png", Astro.site).href;
 const noticeUrl =
   "https://www.impots.gouv.fr/sites/default/files/formulaires/2086/2026/2086_5515.pdf";
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="fr_FR" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-  </head>
-  <body class="bg-slate-50 text-slate-900">
+<BaseLayout title={title} description={description}>
     <main>
       <!-- Calculateur : îlot React hydraté côté client -->
       <Calculateur2086 client:load />
@@ -87,5 +61,4 @@ const noticeUrl =
         </article>
       </section>
     </main>
-  </body>
-</html>
+</BaseLayout>
