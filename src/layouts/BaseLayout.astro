@@ -1,0 +1,55 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  /** Balise <title> et titres Open Graph / Twitter. */
+  title: string;
+  /** Meta description + descriptions Open Graph / Twitter. */
+  description: string;
+  /** Type Open Graph : "website" (défaut) ou "article" pour les pages éditoriales. */
+  ogType?: "website" | "article";
+  /** Image de partage (chemin absolu depuis la racine). */
+  ogImage?: string;
+}
+
+const { title, description, ogType = "website", ogImage = "/og-default.png" } =
+  Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-screen flex-col bg-slate-50 text-slate-900">
+    <Header />
+    <div class="flex-1"><slot /></div>
+    <Footer />
+  </body>
+</html>

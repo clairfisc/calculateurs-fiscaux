@@ -1,5 +1,5 @@
 ---
-import "../styles/global.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import ChecklistComptes from "../components/comptes-3916/ChecklistComptes.tsx";
 import Disclaimer from "../components/content/Disclaimer.astro";
 import { ETABLISSEMENTS } from "../lib/comptes-3916";
@@ -8,35 +8,9 @@ const title =
   "Quels comptes étrangers déclarer ? Checklist 3916 / 3916-bis (2026)";
 const description =
   "Banque, néobanque, courtier, exchange crypto, PayPal : quels comptes étrangers devez-vous déclarer aux impôts (formulaire 3916 / 3916-bis) ? Checklist gratuite, verdict par compte et fiche à recopier. 100 % local, sans compte ni tracker.";
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL("/og-default.png", Astro.site).href;
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="fr_FR" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-  </head>
-  <body class="bg-slate-50 text-slate-900">
+<BaseLayout title={title} description={description}>
     <main>
       <!-- Checklist : îlot React hydraté côté client -->
       <ChecklistComptes client:load />
@@ -81,5 +55,4 @@ const ogImage = new URL("/og-default.png", Astro.site).href;
         </article>
       </section>
     </main>
-  </body>
-</html>
+</BaseLayout>

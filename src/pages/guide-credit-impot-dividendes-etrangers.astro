@@ -1,38 +1,14 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Disclaimer from "../components/content/Disclaimer.astro";
 
 const title =
   "Crédit d'impôt sur dividendes étrangers : guide des cases 2047, 8VL et 8PL (2026)";
 const description =
   "Comment fonctionne le crédit d'impôt sur les dividendes et intérêts étrangers ? Explication simple des cases 203 à 207 du formulaire 2047, de la case 8VL et de la nouvelle case 8PL 2026, sans jargon.";
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL("/og-default.png", Astro.site).href;
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="fr_FR" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-  </head>
-  <body>
+<BaseLayout title={title} description={description} ogType="article">
     <main class="page">
       <article>
         <header>
@@ -232,7 +208,7 @@ const ogImage = new URL("/og-default.png", Astro.site).href;
         <section aria-labelledby="outil">
           <h2 id="outil">Calculer automatiquement vos cases</h2>
           <p>
-            Notre <a href="/">calculateur gratuit</a> fait ces calculs pour
+            Notre <a href="/dividendes-etrangers-2047">calculateur gratuit</a> fait ces calculs pour
             vous, ligne par ligne, à partir de votre saisie manuelle (pays,
             montant, devise, date, retenue), avec conversion au cours du jour. Il
             est <strong>100&nbsp;% côté navigateur</strong> et open source —
@@ -250,7 +226,7 @@ const ogImage = new URL("/og-default.png", Astro.site).href;
       </article>
     </main>
 
-    <style>
+  <style>
       .page {
         max-width: 46rem;
         margin: 0 auto;
@@ -310,5 +286,4 @@ const ogImage = new URL("/og-default.png", Astro.site).href;
         border-top: 1px solid #e2e2e2;
       }
     </style>
-  </body>
-</html>
+</BaseLayout>
