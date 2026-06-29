@@ -134,7 +134,7 @@ export default function OperationFormulaire({
                 onChange={(e) => onChange(operation.id, { valeurGlobale: e.target.value })}
               />
               <span className="mt-0.5 text-xs font-normal text-slate-400">
-                valeur de vos cryptos au moment de cette cession
+                valeur de vos cryptos au moment de cette cession (avant la vente)
               </span>
             </label>
 

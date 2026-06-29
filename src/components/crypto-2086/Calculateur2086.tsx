@@ -81,6 +81,8 @@ function convertitOperation(saisie: OperationSaisie): ConversionOperation {
 }
 
 export default function Calculateur2086() {
+  // Prix d'acquisition net reporté des années précédentes (portefeuille déjà détenu).
+  const [reportAcquisition, setReportAcquisition] = useState("");
   const [operations, setOperations] = useState<OperationSaisie[]>(() => [
     operationVide("achat"),
     operationVide("vente"),
@@ -89,6 +91,7 @@ export default function Calculateur2086() {
   // Refresh = formulaire propre (cf. note dans le calculateur 2047 : certains navigateurs
   // restaurent visuellement les champs sans déclencher onChange). On régénère les ids.
   useEffect(() => {
+    setReportAcquisition("");
     setOperations([operationVide("achat"), operationVide("vente")]);
   }, []);
 
@@ -109,14 +112,17 @@ export default function Calculateur2086() {
   const ventesPretes = operationsPretes.filter((c) => c.operation!.type === "vente");
   const achatsPrets = operationsPretes.filter((c) => c.operation!.type === "achat");
 
+  // Report N-1 : vide ou invalide → 0.
+  const reportCents = toCents(reportAcquisition) ?? 0;
+
   const declaration = useMemo(() => {
     if (ventesPretes.length === 0) return null;
-    return calculeDeclaration2086(operationsPretes.map((c) => c.operation!));
+    return calculeDeclaration2086(operationsPretes.map((c) => c.operation!), reportCents);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [operations]);
+  }, [operations, reportAcquisition]);
 
-  // Garde-fou : des ventes mais aucun achat enregistré → prix d'acquisition 0, gain surévalué.
-  const venteSansAchat = ventesPretes.length > 0 && achatsPrets.length === 0;
+  // Garde-fou : des ventes mais aucun prix d'acquisition (ni achat, ni report) → gain surévalué.
+  const venteSansAchat = ventesPretes.length > 0 && achatsPrets.length === 0 && reportCents === 0;
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4">
@@ -145,6 +151,34 @@ export default function Calculateur2086() {
           <strong> pas imposables</strong> (sursis, art. 150 VH bis II-A) : ne les saisissez pas.
         </p>
       </aside>
+
+      {/* Portefeuille déjà détenu — report des années précédentes */}
+      <section className="rounded-lg border border-slate-200 bg-white p-4">
+        <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
+          Prix d'acquisition net déjà détenu avant cette année (€)
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            inputMode="decimal"
+            placeholder="0,00"
+            className="w-full max-w-xs rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            autoComplete="off"
+            value={reportAcquisition}
+            onChange={(e) => setReportAcquisition(e.target.value)}
+          />
+          <span className="mt-0.5 text-xs font-normal text-slate-400">
+            laissez vide si vous n'aviez pas de crypto avant cette année
+          </span>
+        </label>
+        <p className="mt-3 rounded-md bg-slate-100 px-3 py-2 text-xs text-slate-600">
+          Vous déteniez déjà des cryptos ? Indiquez ici le total que vous aviez payé pour les
+          acquérir. <strong>Si vous aviez déjà vendu une année précédente</strong>, reprenez le
+          <strong> prix d'acquisition net</strong> de votre dernier formulaire 2086 (ligne 223 —
+          déjà diminué des quote-parts imputées les années passées). Les achats faits
+          <strong> pendant l'année</strong> se saisissent, eux, en lignes « Achat » ci-dessous.
+        </p>
+      </section>
 
       {/* Saisie du journal */}
       <section className="flex flex-col gap-4">
