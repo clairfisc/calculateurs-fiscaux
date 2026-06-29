@@ -1,0 +1,243 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Disclaimer from "../components/content/Disclaimer.astro";
+
+const title =
+  "Faut-il cocher la case 2OP ? PFU ou barème selon votre TMI (2026)";
+const description =
+  "Cocher la case 2OP, c'est renoncer à la flat tax pour le barème progressif. Quand est-ce gagnant ? La règle selon votre tranche (TMI), l'abattement de 40 %, la CSG déductible et les pièges (option globale, révocabilité), expliqués simplement.";
+const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34913";
+---
+
+<BaseLayout title={title} description={description} ogType="article">
+  <main class="page">
+    <article>
+      <header>
+        <h1>Faut-il cocher la case 2OP ?</h1>
+        <p class="lede">
+          Par défaut, vos revenus du capital (dividendes, intérêts, plus-values de
+          titres) sont imposés au <strong>prélèvement forfaitaire unique</strong>
+          (PFU, la « flat tax »). Cocher la case <strong>2OP</strong> de votre
+          déclaration, c'est <strong>renoncer à cette flat tax</strong> pour
+          soumettre tout ce capital au <strong>barème progressif</strong>. Bonne
+          idée ou piège ? Ça dépend surtout d'<strong>une</strong> chose : votre
+          tranche marginale d'imposition (TMI). Ce guide donne la règle, et les
+          pièges à connaître avant de cocher.
+        </p>
+      </header>
+
+      <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2042 (case 2OP)" />
+
+      <section aria-labelledby="defaut">
+        <h2 id="defaut">Le choix par défaut : la flat tax (PFU)</h2>
+        <p>
+          Si vous ne cochez rien, vos revenus du capital sont taxés au PFU :
+          <strong> 12,8 % d'impôt sur le revenu + prélèvements sociaux</strong>,
+          quel que soit votre niveau de revenu. Le taux des prélèvements sociaux a
+          augmenté :
+        </p>
+        <ul>
+          <li>
+            la CSG sur les revenus du capital passe de 9,2 % à 10,6 % (LFSS 2026),
+            portant les prélèvements sociaux de 17,2 % à <strong>18,6 %</strong> ;
+          </li>
+          <li>
+            le PFU passe donc de <strong>30 %</strong> à <strong>31,4 %</strong>
+            (la part « impôt sur le revenu » de 12,8 % est, elle, inchangée depuis
+            2018).
+          </li>
+        </ul>
+        <p class="note">
+          Subtilité de calendrier : la hausse frappe les <strong>dividendes et
+          intérêts versés à partir de 2026</strong>, mais s'applique
+          <strong> dès 2025 aux plus-values mobilières</strong> (rétroactivité
+          propre aux « revenus du patrimoine »). Une <strong>plus-value de titres
+          réalisée en 2025 est donc déjà taxée à 31,4 %</strong>, alors qu'un
+          dividende versé en décembre 2025 reste à 30 %.
+        </p>
+      </section>
+
+      <section aria-labelledby="2op">
+        <h2 id="2op">Ce que débloque la case 2OP (le barème)</h2>
+        <p>
+          En cochant 2OP, l'impôt sur le revenu de votre capital n'est plus
+          calculé à 12,8 % fixe, mais à <strong>votre taux marginal</strong>
+          (0, 11, 30, 41 ou 45 %). En échange, le barème ouvre deux avantages que
+          le PFU ne donne <strong>jamais</strong> :
+        </p>
+        <dl class="cases">
+          <dt>L'abattement de 40 % sur les dividendes éligibles</dt>
+          <dd>
+            seuls 60 % de vos dividendes éligibles sont imposés à l'impôt sur le
+            revenu. ⚠️ Cet abattement ne s'applique <strong>qu'aux dividendes
+            éligibles</strong> (actions de sociétés soumises à l'IS, françaises ou
+            UE/convention), <strong>pas</strong> aux intérêts, <strong>pas</strong>
+            aux plus-values, et <strong>pas</strong> aux dividendes de
+            <strong> SIIC / foncières cotées (REIT)</strong> ni à certains
+            ETF/fonds distribuants.
+          </dd>
+          <dt>La CSG déductible (6,8 %)</dt>
+          <dd>
+            une fraction de la CSG (6,8 %) devient déductible de votre revenu
+            global de l'année suivante, ce qui réduit l'impôt. Cet avantage
+            <strong> n'existe que sous le barème</strong>. Attention : la hausse de
+            CSG de 1,4 point est, elle, <strong>non déductible</strong> — la
+            fraction déductible reste figée à 6,8 %.
+          </dd>
+        </dl>
+        <p>
+          À noter : les <strong>prélèvements sociaux sont identiques</strong> dans
+          les deux régimes (mêmes taux, sur le brut). Le match PFU / barème se joue
+          donc <em>uniquement</em> sur la part « impôt sur le revenu » et l'effet de
+          la CSG déductible.
+        </p>
+      </section>
+
+      <section aria-labelledby="regle">
+        <h2 id="regle">La règle selon votre TMI</h2>
+        <p>
+          Comme le barème impose à votre taux marginal, le calcul bascule autour de
+          la TMI de 30 %. Pour des dividendes éligibles (abattement 40 % +
+          CSG déductible 6,8 %) :
+        </p>
+        <dl class="cases">
+          <dt>TMI 0 % ou 11 % → le barème est souvent gagnant</dt>
+          <dd>
+            à 0 %, l'impôt sur le revenu du capital est nul, alors que le PFU
+            prélève 12,8 % : le barème l'emporte largement (mais pensez à le
+            cocher !). À 11 %, l'abattement et la CSG déductible suffisent encore
+            généralement à battre les 12,8 % du PFU.
+          </dd>
+          <dt>TMI 30 % et au-delà → le PFU reprend l'avantage</dt>
+          <dd>
+            30 % (ou 41 %, 45 %) appliqués au capital dépassent les 12,8 % du PFU,
+            même après abattement : la flat tax redevient le moins-disant.
+          </dd>
+        </dl>
+        <p class="note">
+          Cette règle « 0/11 → barème, 30+ → PFU » est un bon réflexe, mais elle
+          dépend de la <strong>nature</strong> de vos revenus : sans dividendes
+          éligibles (que des intérêts ou des plus-values), il n'y a pas
+          d'abattement de 40 %, et le barème devient défavorable plus tôt. D'où
+          l'intérêt de chiffrer votre cas exact.
+        </p>
+      </section>
+
+      <section aria-labelledby="pieges">
+        <h2 id="pieges">Les pièges à connaître avant de cocher</h2>
+        <ul>
+          <li>
+            <strong>L'option est globale.</strong> 2OP s'applique à
+            <strong> tous</strong> les revenus du capital du foyer pour l'année —
+            impossible de choisir le barème sur vos dividendes et le PFU sur vos
+            plus-values. Le bon calcul se fait sur le <strong>total</strong>.
+          </li>
+          <li>
+            <strong>L'abattement de 40 % ne couvre pas tout.</strong> Intérêts,
+            plus-values, dividendes de SIIC/REIT, jetons de présence, certaines
+            distributions d'ETF : pas d'abattement. Beaucoup surestiment le gain du
+            barème en l'appliquant à tort à ces revenus.
+          </li>
+          <li>
+            <strong>Révocabilité.</strong> Pour les <strong>revenus 2025</strong>
+            (déclarés en 2026), l'option 2OP est <strong>irrévocable</strong> une
+            fois la déclaration validée. Pour les <strong>revenus 2026</strong>
+            (déclarés en 2027), elle redevient <strong>révocable</strong>.
+          </li>
+          <li>
+            <strong>Franchissement de tranche.</strong> Si vos revenus du capital
+            vous font passer dans la tranche supérieure, votre « vraie » TMI sur ce
+            capital n'est pas celle de votre salaire — un bon comparateur le prend
+            en compte (mode précis : revenu + parts).
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="ou-cocher">
+        <h2 id="ou-cocher">Où se coche la case 2OP ?</h2>
+        <p>
+          Sur la déclaration de revenus principale (<strong>2042</strong>), à la
+          rubrique des revenus de capitaux mobiliers. La cocher déclenche le calcul
+          au barème pour l'ensemble de vos dividendes (cases 2DC/2TS), intérêts
+          (2TR) et plus-values reportées. Vous pouvez la cocher, simuler, puis la
+          décocher tant que la déclaration n'est pas validée — c'est le bon moment
+          pour comparer.
+        </p>
+      </section>
+
+      <section aria-labelledby="outil">
+        <h2 id="outil">Comparer votre cas précis</h2>
+        <p>
+          Notre <a href="/pfu-ou-bareme">comparateur PFU / barème gratuit</a>
+          chiffre les deux régimes à partir de votre TMI (ou de votre revenu et vos
+          parts, pour gérer le franchissement de tranche), avec abattement de 40 %,
+          CSG déductible et taux du bon millésime — et vous dit lequel coûte le
+          moins cher, et de combien. Il est <strong>100 % côté navigateur</strong>
+          et open source — aucune donnée n'est envoyée.
+        </p>
+      </section>
+
+      <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2042 (case 2OP)" />
+
+      <footer class="page-footer">
+        <p>
+          Voir aussi&nbsp;:
+          <a href="/dividendes-etrangers-2047">crédit d'impôt sur dividendes étrangers (2047)</a>
+          ·
+          <a href="/plus-values-crypto-2086">plus-values crypto (2086)</a>
+        </p>
+      </footer>
+    </article>
+  </main>
+
+  <style>
+    .page {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+      font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 2.5rem;
+    }
+    .lede {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .cases dt {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .cases dd {
+      margin: 0.25rem 0 0;
+    }
+    .note {
+      font-size: 0.92rem;
+      color: #555;
+      background: #f6f6f4;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+    }
+    a {
+      color: #1d4ed8;
+    }
+    .page-footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e2e2;
+    }
+  </style>
+</BaseLayout>

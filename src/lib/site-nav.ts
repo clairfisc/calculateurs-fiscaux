@@ -69,4 +69,18 @@ export const GUIDES: LienOutil[] = [
     resume:
       "Que mettre dans les cases 8VL et 8PL, et comment corriger l'erreur « ligne 8VL sans code 8PL ».",
   },
+  {
+    href: "/declarer-ses-cryptos-aux-impots",
+    court: "Déclarer ses cryptos",
+    long: "Faut-il déclarer ses cryptos ?",
+    resume:
+      "Quand une vente crypto est imposable, pourquoi crypto→crypto ne l'est pas, la méthode 150 VH bis et le seuil de 305 €.",
+  },
+  {
+    href: "/faut-il-cocher-2op",
+    court: "Faut-il cocher 2OP",
+    long: "Faut-il cocher la case 2OP ?",
+    resume:
+      "PFU ou barème selon votre TMI : ce que débloque la case 2OP (abattement 40 %, CSG déductible) et les pièges avant de la cocher.",
+  },
 ];

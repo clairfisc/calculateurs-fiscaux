@@ -1,0 +1,325 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Disclaimer from "../components/content/Disclaimer.astro";
+
+const title =
+  "Faut-il déclarer ses cryptos aux impôts ? Le guide 2086 (revenus 2025)";
+const description =
+  "Quand une vente de crypto est-elle imposable ? Crypto→crypto est-il taxé ? La méthode de la valeur globale du portefeuille (150 VH bis), l'exonération 305 € et les cases 3AN/3BN, expliquées simplement avec un exemple chiffré.";
+const noticeUrl =
+  "https://www.impots.gouv.fr/sites/default/files/formulaires/2086/2026/2086_5515.pdf";
+---
+
+<BaseLayout title={title} description={description} ogType="article">
+  <main class="page">
+    <article>
+      <header>
+        <h1>Faut-il déclarer ses cryptos aux impôts ?</h1>
+        <p class="lede">
+          Oui — mais pas n'importe comment, et pas toujours pour payer. En France,
+          détenir des crypto-actifs déclenche <strong>deux obligations distinctes</strong> :
+          déclarer les <strong>comptes</strong> ouverts sur les plateformes
+          étrangères, et déclarer les <strong>plus-values</strong> quand vous
+          vendez. Ce guide explique <em>quand</em> il y a réellement un impôt, comment
+          se calcule le gain (méthode <strong>150 VH bis</strong>), et où le
+          reporter — sans jargon.
+        </p>
+      </header>
+
+      <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2086" />
+
+      <section aria-labelledby="deux-obligations">
+        <h2 id="deux-obligations">Deux obligations à ne pas confondre</h2>
+        <p>
+          Beaucoup de contribuables croient qu'il suffit de « déclarer ses
+          cryptos » en un seul endroit. En réalité il y a deux choses séparées :
+        </p>
+        <ul>
+          <li>
+            <strong>Déclarer les comptes</strong> (formulaire <strong>3916-bis</strong>) :
+            tout compte d'actifs numériques ouvert, détenu ou clôturé sur une
+            plateforme <strong>établie à l'étranger</strong> (Binance, Kraken,
+            Coinbase hors entité française…) doit être déclaré, <em>même sans
+            aucune vente</em>. C'est une obligation déclarative, pas un impôt ;
+            l'oublier expose à une amende forfaitaire.
+          </li>
+          <li>
+            <strong>Déclarer les plus-values</strong> (formulaire <strong>2086</strong>) :
+            uniquement quand vous avez réalisé une <strong>cession imposable</strong>
+            dans l'année (voir ci-dessous). C'est là que se calcule l'éventuel
+            impôt.
+          </li>
+        </ul>
+        <p class="note">
+          Ce guide porte sur le <strong>2086</strong> (les gains). Pour la liste
+          des comptes à déclarer plateforme par plateforme, voir notre
+          <a href="/comptes-etrangers-3916">checklist 3916 / 3916-bis</a>.
+        </p>
+      </section>
+
+      <section aria-labelledby="fait-generateur">
+        <h2 id="fait-generateur">Quand une opération crypto est-elle imposable ?</h2>
+        <p>
+          C'est le point le plus mal compris. Toutes les opérations ne sont
+          <strong>pas</strong> des faits générateurs d'impôt. Sont imposables
+          (article 150 VH bis du CGI) :
+        </p>
+        <ul>
+          <li>
+            une cession de crypto <strong>contre une monnaie ayant cours légal</strong>
+            (vente en euros, dollars…) ;
+          </li>
+          <li>
+            une cession de crypto <strong>contre un bien ou un service</strong>
+            (payer un achat en bitcoin, par exemple).
+          </li>
+        </ul>
+        <h3 id="crypto-crypto">Crypto → crypto : non imposable (sursis)</h3>
+        <p>
+          Échanger un actif numérique contre un autre <strong>sans soulte</strong>
+          (BTC → ETH, vente d'un token contre un stablecoin…) <strong>n'est pas</strong>
+          un fait générateur : l'opération bénéficie d'un <strong>sursis
+          d'imposition</strong> (CGI 150 VH bis, II-A). Tant que vous restez «
+          en crypto », il n'y a rien à déclarer au titre des plus-values.
+        </p>
+        <p class="note">
+          Concrètement : vous pouvez arbitrer entre cryptos toute l'année sans
+          générer d'impôt. Le compteur fiscal ne se déclenche qu'au moment où vous
+          <strong>sortez vers de l'euro</strong> (ou payez un bien/service). Inutile
+          de saisir vos échanges crypto→crypto dans le calculateur — ils n'entrent
+          ni dans le gain, ni dans le seuil des 305 €.
+        </p>
+      </section>
+
+      <section aria-labelledby="methode">
+        <h2 id="methode">La méthode « valeur globale du portefeuille » (150 VH bis)</h2>
+        <p>
+          Contrairement aux actions, on ne calcule <em>pas</em> le gain ligne par
+          ligne (prix de vente − prix d'achat de <em>ce</em> coin). La loi impose
+          une formule à l'échelle de <strong>tout votre portefeuille</strong> :
+        </p>
+        <p class="formule">
+          plus-value = prix de cession − [ prix total d'acquisition × (prix de
+          cession ÷ valeur globale du portefeuille) ]
+        </p>
+        <p>Décodé :</p>
+        <dl class="cases">
+          <dt>Prix de cession</dt>
+          <dd>
+            ce que vous encaissez à la vente (minoré des frais de cession, sur
+            justificatifs).
+          </dd>
+          <dt>Valeur globale du portefeuille</dt>
+          <dd>
+            la valeur de <strong>tous</strong> vos actifs numériques au
+            <strong> moment de la vente</strong> (pas seulement le coin vendu).
+            Elle se recalcule à chaque cession.
+          </dd>
+          <dt>Prix total d'acquisition</dt>
+          <dd>
+            la somme de tout ce que vous avez réellement payé en euros pour
+            constituer ce portefeuille — diminué, à chaque vente, de la part de
+            capital déjà « consommée » par les ventes précédentes.
+          </dd>
+        </dl>
+        <p>
+          L'idée : chaque vente ne sort qu'une <strong>fraction</strong> du
+          portefeuille, donc on n'impute qu'une fraction proportionnelle du capital
+          investi. Un <strong>rachat entre deux ventes</strong> augmente le prix
+          d'acquisition disponible pour les ventes suivantes.
+        </p>
+      </section>
+
+      <section aria-labelledby="exemple">
+        <h2 id="exemple">Un exemple chiffré (celui de la notice officielle)</h2>
+        <p>
+          Vous avez investi <strong>1 000 €</strong> au total. Deux ventes dans
+          l'année :
+        </p>
+        <ul>
+          <li>
+            <strong>Vente 1</strong> — portefeuille valorisé 1 200 €, vous vendez
+            pour 450 € :<br />
+            gain = 450 − [1 000 × (450 ÷ 1 200)] = 450 − 375 =
+            <strong>75 €</strong>. Capital « consommé » : 375 €.
+          </li>
+          <li>
+            <strong>Vente 2</strong> — portefeuille valorisé 1 300 €, vous vendez
+            tout (1 300 €). Le prix d'acquisition restant n'est plus que 1 000 −
+            375 = 625 € :<br />
+            gain = 1 300 − [625 × (1 300 ÷ 1 300)] = 1 300 − 625 =
+            <strong>675 €</strong>.
+          </li>
+        </ul>
+        <p>
+          Plus-value nette de l'année = 75 + 675 = <strong>750 €</strong>. C'est ce
+          montant qui sera imposé (à 30 % par défaut).
+        </p>
+      </section>
+
+      <section aria-labelledby="seuil">
+        <h2 id="seuil">L'exonération des 305 €</h2>
+        <p>
+          Si la <strong>somme de vos prix de cession</strong> de l'année (le total
+          de ce que vous avez vendu, pas le gain) <strong>ne dépasse pas 305 €</strong>,
+          <strong> toutes</strong> vos plus-values sont exonérées. Au-delà, elles
+          sont imposables <strong>dès le premier euro</strong> de gain.
+        </p>
+        <p class="note">
+          C'est un seuil « tout ou rien », pas un abattement : 305 € de ventes →
+          exonéré ; 306 € → le gain entier est imposable. Les échanges
+          crypto→crypto ne comptent pas dans ce total.
+        </p>
+      </section>
+
+      <section aria-labelledby="moins-values">
+        <h2 id="moins-values">Les moins-values : attention, pas de report</h2>
+        <p>
+          Sur une même année, une moins-value de cession crypto s'impute sur vos
+          plus-values crypto (somme algébrique). Mais une <strong>moins-value nette</strong>
+          de l'année est <strong>définitivement perdue</strong> : elle ne se
+          reporte <em>pas</em> sur les années suivantes, et ne s'impute pas sur des
+          plus-values d'une autre nature (actions, par exemple).
+        </p>
+        <p class="note">
+          Différence majeure avec les <a href="/plus-values-cession-titres-etrangers">titres
+          (2074)</a>, où les moins-values sont reportables 10 ans.
+        </p>
+      </section>
+
+      <section aria-labelledby="hors-perimetre">
+        <h2 id="hors-perimetre">Staking, mining, airdrops : pas sur le 2086</h2>
+        <p>
+          Le 2086 ne couvre que les <strong>cessions</strong>. Les
+          <strong> revenus</strong> tirés de la crypto relèvent de régimes
+          distincts et se déclarent ailleurs :
+        </p>
+        <ul>
+          <li><strong>Minage</strong> : bénéfices non commerciaux (BNC).</li>
+          <li>
+            <strong>Staking, lending, airdrops</strong> : revenus (BNC, ou revenus
+            de capitaux mobiliers selon les cas) — pas une plus-value de cession.
+          </li>
+        </ul>
+        <p>
+          En revanche, le jour où vous <em>vendez</em> les jetons reçus par
+          staking ou airdrop, cette vente, elle, relève bien du 2086.
+        </p>
+      </section>
+
+      <section aria-labelledby="ou-reporter">
+        <h2 id="ou-reporter">Où reporter le résultat ?</h2>
+        <p>
+          Le 2086 calcule l'assiette, que vous reportez sur la
+          <strong> 2042-C</strong> :
+        </p>
+        <ul>
+          <li>
+            plus-value nette → case <strong>3AN</strong> ;
+          </li>
+          <li>
+            moins-value nette → case <strong>3BN</strong> (valeur absolue) ;
+          </li>
+          <li>
+            exonéré (≤ 305 €) → 3AN = 3BN = 0.
+          </li>
+        </ul>
+        <p>
+          Par défaut, le gain est taxé au <strong>prélèvement forfaitaire unique
+          de 30 %</strong> (12,8 % d'impôt + 17,2 % de prélèvements sociaux). Vous
+          pouvez opter pour le <strong>barème progressif</strong> (case 3CN) si
+          c'est plus avantageux — voir notre
+          <a href="/pfu-ou-bareme">comparateur PFU / barème</a>.
+        </p>
+      </section>
+
+      <section aria-labelledby="outil">
+        <h2 id="outil">Calculer automatiquement votre plus-value</h2>
+        <p>
+          Notre <a href="/plus-values-crypto-2086">calculateur 2086 gratuit</a>
+          applique la méthode 150 VH bis pour vous : vous saisissez vos achats et
+          vos ventes comme un journal, il calcule l'imputation progressive du prix
+          d'acquisition, gère l'exonération des 305 € et vous donne directement le
+          montant à porter en 3AN ou 3BN. Il est <strong>100 % côté navigateur</strong>
+          et open source — aucune donnée n'est envoyée.
+        </p>
+      </section>
+
+      <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2086" />
+
+      <footer class="page-footer">
+        <p>
+          <a href="/comptes-etrangers-3916">Quels comptes crypto déclarer (3916-bis) ? →</a>
+        </p>
+      </footer>
+    </article>
+  </main>
+
+  <style>
+    .page {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+      font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 2.5rem;
+    }
+    h3 {
+      font-size: 1.1rem;
+      margin-top: 1.5rem;
+    }
+    .lede {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .formule {
+      background: #f0f0f0;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.9rem;
+    }
+    .cases dt {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .cases dd {
+      margin: 0.25rem 0 0;
+    }
+    code {
+      background: #f0f0f0;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    .note {
+      font-size: 0.92rem;
+      color: #555;
+      background: #f6f6f4;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+    }
+    a {
+      color: #1d4ed8;
+    }
+    .page-footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e2e2;
+    }
+  </style>
+</BaseLayout>
