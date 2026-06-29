@@ -1,63 +1,80 @@
-# Déploiement — OVH (hébergement mutualisé, statique)
+# Déploiement
 
-Le site est un **Astro statique** (`dist/`) — aucun backend, aucune Pages
-Function. Il est servi par l'**hébergement web OVH** de `clairfisc.fr`
-(datacenter France), et déployé automatiquement par **GitHub Actions en FTPS**.
+Le site est un **Astro statique** (`dist/`) — aucun backend, aucune fonction
+serveur. Il se déploie donc sur **n'importe quel hébergeur statique** (Netlify,
+Cloudflare Pages, GitHub Pages, Nginx, un mutualisé en SFTP…).
 
-## 1. Domaine de production
+Les sections 1 à 3 sont **génériques** (utiles pour auto-héberger un fork). La
+section 4 documente **notre** production (OVH) — spécifique, donnée à titre
+d'exemple.
 
-Centralisé dans `astro.config.mjs` :
+## 1. Build & test en local
+
+```sh
+npm install
+npm run build      # sortie statique dans dist/
+npm run preview    # sert dist/ localement
+```
+
+Le contenu de `dist/` est tout ce qu'il faut servir.
+
+## 2. Domaine de production
+
+Centralisé dans `astro.config.mjs` (un seul endroit à changer) :
 
 ```js
 site: 'https://clairfisc.fr',
 ```
 
-Tout en dérive au build (un seul endroit à changer) : `canonical` de chaque
-page (via `Astro.url.pathname` → cohérent avec l'URL servie), URLs `og:image`/
-`og:url` absolues, et `sitemap-index.xml` / `sitemap-0.xml` (`@astrojs/sitemap`).
-`public/robots.txt` pointe vers `https://clairfisc.fr/sitemap-index.xml`.
+Tout en dérive au build : `canonical` de chaque page (via `Astro.url.pathname`),
+URLs absolues `og:image` / `og:url`, et `sitemap-index.xml` / `sitemap-0.xml`
+(`@astrojs/sitemap`). `public/robots.txt` pointe vers le sitemap correspondant.
+Pour un fork auto-hébergé, remplacez cette valeur par votre domaine.
 
-## 2. Déploiement automatique (CI → OVH FTPS)
+## 3. Déploiement automatique (CI → SFTP)
 
-Le workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) build
-puis pousse `dist/` vers le dossier `www/` de l'hébergement à chaque push sur
-`main`, via **`lftp mirror` en SFTP** (`mirror -R --delete`, inclut les dotfiles
-comme `.htaccess`, exclut `.well-known/`).
+Le workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+**build + teste**, puis pousse `dist/` vers le dossier `www/` du serveur **à
+chaque push sur `main`** (et via *workflow_dispatch*). Il fonctionne avec
+**tout hébergeur joignable en SFTP**, pas seulement OVH.
 
 **Secrets à définir** (Settings → Secrets and variables → Actions) :
 
-| Secret | Valeur |
-| --- | --- |
-| `FTP_SERVER` | hôte OVH (ex. `ftp.clusterXXX.hosting.ovh.net`) |
-| `FTP_USER` | identifiant OVH |
-| `FTP_PASSWORD` | mot de passe OVH |
+| Secret         | Valeur                                   |
+| -------------- | ---------------------------------------- |
+| `FTP_SERVER`   | hôte SFTP                                |
+| `FTP_USER`     | identifiant SFTP                         |
+| `FTP_PASSWORD` | mot de passe SFTP                        |
 
-> ⚠️ L'offre gratuite OVH **n'expose pas FTPS** (port 21 en clair seulement),
-> mais **fournit le SFTP sur le port 22** (transfert chiffré via SSH, sans shell
-> interactif). On déploie donc en **SFTP** — identifiants et fichiers chiffrés.
-> Pensez à changer le mot de passe par défaut dans l'espace client OVH.
+**Méthode (et pourquoi).** Le transfert se fait via `sshpass -e sftp` (port 22),
+avec un **batch généré à la volée : une commande `put` par entrée** de `dist/`.
+Deux choix non évidents, utiles à connaître si vous adaptez le workflow :
 
-## 3. Domaine, HTTPS, redirection
+- **SFTP, pas FTPS** — transfert chiffré via SSH, largement disponible sur les
+  mutualisés (port 22). `sshpass + sftp` s'est révélé **plus fiable** que
+  `sshpass + lftp` (qui se bloquait) ; on évite aussi `put -r *` (ambigu en
+  multi-argument côté `sftp`).
+- **`rm` avant `put`** pour les fichiers de premier niveau — certains hébergeurs
+  (dont l'OVH mutualisé) **échouent à écraser** un fichier existant ; le `-rm`
+  préalable (le `-` ignore l'absence) rend le redéploiement idempotent. Les
+  dotfiles (`.htaccess`) sont inclus explicitement.
+
+## 4. Notre production : OVH mutualisé (exemple spécifique)
+
+La prod de `clairfisc.fr` tourne sur l'**hébergement web OVH mutualisé**
+(datacenter France). Détails propres à cette offre :
 
 - **DNS** : géré chez OVH ; l'entrée A de `clairfisc.fr` pointe sur
-  l'hébergement (propagation 24-48 h après activation).
+  l'hébergement (propagation 24-48 h après activation). Avant propagation, le
+  site est joignable via l'URL de cluster OVH (`http://<login>.<cluster>.hosting.ovh.net`) ;
+  les `canonical` pointant déjà sur le domaine réel, **ne pas soumettre à Search
+  Console** avant la mise en ligne du domaine.
 - **HTTPS** : certificat Let's Encrypt gratuit fourni par OVH. Le
   [`public/.htaccess`](public/.htaccess) force HTTPS (pattern OVH
   `X-Forwarded-Proto`) et pose les en-têtes de sécurité/cache.
-- **`clairfisc.com` → `clairfisc.fr`** : redirection 301 à configurer au niveau
-  **domaine** dans le panel OVH (ne consomme pas le slot « 1 site »).
-
-## 4. Accès temporaire (avant propagation DNS)
-
-Tant que le DNS n'est pas propagé, le site est accessible via l'URL de cluster
-OVH (`http://<login>.<cluster>.hosting.ovh.net`). Les `canonical` pointent déjà
-sur `clairfisc.fr` → **ne pas soumettre à Search Console** avant que le domaine
-réel soit en ligne.
-
-## 5. Tester le build en local
-
-```sh
-npm install
-npm run build
-npm run preview   # sert dist/ localement
-```
+- **Quirks de l'offre gratuite** (à l'origine des choix de la section 3) : pas de
+  FTPS (port 21 en clair uniquement) → on passe en **SFTP port 22** ; écrasement
+  de fichier impossible → **`rm` avant `put`**. Pensez à changer le mot de passe
+  par défaut dans l'espace client.
+- **`clairfisc.com` → `clairfisc.fr`** : redirection 301 au niveau **domaine**
+  dans le panel OVH (ne consomme pas le slot « 1 site »).
