@@ -159,7 +159,11 @@ export default function ChecklistComptes() {
   const agregat = useMemo(() => evalueDeclaration(toutesLignes), [toutesLignes]);
 
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4">
+    <form
+      className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4"
+      autoComplete="off"
+      onSubmit={(e) => e.preventDefault()}
+    >
       <header>
         <h1 className="text-2xl font-bold text-slate-900">Quels comptes étrangers devez-vous déclarer&nbsp;?</h1>
         <p className="mt-1 text-sm text-slate-600">
@@ -200,6 +204,7 @@ export default function ChecklistComptes() {
                   <select
                     value={p.etablissementId ?? ""}
                     onChange={(e) => choisirEtablissement(p.id, e.target.value || undefined)}
+                    autoComplete="off"
                     className="rounded-md border border-slate-300 px-2 py-1.5"
                   >
                     <option value="">Autre / saisie libre…</option>
@@ -229,7 +234,7 @@ export default function ChecklistComptes() {
                       <div className="flex items-end gap-3">
                         <label className="flex flex-1 flex-col gap-1 text-sm">
                           <span className="text-slate-700">{l.sousCompteLibelle ?? "Type de compte"}</span>
-                          <select value={l.type} onChange={(e) => majLigne(p.id, l.id, { type: e.target.value as TypeCompte })} className="rounded-md border border-slate-300 px-2 py-1.5">
+                          <select value={l.type} onChange={(e) => majLigne(p.id, l.id, { type: e.target.value as TypeCompte })} autoComplete="off" className="rounded-md border border-slate-300 px-2 py-1.5">
                             {typesPourSelect.map((t) => (
                               <option key={t} value={t}>{TYPE_LABELS[t]}</option>
                             ))}
@@ -320,6 +325,6 @@ export default function ChecklistComptes() {
         Aide informative — ne constitue pas un conseil fiscal. Les cas marqués « à vérifier » ne sont pas tranchés&nbsp;:
         rapprochez-vous de la doctrine ou d'un professionnel.
       </p>
-    </div>
+    </form>
   );
 }
