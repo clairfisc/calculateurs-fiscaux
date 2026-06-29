@@ -3,7 +3,7 @@ import BoutonCopier from "../BoutonCopier";
 import { formateCents, formateEurosEntiers } from "../fx";
 
 /**
- * Affichage des résultats du calcul 2086 : détail par cession (imputation progressive du
+ * Affichage des résultats du calcul 2086 : détail par vente (imputation progressive du
  * prix d'acquisition) + cases 2042-C 3AN / 3BN à reporter. Tout est dérivé du moteur.
  */
 interface Resultats2086Props {
@@ -20,7 +20,7 @@ function Cellule({ libelle, cents }: { libelle: string; cents: number }) {
 }
 
 export default function Resultats2086({ declaration }: Resultats2086Props) {
-  const { cessions, totalCessionsEur, exonere305, case3anEur, case3bnEur } = declaration;
+  const { ventes, totalCessionsEur, exonere305, case3anEur, case3bnEur } = declaration;
   const estMoinsValue = case3bnEur > 0;
 
   return (
@@ -36,15 +36,15 @@ export default function Resultats2086({ declaration }: Resultats2086Props) {
         </p>
       )}
 
-      {/* Détail par cession */}
+      {/* Détail par vente */}
       <div className="flex flex-col gap-3">
-        {cessions.map((c, i) => {
+        {ventes.map((c, i) => {
           const moinsValue = c.plusValueCents < 0;
           return (
             <div key={i} className="rounded-lg border border-slate-200 bg-white p-4">
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-slate-800">
-                  Cession {i + 1}
+                  Vente {i + 1}
                   {c.date && <span className="font-normal text-slate-500"> — {c.date}</span>}
                 </h3>
                 <span
