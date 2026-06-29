@@ -2,8 +2,9 @@ import { useMemo, useState } from "react";
 import {
   evalueCompte,
   evalueDeclaration,
-  ETABLISSEMENTS,
   etablissementParId,
+  etablissementsPourType,
+  typesDeEtablissement,
   type Compte,
   type TypeCompte,
   type Verdict,
@@ -37,6 +38,8 @@ const VERDICT_STYLE: Record<Verdict, { label: string; classe: string }> = {
 
 interface CompteSaisie extends Compte {
   readonly id: string;
+  /** Libellé de sous-compte (gabarit multi-comptes, ex. DEGIRO « Compte espèces flatex »). */
+  readonly sousCompteLibelle?: string;
 }
 
 let compteur = 0;
@@ -55,12 +58,15 @@ function ficheTexte(c: CompteSaisie): string {
   return [
     `Formulaire : ${r.formulaire ?? "—"}`,
     `Établissement : ${designation}`,
+    c.sousCompteLibelle ? `Compte : ${c.sousCompteLibelle}` : null,
     `Adresse : ${adresse}`,
     `Pays : ${pays}`,
     `Type de compte : ${TYPE_LABELS[c.type]}`,
     `N° / identifiant : (à renseigner)`,
     `Date d'ouverture / clôture dans l'année : (à renseigner)`,
-  ].join("\n");
+  ]
+    .filter((l): l is string => Boolean(l))
+    .join("\n");
 }
 
 export default function ChecklistComptes() {
@@ -74,6 +80,30 @@ export default function ChecklistComptes() {
   }
   function supprimer(id: string) {
     setComptes((prev) => (prev.length > 1 ? prev.filter((c) => c.id !== id) : prev));
+  }
+  // Choix d'un établissement : auto-déplie en plusieurs lignes si gabarit multi-comptes
+  // (ex. DEGIRO = titres + espèces) ; sinon adapte le type s'il n'est pas proposé.
+  function choisirEtablissement(rowId: string, id: string | undefined) {
+    const etab = id ? etablissementParId(id) : undefined;
+    setComptes((prev) => {
+      const idx = prev.findIndex((c) => c.id === rowId);
+      if (idx < 0) return prev;
+      const c = prev[idx]!;
+      let remplacement: CompteSaisie[];
+      if (etab?.comptes && etab.comptes.length > 1) {
+        remplacement = etab.comptes.map((g, k) => ({
+          id: `${rowId}.${k}`,
+          type: g.type,
+          etablissementId: id,
+          sousCompteLibelle: g.libelle,
+          pays: c.pays,
+        }));
+      } else {
+        const type = etab && !typesDeEtablissement(etab).includes(c.type) ? etab.typeParDefaut : c.type;
+        remplacement = [{ ...c, etablissementId: id, type, sousCompteLibelle: undefined }];
+      }
+      return [...prev.slice(0, idx), ...remplacement, ...prev.slice(idx + 1)];
+    });
   }
 
   const agregat = useMemo(() => evalueDeclaration(comptes), [comptes]);
@@ -108,7 +138,9 @@ export default function ChecklistComptes() {
           return (
             <article key={c.id} className="flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-4">
               <div className="flex items-start justify-between gap-3">
-                <span className="text-sm font-medium text-slate-500">Compte {i + 1}</span>
+                <span className="text-sm font-medium text-slate-500">
+                  Compte {i + 1}{c.sousCompteLibelle ? ` — ${c.sousCompteLibelle}` : ""}
+                </span>
                 <button
                   type="button"
                   onClick={() => supprimer(c.id)}
@@ -124,7 +156,13 @@ export default function ChecklistComptes() {
                   <span className="text-slate-700">Type de compte</span>
                   <select
                     value={c.type}
-                    onChange={(e) => modifier(c.id, { type: e.target.value as TypeCompte })}
+                    onChange={(e) => {
+                      const type = e.target.value as TypeCompte;
+                      // Si l'établissement choisi n'est pas compatible avec le nouveau type, on le réinitialise.
+                      const etab = c.etablissementId ? etablissementParId(c.etablissementId) : undefined;
+                      const garde = etab ? typesDeEtablissement(etab).includes(type) : true;
+                      modifier(c.id, { type, etablissementId: garde ? c.etablissementId : undefined });
+                    }}
                     className="rounded-md border border-slate-300 px-2 py-1.5"
                   >
                     {(Object.keys(TYPE_LABELS) as TypeCompte[]).map((t) => (
@@ -137,11 +175,11 @@ export default function ChecklistComptes() {
                   <span className="text-slate-700">Établissement</span>
                   <select
                     value={c.etablissementId ?? ""}
-                    onChange={(e) => modifier(c.id, { etablissementId: e.target.value || undefined })}
+                    onChange={(e) => choisirEtablissement(c.id, e.target.value || undefined)}
                     className="rounded-md border border-slate-300 px-2 py-1.5"
                   >
                     <option value="">Autre / saisie libre…</option>
-                    {ETABLISSEMENTS.map((e) => (
+                    {etablissementsPourType(c.type).map((e) => (
                       <option key={e.id} value={e.id}>{e.designation}</option>
                     ))}
                   </select>

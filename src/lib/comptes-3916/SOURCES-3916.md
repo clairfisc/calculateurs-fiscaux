@@ -127,3 +127,28 @@ sur impots.gouv, **non stockée** — frontière §5.5.)*
 (5173) & 2026 (5454) vérifiés ; codes PSAN = aide non exhaustive (à défaut : nom/adresse/URL). Pour
 art. 344 A I, utiliser la version « valeurs mobilières, titres ou fonds » (décret 2020-118), pas la
 version 2019 « espèces ». Re-vérifier chaque millésime (règle « valider avant de déployer »).*
+
+## 11. Structures multi-comptes par établissement (validé 29/06/2026)
+
+> Recherche multi-sources + vérif adversariale (104 agents). **Règle fondatrice (BOFiP
+> BOI-CF-CPF-30-20 §180) : une déclaration PAR COMPTE distinct** (numéro/IBAN propre) ;
+> la devise seule ne crée pas un compte. Critère de déclarabilité = **établissement teneur
+> à l'étranger** ; un IBAN FR de succursale française ⇒ compte français (non déclarable).
+
+| Établissement | Comptes déclarables | Auto-déplier ? | Conf. |
+|---|---|---|---|
+| **DEGIRO / flatexDEGIRO** | **2** : compte-titres (succursale NL, Amsterdam, 3916) + compte espèces **flatex** (Allemagne, IBAN DE, 3916) | **OUI (2)** | haute |
+| **Revolut** | courant EUR/Épargne (succursale FR, IBAN FR) **NON déclarable** ; titres/Flexible Cash Funds (Lituanie, 3916) + crypto (Chypre, 3916-bis) **si détenus** | non (note) | haute |
+| **eToro** | actions/CFD (3916) **et** crypto (3916-bis) = 2 comptes **si les deux** | non (note) | moy. |
+| **Trade Republic** | espèces (IBAN FR récent = non déclarable / IBAN DE = 3916) + titres (3916) + crypto (3916-bis, PSAN 029) | non (note) | moy. |
+| **N26** | 1 compte (IBAN **DE** → à déclarer ; « rumeur IBAN FR 2023 » **réfutée 0-3**) ; Espaces = même IBAN | non (note) | moy. |
+| **PayPal** | 1 compte ; **exemption e-money** (3 conditions) prime — « toujours déclarable car Luxembourg » **réfuté 0-3** | non | haute |
+| **Binance** | 1 compte 3916-bis ; **Binance France SAS (AMF) = compte FR non déclarable** sinon entité étrangère | non (note) | moy. |
+| **Coinbase / Kraken** | 1 compte 3916-bis (entité Luxembourg / Payward Irlande) | non | moy. |
+| **IBKR / bunq / Wise** | 1 compte par défaut ; sous-comptes (cash séparé, jars/IBAN devise) **non sourcés comme distincts** → note « à vérifier » | non (note) | basse |
+
+**Sous-comptes NON auto-dépliés** (non fermement sourcés comme distincts) : devises AutoFX (DEGIRO),
+Espaces (N26), vaults (Revolut), soldes multi-devises (Wise), sous-comptes (IBKR/Binance).
+**Questions ouvertes** (reconfirmer par millésime) : IBAN exact Trade Republic/N26 ; entité Binance de
+l'utilisateur ; soldes multi-devises Wise (1 vs N). Sources : impots.gouv.fr/notice 3916, BOFiP, pages
+d'aide officielles (DEGIRO fiscalité, Revolut tax), guides FR (rotek, moneyvox, portfoliotracker).
