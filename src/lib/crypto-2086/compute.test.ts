@@ -146,6 +146,24 @@ describe("2086 — méthode de la valeur globale du portefeuille (CGI 150 VH bis
     expect(decl.case3anEur).toBe(1000);
   });
 
+  it("report N-1 — le prix d'acquisition net reporté initialise le calcul (sans ligne Achat)", () => {
+    // Équivaut à « achat 1000 puis vente 450/1200 » mais via le report : fraction 375, PV 75.
+    const decl = calculeDeclaration2086([vente("2025-03-15", 450, 1200)], eur(1000));
+    expect(decl.ventes[0].prixAcquisitionNetCents).toBe(eur(1000));
+    expect(decl.ventes[0].fractionAcquisitionImputeeCents).toBe(eur(375));
+    expect(decl.ventes[0].plusValueCents).toBe(eur(75));
+  });
+
+  it("report N-1 + rachat de l'année : le report et les achats s'additionnent", () => {
+    // Report 625 (net N-1) + achat 500 dans l'année = ptaNet 1125 ; vente 1000/2000 → 437,50.
+    const decl = calculeDeclaration2086(
+      [achat("2025-06-01", 500), vente("2025-09-01", 1000, 2000)],
+      eur(625),
+    );
+    expect(decl.ventes[0].prixAcquisitionNetCents).toBe(eur(1125));
+    expect(decl.ventes[0].plusValueCents).toBe(eur(437.5));
+  });
+
   it("valeur globale ≤ 0 → erreur explicite", () => {
     expect(() =>
       calculeDeclaration2086([

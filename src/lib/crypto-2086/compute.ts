@@ -48,12 +48,22 @@ function eurosArrondis(cents: Cents): number {
  * @param operations Suite d'**achats** (acquisitions en €) et de **ventes** (cessions
  *                   imposables). Triées par date pour l'imputation (ordre de saisie conservé à
  *                   date égale). Les échanges crypto→crypto ne sont PAS des opérations (sursis).
+ * @param reportAcquisitionNetCents **Prix d'acquisition net reporté des années précédentes**
+ *                   (centimes), pour un portefeuille déjà détenu : total payé pour les cryptos
+ *                   détenues en début d'année, **diminué des fractions de capital déjà imputées
+ *                   sur les cessions des années antérieures** (ligne 223 du 2086 N-1 ; CGI 150 VH
+ *                   bis III-B, « cessions antérieurement réalisées » — réduction cumulative
+ *                   d'année en année). Défaut 0 (première détention / première vente). Cf.
+ *                   SOURCES-2086.md §3.
  * @returns Détail par vente + agrégats (PV nette, 3AN/3BN, exonération 305 €), en EUR pour les
  *          valeurs reportables.
  *
  * @throws ValeurGlobaleInvalideError si une vente a une valeur globale ≤ 0.
  */
-export function calculeDeclaration2086(operations: readonly Operation[]): Declaration2086 {
+export function calculeDeclaration2086(
+  operations: readonly Operation[],
+  reportAcquisitionNetCents: Cents = 0,
+): Declaration2086 {
   // Ordre chronologique : achats et ventes s'enchaînent ; l'imputation est séquentielle.
   // Tri stable → à date égale, l'ordre de saisie (donc l'intention de l'utilisateur) est conservé.
   const journal = operations
@@ -61,7 +71,9 @@ export function calculeDeclaration2086(operations: readonly Operation[]): Declar
     .sort((a, b) => (a.op.date < b.op.date ? -1 : a.op.date > b.op.date ? 1 : a.i - b.i))
     .map(({ op }) => op);
 
-  let ptaNetCents = 0;
+  // Le prix d'acquisition disponible démarre au net reporté des années précédentes (0 par défaut),
+  // puis les achats de l'année viennent l'augmenter.
+  let ptaNetCents = Math.max(0, Math.round(reportAcquisitionNetCents));
   let totalCessionsNetFraisCents = 0;
   let plusValueNetteCents = 0;
   const ventes: ResultatVente[] = [];

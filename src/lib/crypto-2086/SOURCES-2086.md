@@ -118,8 +118,8 @@ seuls les frais de **cession** réduisent le prix de cession, BOFiP ; un « acha
 monnaie ayant cours légal** et **crypto → bien/service** sont imposables. Les échanges
 crypto→crypto sans soulte ne sont **pas** un fait générateur : ils n'entrent **pas** dans le calcul
 (ni dans la PV, ni dans l'assiette du seuil 305 €) et n'affectent pas le prix total d'acquisition
-(actif reçu valorisé à 0, cf. §2). Le moteur expose `estImposable(contrepartie)` et **filtre** les
-cessions non imposables (cas E).
+(actif reçu valorisé à 0, cf. §2). Dans le modèle « journal », ils ne sont donc **pas des
+opérations** (ni achat, ni vente) : l'utilisateur ne les saisit pas (UI : encart d'aide).
 
 ## 5. Seuil 305 €, compensation PV/MV, report (II-B, IV, V) + routage 2042-C
 
@@ -184,14 +184,15 @@ division exacte pour un oracle non ambigu.
 | **B** notice officielle | PTA 1000 ; [1200, 450, 0] puis [1300, 1300, 0] | 75 puis 1300 − (1000−375)×(1300/1300) = 675 | PV 75 + 675 = 750 ; **3AN 750** |
 | **C** ≤ 305 € exonéré | PTA 1000 ; [1500, 300, 0] | total cessions 300 ≤ 305 | exonéré ; **3AN 0 / 3BN 0** |
 | **D** frais (217 vs 218) | PTA 1000 ; [2000, 1000, 50] | 950 − 1000×(1000/2000) = 950 − 500 | PV 450 ; **3AN 450** |
-| **E** crypto→crypto ignoré | PTA 1000 ; [2000, 1000, 0] (fiat) + 1 échange actif-num. | l'échange est filtré (II-A) | identique à A ; **3AN 500** |
 | **F** moins-value | PTA 2000 ; [1000, 500, 0] | 500 − 2000×(500/1000) = 500 − 1000 | MV −500 ; **3BN 500** |
 | **G** compensation → MV nette | PTA 1000 ; [2000, 200, 0] puis [500, 400, 0] | +100 puis 400 − (1000−100)×(400/500) = 400 − 720 = −320 | net −220 ; **3BN 220** |
 | **H** rachat entre 2 ventes | achat 1000 ; vente [1200, 450, 0] ; achat 500 ; vente [2000, 1000, 0] | 75 ; ptaNet 625+500=1125 ; 1000 − 1125×(1000/2000) = 437,50 | net 512,50 ; **3AN ~513** |
+| **report N-1** | report 1000 ; vente [1200, 450, 0] (aucune ligne Achat) | 450 − 1000×(450/1200) = 75 | identique à B-cession-1 |
 
-*(Notation : pour A-G, « PTA n » = un achat unique initial ; cessions notées [VGP, prix, frais].
-Depuis la refonte « journal », les entrées sont une suite d'opérations achat/vente datées — A-G
-équivalent à « un achat initial puis les ventes ».)*
+*(Notation : « PTA n » / « report n » = prix d'acquisition de départ (achat initial ou report
+N-1) ; ventes notées [VGP, prix, frais]. Modèle « journal » : suite d'opérations achat/vente
+datées + un report N-1 optionnel. Le crypto→crypto n'est pas une opération (§4) — pas de cas-type.
+Tests additionnels : ordre chronologique, « achats seuls », « vente sans achat », VGP ≤ 0.)*
 
 **Détail cas B (exemple officiel, notice 2086 / BOFiP §110)** :
 - Cession 1 (mars) : `450 − (1000 × 450/1200) = 450 − 375 = 75 €`. Fraction imputée = 375 €.
