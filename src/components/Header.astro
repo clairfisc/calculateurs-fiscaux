@@ -1,0 +1,91 @@
+---
+import { CALCULATEURS, GUIDES } from "../lib/site-nav";
+
+const path = Astro.url.pathname;
+/** Actif si la page courante correspond au lien (gère le slash final). */
+const estActif = (href: string) =>
+  path === href || path === `${href}/`;
+---
+
+<header class="border-b border-slate-200 bg-white">
+  <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3">
+    <a href="/" class="flex items-center gap-2 font-semibold text-slate-900">
+      <img src="/favicon.svg" alt="" width="24" height="24" aria-hidden="true" />
+      <span>Clairfisc</span>
+    </a>
+
+    <!-- Navigation desktop -->
+    <nav class="hidden items-center gap-5 text-sm md:flex" aria-label="Calculateurs">
+      {
+        CALCULATEURS.map((l) => (
+          <a
+            href={l.href}
+            class:list={[
+              "transition hover:text-blue-700",
+              estActif(l.href) ? "font-semibold text-blue-700" : "text-slate-600",
+            ]}
+            aria-current={estActif(l.href) ? "page" : undefined}
+          >
+            {l.court}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Navigation mobile : menu déroulant sans JS -->
+    <details class="relative md:hidden">
+      <summary
+        class="flex cursor-pointer list-none items-center gap-1 rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700"
+        aria-label="Ouvrir le menu"
+      >
+        Menu
+      </summary>
+      <div
+        class="absolute right-0 z-20 mt-2 w-64 rounded-lg border border-slate-200 bg-white p-3 shadow-lg"
+      >
+        <p class="px-2 pb-1 text-xs font-semibold tracking-wide text-slate-400 uppercase">
+          Calculateurs
+        </p>
+        <ul class="mb-2">
+          {
+            CALCULATEURS.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  class:list={[
+                    "block rounded px-2 py-1.5 text-sm hover:bg-slate-50",
+                    estActif(l.href) ? "font-semibold text-blue-700" : "text-slate-700",
+                  ]}
+                  aria-current={estActif(l.href) ? "page" : undefined}
+                >
+                  {l.court}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="px-2 pb-1 text-xs font-semibold tracking-wide text-slate-400 uppercase">
+          Guides
+        </p>
+        <ul>
+          {
+            GUIDES.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  class:list={[
+                    "block rounded px-2 py-1.5 text-sm hover:bg-slate-50",
+                    estActif(l.href) ? "font-semibold text-blue-700" : "text-slate-700",
+                  ]}
+                  aria-current={estActif(l.href) ? "page" : undefined}
+                >
+                  {l.court}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </details>
+  </div>
+</header>
