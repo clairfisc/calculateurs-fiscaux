@@ -52,8 +52,18 @@ describe("moteur 3916/3916-bis — cas-types (oracle SOURCES-3916.md §8)", () =
     expect(r.verdict).toBe("a_declarer");
   });
 
-  it("5-bis. e-money conditions non renseignées → à vérifier (on ne tranche pas)", () => {
+  it("5-bis. e-money sans condition cochée → à déclarer par défaut (exemption non revendiquée)", () => {
     const r = evalueCompte({ type: "paiement_emoney" });
+    expect(r.verdict).toBe("a_declarer");
+  });
+
+  it("5-ter. e-money : un montant seul, sans cocher les 2 conditions → à déclarer", () => {
+    const r = evalueCompte({ type: "paiement_emoney", emoneyEncaissementsAnnuelsEur: 3000 });
+    expect(r.verdict).toBe("a_declarer");
+  });
+
+  it("5-quater. e-money : 2 conditions cochées mais montant non renseigné → à vérifier (indiquer le montant)", () => {
+    const r = evalueCompte({ type: "paiement_emoney", emoneyUsageVentesBiens: true, emoneyAdosseCompteFrancais: true });
     expect(r.verdict).toBe("a_verifier");
   });
 

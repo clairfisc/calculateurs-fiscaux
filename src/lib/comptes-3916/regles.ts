@@ -18,37 +18,48 @@ import { SEUIL_EMONEY_EUR } from "./types";
  */
 function evalueEmoney(c: Compte): ResultatCompte {
   const src = "CGI art. 1649 A ; BOFiP BOI-CF-CPF-30-20 §85 ; FAQ PayPal impots.gouv";
-  const { emoneyUsageVentesBiens: usage, emoneyAdosseCompteFrancais: adosse, emoneyEncaissementsAnnuelsEur: enc } = c;
+  // Cases à cocher = conditions binaires : décochée ⇒ condition NON remplie (pas « inconnue »).
+  const usage = c.emoneyUsageVentesBiens ?? false;
+  const adosse = c.emoneyAdosseCompteFrancais ?? false;
+  const enc = c.emoneyEncaissementsAnnuelsEur;
 
-  // Une condition explicitement non remplie → à déclarer.
-  if (usage === false || adosse === false || (enc !== undefined && enc > SEUIL_EMONEY_EUR)) {
+  // L'exemption suppose les DEUX conditions qualitatives affirmées (usage + adossement).
+  if (usage && adosse) {
+    if (enc === undefined) {
+      return {
+        verdict: "a_verifier",
+        formulaire: "3916",
+        motif:
+          "Conditions d'usage (ventes de biens en ligne) et d'adossement à un compte en France remplies : " +
+          `indiquez vos encaissements annuels — ≤ ${SEUIL_EMONEY_EUR} € ⇒ dispensé, au-delà ⇒ à déclarer.`,
+        source: src,
+      };
+    }
+    if (enc <= SEUIL_EMONEY_EUR) {
+      return {
+        verdict: "exonere",
+        formulaire: null,
+        motif:
+          "Compte de monnaie électronique remplissant les 3 conditions cumulatives d'exemption " +
+          "(ventes de biens en ligne, adossé à un compte en France, encaissements ≤ 10 000 €) → dispensé de déclaration.",
+        source: src,
+      };
+    }
     return {
       verdict: "a_declarer",
       formulaire: "3916",
-      motif:
-        "Compte de monnaie électronique ne remplissant pas les 3 conditions cumulatives d'exemption " +
-        `(usage ventes de biens en ligne + adossé à un compte en France + encaissements ≤ ${SEUIL_EMONEY_EUR} €) → à déclarer.`,
+      motif: `Encaissements annuels supérieurs à ${SEUIL_EMONEY_EUR} € → l'exemption ne s'applique pas : compte à déclarer.`,
       source: src,
     };
   }
-  // Les 3 conditions clairement remplies → exonéré.
-  if (usage === true && adosse === true && enc !== undefined && enc <= SEUIL_EMONEY_EUR) {
-    return {
-      verdict: "exonere",
-      formulaire: null,
-      motif:
-        "Compte de monnaie électronique remplissant les 3 conditions cumulatives d'exemption " +
-        "(ventes de biens en ligne, adossé à un compte en France, encaissements ≤ 10 000 €) → dispensé de déclaration.",
-      source: src,
-    };
-  }
-  // Information incomplète → on ne tranche pas.
+
+  // Au moins une condition qualitative non remplie (case décochée) → à déclarer par défaut.
   return {
-    verdict: "a_verifier",
+    verdict: "a_declarer",
     formulaire: "3916",
     motif:
-      "Compte de monnaie électronique : renseignez les 3 conditions d'exemption (usage ventes de biens, " +
-      "adossement à un compte en France, montant des encaissements annuels) pour déterminer s'il est dispensé.",
+      "Les 3 conditions cumulatives d'exemption ne sont pas toutes remplies (usage ventes de biens en ligne " +
+      "+ adossé à un compte en France + encaissements ≤ 10 000 €) → compte à déclarer. Cochez les conditions remplies pour vérifier l'exemption.",
     source: src,
   };
 }
