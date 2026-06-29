@@ -73,24 +73,39 @@ function buildCompte(p: Poste, l: CompteLigne): Compte {
   };
 }
 
-/** Texte de la fiche à recopier sur impots.gouv. */
-function ficheTexte(p: Poste, l: CompteLigne): string {
+interface FicheChamp {
+  readonly label: string;
+  readonly value: string;
+  /** Champ que l'utilisateur doit compléter lui-même (affiché en grisé). */
+  readonly aRenseigner?: boolean;
+}
+
+/** Champs structurés de la fiche à recopier sur impots.gouv. */
+function ficheChamps(p: Poste, l: CompteLigne): FicheChamp[] {
   const etab = p.etablissementId ? etablissementParId(p.etablissementId) : undefined;
   const r = evalueCompte(buildCompte(p, l));
-  const designation = etab?.designation ?? p.etablissementLibre ?? "(à renseigner)";
-  const adresse = etab?.adresse ?? "(adresse à renseigner)";
-  const pays = p.pays ?? etab?.pays ?? "(pays à renseigner)";
-  return [
-    `Formulaire : ${r.formulaire ?? "—"}`,
-    `Établissement : ${designation}`,
-    l.sousCompteLibelle ? `Compte : ${l.sousCompteLibelle}` : null,
-    `Adresse : ${adresse}`,
-    `Pays : ${pays}`,
-    `Type de compte : ${TYPE_LABELS[l.type]}`,
-    `N° / identifiant : (à renseigner)`,
-    `Date d'ouverture / clôture dans l'année : (à renseigner)`,
-  ]
-    .filter((x): x is string => Boolean(x))
+  const designation = etab?.designation ?? p.etablissementLibre ?? "";
+  const adresse = etab?.adresse ?? "";
+  const pays = p.pays ?? etab?.pays ?? "";
+  const champs: FicheChamp[] = [
+    { label: "Formulaire", value: r.formulaire ?? "—" },
+    { label: "Établissement", value: designation || "à renseigner", aRenseigner: !designation },
+  ];
+  if (l.sousCompteLibelle) champs.push({ label: "Compte", value: l.sousCompteLibelle });
+  champs.push(
+    { label: "Adresse de l'établissement", value: adresse || "à renseigner", aRenseigner: !adresse },
+    { label: "Pays", value: pays || "à renseigner", aRenseigner: !pays },
+    { label: "Type de compte", value: TYPE_LABELS[l.type] },
+    { label: "N° / identifiant du compte", value: "à renseigner", aRenseigner: true },
+    { label: "Dates d'ouverture / clôture", value: "à renseigner", aRenseigner: true },
+  );
+  return champs;
+}
+
+/** Version texte (presse-papiers) dérivée des champs structurés. */
+function ficheTexte(p: Poste, l: CompteLigne): string {
+  return ficheChamps(p, l)
+    .map((c) => `${c.label} : ${c.value}`)
     .join("\n");
 }
 
@@ -254,11 +269,22 @@ export default function ChecklistComptes() {
                       </div>
 
                       {r.verdict === "a_declarer" && (
-                        <details className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm">
-                          <summary className="cursor-pointer font-medium text-slate-700">Fiche à recopier sur impots.gouv</summary>
-                          <pre className="mt-2 whitespace-pre-wrap font-mono text-xs text-slate-700">{ficheTexte(p, l)}</pre>
-                          <div className="mt-2"><BoutonCopier valeur={ficheTexte(p, l)} libelle="Copier la fiche" /></div>
-                        </details>
+                        <div className="overflow-hidden rounded-md border border-slate-200 bg-white">
+                          <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-3 py-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                              Fiche à recopier sur impots.gouv
+                            </span>
+                            <BoutonCopier valeur={ficheTexte(p, l)} libelle="Copier la fiche" />
+                          </div>
+                          <dl className="divide-y divide-slate-100 text-sm">
+                            {ficheChamps(p, l).map((ch) => (
+                              <div key={ch.label} className="flex gap-3 px-3 py-1.5">
+                                <dt className="w-48 shrink-0 text-slate-500">{ch.label}</dt>
+                                <dd className={ch.aRenseigner ? "italic text-slate-400" : "font-medium text-slate-800"}>{ch.value}</dd>
+                              </div>
+                            ))}
+                          </dl>
+                        </div>
                       )}
                     </div>
                   );
