@@ -59,8 +59,9 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     url: "https://www.binance.com",
     adresse: null,
     note:
-      "Entité variable selon le compte → adresse à confirmer sur votre relevé. " +
-      "Si votre compte relève de Binance France SAS (enregistrée AMF), c'est un compte FRANÇAIS → non concerné par le 3916-bis.",
+      "Pas d'adresse d'établissement unique : elle dépend de votre entité contractante. " +
+      "• Compte rattaché à Binance France SAS (enregistrée AMF, Paris) → compte FRANÇAIS, NON concerné par le 3916-bis. " +
+      "• Compte sur la plateforme internationale (binance.com) → déclarez l'entité étrangère figurant dans vos conditions générales / relevé, avec SON adresse (et non celle des bureaux parisiens). À reporter depuis vos CGU.",
   },
   { id: "coinbase", designation: "Coinbase", typeParDefaut: "exchange_crypto", formulaireParDefaut: "3916-bis", codePsan: "009", pays: "LU", url: "https://www.coinbase.com", adresse: "Coinbase Luxembourg S.A., 58 Boulevard Grande-Duchesse Charlotte, L-1330 Luxembourg", note: "Entité Coinbase Luxembourg S.A. — confirmer selon votre relevé." },
   { id: "kraken", designation: "Kraken", typeParDefaut: "exchange_crypto", formulaireParDefaut: "3916-bis", codePsan: "020", pays: "IE", url: "https://www.kraken.com", adresse: "Payward Ireland Limited, 70 Sir John Rogerson's Quay, Dublin 2, D02 R296, Irlande" },
