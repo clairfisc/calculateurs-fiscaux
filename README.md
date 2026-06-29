@@ -1,26 +1,32 @@
-# Calculateur de crédit d'impôt sur revenus mobiliers étrangers (2047)
+# Clairfisc — calculateurs fiscaux open source pour l'investisseur
 
-Calculateur **gratuit et open source** du crédit d'impôt sur **dividendes et intérêts étrangers** :
-cases du formulaire **2047** (205/206/207), **8VL**, **8PL** (2026) et **report 2042** (2DC/2TS/2TR).
+Super-app **gratuite et open source** de calculateurs fiscaux pour l'investisseur français :
+dividendes et plus-values étrangers, crypto, comptes à l'étranger, choix PFU / barème.
 
-Le calcul s'exécute **entièrement dans votre navigateur** — sans compte, sans tracker.
+Le calcul s'exécute **entièrement dans votre navigateur** — sans compte, sans tracker, sans envoi de données.
+En ligne : **[clairfisc.fr](https://clairfisc.fr)**.
 
 ## Pourquoi
 
-La fiscalité des revenus mobiliers étrangers (le crédit d'impôt, la case **8PL** introduite en 2026,
-le routage 2047 → 2042) est mal documentée et source d'erreurs. Cet outil produit les bonnes cases,
-gratuitement — et **son code est public pour que chacun puisse vérifier les calculs**.
+La fiscalité de l'investisseur (crédit d'impôt sur revenus étrangers, plus-values de cession, crypto,
+déclaration des comptes étrangers, arbitrage PFU/barème) est mal documentée et source d'erreurs. Ces
+outils produisent les bonnes cases, gratuitement — et **leur code est public pour que chacun puisse
+vérifier les calculs**. C'est le cœur du projet : la justesse fiscale **auditable**.
 
-## Ce qu'il fait
+## Les calculateurs
 
-- Saisie multi-lignes : pays, type (dividende / intérêt), montant (brut ou net) + devise, date d'encaissement, impôt étranger retenu.
-- Calcule, case par case : **205 / 206 / 207**, les agrégats **8VL / 8PL**, et le **report 2042** (2DC / 2TS / 2TR).
-- Garde-fous : signalement de l'excédent de retenue non récupérable (ex. Allemagne 26,375 %, Suisse 35 %), pays sans crédit, etc.
+- **Dividendes étrangers (2047)** — crédit d'impôt sur dividendes et intérêts étrangers : cases 205/206/207, agrégats **8VL / 8PL** (2026), report 2042 (2DC / 2TS / 2TR).
+- **Plus-values de cession de titres (2074-CMV)** — compte-titres étranger : prix moyen pondéré, change par opération, imputation/report des moins-values, cases **3VG / 3VH**.
+- **Plus-values crypto (2086)** — méthode de la valeur globale du portefeuille (CGI 150 VH bis), exonération 305 €, cases **3AN / 3BN**.
+- **Comptes étrangers (3916 / 3916-bis)** — checklist « quels comptes déclarer » (banque, néobanque, courtier, exchange crypto, PayPal…) + fiche à recopier, compte par compte.
+- **PFU ou barème (case 2OP)** — comparateur flat tax (30 % / 31,4 % en 2026) vs barème progressif : abattement 40 %, CSG déductible.
+
+Chaque calculateur est accompagné de **guides explicatifs** (contenu pédagogique sourcé) — voir [`src/pages/`](src/pages/).
 
 ## Vie privée
 
 - **Le calcul est 100 % local.** Vos montants ne quittent jamais le navigateur : aucun envoi, aucun compte, aucune analytics tierce, aucun tracker.
-- **Aucune donnée n'est collectée.** Le site est **entièrement statique** et n'effectue **aucune requête vers un serveur** : tout se passe dans votre navigateur.
+- **Site entièrement statique, aucune requête runtime.** Les taux de change BCE sont **embarqués au build** ([`ecb-rates.json`](src/lib/tax-engine/fx/)) — le navigateur ne contacte aucun serveur, même pour le change.
 
 ## Licence
 
@@ -29,37 +35,42 @@ proposer une amélioration ou l'héberger vous-même.
 
 ## Stack
 
-- **Astro** (sortie statique, SEO) + un **îlot React** pour le calculateur, **TypeScript strict**, **Tailwind**.
-- Le **moteur fiscal** — [`src/lib/tax-engine/`](src/lib/tax-engine/) — est un module **pur, sans dépendance, testé** (Vitest). Montants en **centimes entiers** (jamais de flottant pour de l'argent). Les sources fiscales sont citées dans [`src/lib/tax-engine/SOURCES-2047.md`](src/lib/tax-engine/SOURCES-2047.md).
+- **Astro** (sortie statique, SEO) + des **îlots React** pour les calculateurs, **TypeScript strict**, **Tailwind**.
+- Chaque **moteur fiscal** est un module **pur, sans dépendance, testé** (Vitest). Montants en **centimes entiers** (jamais de flottant pour de l'argent).
+- **Validation-d'abord** : chaque module gèle un oracle fiscal sourcé (`SOURCES-*.md`, citations Legifrance / BOFiP / notices officielles) dans ses tests. Voir par exemple [`src/lib/tax-engine/SOURCES-2047.md`](src/lib/tax-engine/SOURCES-2047.md).
 
 ## Développement
 
 Prérequis : **Node ≥ 22**.
 
-| Commande            | Action                                            |
-| :------------------ | :------------------------------------------------ |
-| `npm install`       | Installe les dépendances                          |
-| `npm run dev`       | Serveur de dev sur `localhost:4321`               |
-| `npm test`          | Lance les tests du moteur fiscal (Vitest)         |
-| `npm run build`     | Build statique dans `./dist/`                     |
-| `npm run astro check` | Vérification de types                           |
+| Commande              | Action                                       |
+| :-------------------- | :------------------------------------------- |
+| `npm install`         | Installe les dépendances                     |
+| `npm run dev`         | Serveur de dev sur `localhost:4321`          |
+| `npm test`            | Lance les tests des moteurs fiscaux (Vitest) |
+| `npm run build`       | Build statique dans `./dist/`                |
+| `npm run astro check` | Vérification de types                        |
 
 ## Structure
 
 ```text
-src/lib/tax-engine/   moteur fiscal pur (calcul, taux par pays, change BCE) + tests + SOURCES-2047.md
-src/components/        UI : calculateur (React), disclaimer
-src/pages/            calculateur (index) + guides explicatifs (SEO)
+src/lib/        moteurs fiscaux purs, un dossier par module (tax-engine, cessions-2074,
+                crypto-2086, comptes-3916, pfu-bareme), chacun avec ses tests + SOURCES-*.md
+                site-nav.ts : source unique de la navigation (header, footer, hub)
+src/components/ UI : îlots React des calculateurs, layout, disclaimer
+src/pages/      pages calculateurs + guides explicatifs (SEO) + hub d'accueil
 ```
 
 ## Déploiement
 
-Site **100 % statique** (`dist/`), déployable sur n'importe quel hébergeur statique. Procédure Cloudflare Pages dans [`DEPLOY.md`](DEPLOY.md).
+Site **100 % statique** (`dist/`), déployable sur n'importe quel hébergeur statique. La production
+tourne sur l'**hébergement OVH** de `clairfisc.fr`, déployé automatiquement à chaque push sur `main`
+par **GitHub Actions** (transfert SFTP). Détails et secrets dans [`DEPLOY.md`](DEPLOY.md).
 
 ## Statut & avertissement
 
-Projet **en cours (v0)**. Les taux par pays et la logique de calcul sont **à recouper avec la
-notice officielle 2047** avant tout usage engageant.
+Projet **en cours (v0)**. Les taux, règles et cases sont **validés contre les sources officielles**
+(notices, BOFiP, CGI) et gelés en tests, mais restent **à recouper** avant tout usage engageant.
 
 > **Aide informative — ne constitue pas un conseil fiscal.** Vérifiez chaque montant avec la notice
-> officielle du formulaire 2047 ou un professionnel.
+> officielle du formulaire concerné ou un professionnel.
