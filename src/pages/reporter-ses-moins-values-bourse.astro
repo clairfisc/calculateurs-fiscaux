@@ -1,0 +1,230 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Disclaimer from "../components/content/Disclaimer.astro";
+
+const title =
+  "Reporter ses moins-values de bourse : report 10 ans, case 3VH et purge (2026)";
+const description =
+  "Une moins-value de cession de titres se reporte 10 ans, mais uniquement sur des plus-values de même nature. Comment fonctionne l'imputation, la case 3VH, et pourquoi « purger » ses moins-values avant qu'elles n'expirent.";
+const noticeUrl =
+  "https://www.impots.gouv.fr/formulaire/2074/declaration-des-plus-ou-moins-values-realisee";
+---
+
+<BaseLayout title={title} description={description} ogType="article">
+  <main class="page">
+    <article>
+      <header>
+        <h1>Reporter ses moins-values de bourse</h1>
+        <p class="lede">
+          Une vente d'actions à perte n'est pas qu'une mauvaise nouvelle : la
+          <strong> moins-value</strong> réduit l'impôt sur vos gains. Mais les
+          règles sont précises — l'imputation est <strong>obligatoire</strong>,
+          limitée aux <strong>plus-values de même nature</strong>, et le reliquat
+          n'est reportable que <strong>10 ans</strong>. Ce guide explique le
+          mécanisme, la case <strong>3VH</strong>, et pourquoi il est parfois
+          malin de « <strong>purger</strong> » ses moins-values avant la fin de
+          l'année.
+        </p>
+      </header>
+
+      <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2074" />
+
+      <section aria-labelledby="principe">
+        <h2 id="principe">Une moins-value ne s'impute que sur des gains de même nature</h2>
+        <p>
+          Contrairement à un déficit foncier (qui peut réduire votre revenu
+          global), une moins-value de cession de valeurs mobilières <strong>ne
+          s'impute que sur des plus-values de même nature</strong> : d'autres
+          cessions de titres. Elle <strong>ne réduit ni votre salaire, ni vos
+          dividendes, ni vos plus-values crypto</strong> (régime distinct, voir
+          le <a href="/declarer-ses-cryptos-aux-impots">2086</a>).
+        </p>
+        <p>
+          L'imputation se fait sur l'année, <strong>avant</strong> tout abattement
+          pour durée de détention (« montant brut sur montant brut »).
+        </p>
+      </section>
+
+      <section aria-labelledby="obligatoire">
+        <h2 id="obligatoire">L'imputation est obligatoire — vous ne choisissez pas</h2>
+        <p>
+          Si vous réalisez des plus-values <em>et</em> des moins-values la même
+          année, vous <strong>devez</strong> réduire vos plus-values de la
+          totalité des moins-values disponibles, dans la limite de ces
+          plus-values. Vous <strong>ne pouvez pas</strong> « garder » une partie
+          de vos moins-values de l'année pour une année future plus chargée.
+        </p>
+        <p>L'ordre d'imputation est figé :</p>
+        <ol>
+          <li>
+            d'abord les <strong>moins-values de l'année</strong> en cours ;
+          </li>
+          <li>
+            puis, sur le reliquat de plus-values, les <strong>moins-values
+            antérieures</strong> encore en report.
+          </li>
+        </ol>
+        <p class="note">
+          En pratique, les pertes les plus anciennes ont intérêt à être imputées
+          en priorité : une moins-value atteint sa <strong>10ᵉ année</strong> et
+          devient alors définitivement perdue si elle n'a pas trouvé de plus-value
+          à absorber.
+        </p>
+      </section>
+
+      <section aria-labelledby="case-3vh">
+        <h2 id="case-3vh">La case 3VH : attention au piège</h2>
+        <p>
+          Sur la déclaration <strong>2042-C</strong> :
+        </p>
+        <ul>
+          <li>
+            la <strong>plus-value nette</strong> de l'année (après imputation des
+            moins-values) va en case <strong>3VG</strong> ;
+          </li>
+          <li>
+            la <strong>moins-value de l'année</strong> qui n'a pas pu être imputée
+            va en case <strong>3VH</strong>.
+          </li>
+        </ul>
+        <p class="note">
+          Piège courant : la case <strong>3VH ne contient que la moins-value de
+          l'année</strong> non imputée. Le <strong>reliquat de vos moins-values
+          des années précédentes</strong> n'y figure <em>pas</em> — il continue de
+          vivre dans votre « stock » de report, à suivre vous-même (c'est tout
+          l'intérêt de garder une trace pluriannuelle de vos pertes).
+        </p>
+      </section>
+
+      <section aria-labelledby="purge">
+        <h2 id="purge">« Purger » ses moins-values : l'arbitrage de fin d'année</h2>
+        <p>
+          Puisqu'une moins-value expire au bout de 10 ans et ne s'impute que sur
+          des plus-values de titres, deux situations classiques se gèrent
+          <strong> avant le 31 décembre</strong> :
+        </p>
+        <dl class="cases">
+          <dt>Vous avez réalisé de grosses plus-values cette année</dt>
+          <dd>
+            vendre une ligne en moins-value latente avant la fin de l'année
+            (« <strong>tax-loss harvesting</strong> ») vient réduire la plus-value
+            imposable de l'année. Vous pouvez racheter le titre ensuite — il n'y a
+            pas, en France, de règle de « wash sale » qui annule l'opération (mais
+            l'opération doit être réelle).
+          </dd>
+          <dt>Vous portez de vieilles moins-values en report</dt>
+          <dd>
+            si une perte approche de sa 10ᵉ année, réaliser une plus-value
+            (vendre une ligne gagnante) permet de l'<strong>absorber</strong> avant
+            qu'elle n'expire — sinon elle est perdue.
+          </dd>
+        </dl>
+        <p class="note">
+          C'est une décision d'<strong>information / simulation</strong>, pas un
+          conseil : l'intérêt dépend de votre situation globale (PFU ou barème,
+          autres revenus). Vérifiez toujours l'impact chiffré avant d'agir.
+        </p>
+      </section>
+
+      <section aria-labelledby="duree">
+        <h2 id="duree">Récapitulatif des règles</h2>
+        <ul>
+          <li>
+            <strong>Imputation</strong> : sur les plus-values de même nature
+            uniquement, même année d'abord.
+          </li>
+          <li>
+            <strong>Obligatoire</strong> et plafonnée aux plus-values de l'année —
+            pas de mise en réserve volontaire.
+          </li>
+          <li>
+            <strong>Report</strong> : le reliquat non imputé est reportable sur les
+            <strong> 10 années suivantes</strong>.
+          </li>
+          <li>
+            <strong>Pas de report en arrière</strong> ni d'imputation sur le revenu
+            global.
+          </li>
+          <li>
+            <strong>Cases</strong> : 3VG (plus-value nette) / 3VH (moins-value de
+            l'année non imputée).
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="outil">
+        <h2 id="outil">Calculer votre plus ou moins-value nette</h2>
+        <p>
+          Notre <a href="/plus-values-cession-titres-etrangers">calculateur 2074
+          gratuit</a> détermine le prix moyen pondéré, convertit chaque opération
+          au cours du jour, impute vos moins-values (de l'année et antérieures) et
+          vous donne directement les cases <strong>3VG / 3VH</strong> ainsi que le
+          <strong> reliquat reportable</strong>. Il est <strong>100 % côté
+          navigateur</strong> et open source — aucune donnée n'est envoyée.
+        </p>
+      </section>
+
+      <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2074" />
+
+      <footer class="page-footer">
+        <p>
+          Voir aussi&nbsp;:
+          <a href="/plus-values-cession-titres-etrangers">calculateur plus-values de titres (2074)</a>
+          ·
+          <a href="/faut-il-cocher-2op">PFU ou barème (case 2OP)</a>
+        </p>
+      </footer>
+    </article>
+  </main>
+
+  <style>
+    .page {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+      font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 2.5rem;
+    }
+    .lede {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .cases dt {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .cases dd {
+      margin: 0.25rem 0 0;
+    }
+    .note {
+      font-size: 0.92rem;
+      color: #555;
+      background: #f6f6f4;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+    }
+    a {
+      color: #1d4ed8;
+    }
+    .page-footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e2e2;
+    }
+  </style>
+</BaseLayout>

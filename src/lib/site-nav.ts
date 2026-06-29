@@ -83,4 +83,11 @@ export const GUIDES: LienOutil[] = [
     resume:
       "PFU ou barème selon votre TMI : ce que débloque la case 2OP (abattement 40 %, CSG déductible) et les pièges avant de la cocher.",
   },
+  {
+    href: "/reporter-ses-moins-values-bourse",
+    court: "Report moins-values",
+    long: "Reporter ses moins-values de bourse",
+    resume:
+      "Report 10 ans, imputation sur plus-values de même nature, case 3VH et « purge » de fin d'année des moins-values de titres.",
+  },
 ];
