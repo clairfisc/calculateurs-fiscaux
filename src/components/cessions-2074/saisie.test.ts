@@ -102,3 +102,65 @@ describe("convertitCession — validation", () => {
     expect(conv.erreurs.some((e) => e.includes("Quantité cédée"))).toBe(true);
   });
 });
+
+describe("convertitCession — câblage fin saisie → moteur", () => {
+  it("la devise de la cession est propagée à chacun de ses lots", () => {
+    const saisie = cessionBase({
+      dateISO: "2025-09-15",
+      devise: "USD",
+      quantiteCedee: "100",
+      prixUnitaire: "130",
+      lots: [
+        { id: "l1", dateISO: "2023-06-15", quantite: "60", prixUnitaire: "100", frais: "" },
+        { id: "l2", dateISO: "2024-01-02", quantite: "40", prixUnitaire: "110", frais: "" },
+      ],
+    });
+    const conv = convertitCession(saisie, 0);
+    expect(conv.erreurs).toEqual([]);
+    const acq = conv.cession!.acquisition;
+    expect(acq.type).toBe("lots");
+    if (acq.type === "lots") {
+      expect(acq.lots).toHaveLength(2);
+      expect(acq.lots.every((l) => l.devise === "USD")).toBe(true);
+    }
+  });
+
+  it("dateAcquisitionRef (abattement) est transmise en PMP direct, omise si invalide", () => {
+    const base = cessionBase({
+      dateISO: "2025-06-02",
+      devise: "EUR",
+      quantiteCedee: "100",
+      prixUnitaire: "100",
+      baseMode: "pmp",
+      pmpUnitaire: "40",
+      quantiteTotale: "100",
+    });
+
+    // Renseignée → reportée sur la cession ET sur la base d'acquisition.
+    const avec = convertitCession({ ...base, dateAcquisitionRef: "2014-03-10" }, 0);
+    expect(avec.erreurs).toEqual([]);
+    expect(avec.cession!.dateAcquisitionRefISO).toBe("2014-03-10");
+    const acq = avec.cession!.acquisition;
+    if (acq.type === "pmp") expect(acq.dateAcquisitionRefISO).toBe("2014-03-10");
+
+    // Vide → undefined (le moteur lèvera AbattementDateRequiseError si besoin sous barème).
+    const sans = convertitCession({ ...base, dateAcquisitionRef: "" }, 0);
+    expect(sans.cession!.dateAcquisitionRefISO).toBeUndefined();
+  });
+
+  it("un seul lot invalide parmi plusieurs → aucune Cession construite (pas d'acquisition partielle)", () => {
+    const saisie = cessionBase({
+      dateISO: "2025-09-15",
+      devise: "EUR",
+      quantiteCedee: "100",
+      prixUnitaire: "120",
+      lots: [
+        { id: "l1", dateISO: "2024-01-02", quantite: "100", prixUnitaire: "50", frais: "" },
+        { id: "l2", dateISO: "", quantite: "", prixUnitaire: "", frais: "" }, // incomplet
+      ],
+    });
+    const conv = convertitCession(saisie, 0);
+    expect(conv.cession).toBeNull();
+    expect(conv.erreurs.some((e) => e.startsWith("Lot 2"))).toBe(true);
+  });
+});
