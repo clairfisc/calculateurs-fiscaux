@@ -16,11 +16,16 @@
 mobilières), le **coût d'impôt total** sous chacun des deux régimes — (1) **PFU** (flat tax)
 et (2) **option barème** (case 2OP) — puis désigne le **moins-disant** et l'**écart en €**.
 
-**Ne calcule PAS :** l'impôt complet du foyer. Le comparateur applique la **TMI fournie**
-comme taux marginal sur l'assiette des revenus du capital (hypothèse v0, §6). Il ne reconstitue
-pas le quotient familial, ni le barème tranche par tranche, ni le RFR. C'est l'approche standard
-des comparateurs PFU/barème ; elle est **exacte tant que les revenus du capital ne font pas
-changer de tranche** (garde-fou affiché).
+**Deux modes de calcul du barème** (cf. §6) :
+- **Rapide** — l'utilisateur fournit sa **TMI** ; l'IR du capital est estimé à ce taux marginal.
+  Rapide mais **approximatif** si le capital fait franchir une tranche.
+- **Précis** — l'utilisateur fournit son **revenu imposable hors capital + ses parts** ; l'IR du
+  capital est calculé par **différence de deux impositions au barème réel** (`impotBareme`),
+  ce qui gère le franchissement de tranche.
+
+**Ne calcule PAS :** l'impôt complet du foyer dans tous ses détails. Même en mode précis, la
+**décote** et le **plafonnement du quotient familial** ne sont pas modélisés (approximations
+résiduelles, §6).
 
 ## 1. Sources consultées
 
@@ -169,9 +174,15 @@ Soit, pour un millésime donné, `tIR_pfu = 12,8 %`, `tPS` (17,2 % ou 18,6 %), `
 
 ## 6. Garde-fous & hypothèses v0 (= crédibilité, §5.5)
 
-- **TMI marginale (hypothèse v0)** : `IR_bareme` est calculé à la **TMI fournie**, comme si toute
-  l'assiette restait dans cette tranche. **Faux si** les revenus du capital font franchir une
-  tranche supérieure → résultat à affiner via le simulateur officiel. À afficher comme hypothèse.
+- **Mode rapide (TMI)** : `IR_bareme` est calculé à la **TMI fournie**, comme si toute l'assiette
+  restait dans cette tranche. **Faux si** les revenus du capital font franchir une tranche → d'où
+  le **mode précis** ci-dessous.
+- **Mode précis (revenu + parts)** : `IR_bareme = impotBareme(R + assiette_capital − CSG_déd) −
+  impotBareme(R)`, avec `R` = revenu imposable hors capital et le barème appliqué par quotient
+  familial. Gère le franchissement de tranche. **Approximations résiduelles assumées** : la
+  **décote** (bas revenus) et le **plafonnement du quotient familial** (hauts revenus) ne sont pas
+  modélisés ; le **barème 2025 est utilisé pour les deux millésimes** (seuils 2026 non connus à la
+  date de validation). À confirmer au simulateur officiel pour un cas limite.
 - **CSG déductible décalée (N+1)** : la déduction joue sur le revenu **de l'année du paiement des
   PS** (en pratique N+1 pour les RCM/PV recouvrés par voie de rôle). Le moteur l'impute **en année
   courante** pour la comparaison (simplification documentée).

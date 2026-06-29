@@ -9,7 +9,7 @@ export type {
   ComparaisonResult,
 } from "./types";
 
-export { arrondiEuro, compareRegimes } from "./compute";
+export { arrondiEuro, compareRegimes, impotBareme } from "./compute";
 
 export {
   PFU_IR_BP,

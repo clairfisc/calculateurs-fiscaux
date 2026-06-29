@@ -174,23 +174,36 @@ export default function ComparateurPfuBareme() {
   const [interets, setInterets] = useState("");
   const [plusValues, setPlusValues] = useState("");
   const [dividendesEligibles, setDividendesEligibles] = useState(true);
+  const [modePrecis, setModePrecis] = useState(false);
+  const [revenuImposable, setRevenuImposable] = useState("");
+  const [parts, setParts] = useState("1");
 
   const dividendesCents = toCents(dividendes) ?? 0;
   const interetsCents = toCents(interets) ?? 0;
   const plusValuesCents = toCents(plusValues) ?? 0;
+  const revenuImposableCents = toCents(revenuImposable) ?? 0;
+  const partsNum = (() => {
+    const n = parseFloat((parts || "").replace(",", "."));
+    return Number.isFinite(n) && n > 0 ? n : 1;
+  })();
   const aSaisie = dividendesCents > 0 || interetsCents > 0 || plusValuesCents > 0;
 
   const resultat = useMemo(
     () =>
       compareRegimes({
         millesime,
-        tmiBp,
+        ...(modePrecis
+          ? { revenuImposableHorsCapitalCents: revenuImposableCents, parts: partsNum }
+          : { tmiBp }),
         dividendesCents,
         dividendesEligiblesAbattement40: dividendesEligibles,
         interetsCents,
         plusValuesCents,
       }),
-    [millesime, tmiBp, dividendesCents, dividendesEligibles, interetsCents, plusValuesCents],
+    [
+      millesime, modePrecis, tmiBp, revenuImposableCents, partsNum,
+      dividendesCents, dividendesEligibles, interetsCents, plusValuesCents,
+    ],
   );
 
   const revocable = PARAMETRES[millesime].option2opRevocable;
@@ -230,6 +243,59 @@ export default function ComparateurPfuBareme() {
           </div>
 
           <div className="flex flex-col gap-1">
+            <span className="text-sm font-medium text-slate-700">Méthode de calcul du barème</span>
+            <div className="flex rounded-md border border-slate-300 p-0.5 text-sm">
+              <button
+                type="button"
+                onClick={() => setModePrecis(false)}
+                aria-pressed={!modePrecis}
+                className={"flex-1 rounded px-3 py-1.5 transition " + (!modePrecis ? "bg-blue-600 font-medium text-white" : "text-slate-700 hover:bg-slate-100")}
+              >
+                Rapide (TMI)
+              </button>
+              <button
+                type="button"
+                onClick={() => setModePrecis(true)}
+                aria-pressed={modePrecis}
+                className={"flex-1 rounded px-3 py-1.5 transition " + (modePrecis ? "bg-blue-600 font-medium text-white" : "text-slate-700 hover:bg-slate-100")}
+              >
+                Précis (revenu + parts)
+              </button>
+            </div>
+            <p className="text-xs text-slate-500">
+              Le mode précis calcule le barème réel (gère le franchissement de tranche).
+            </p>
+          </div>
+        </div>
+
+        {modePrecis ? (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <ChampMontant
+              id="revenu-imposable"
+              libelle="Revenu imposable (hors capital)"
+              aide="Revenu net imposable annuel du foyer, hors les revenus du capital comparés ci-dessous."
+              valeur={revenuImposable}
+              onChange={setRevenuImposable}
+            />
+            <div className="flex flex-col gap-1">
+              <label htmlFor="parts" className="text-sm font-medium text-slate-700">
+                Nombre de parts
+              </label>
+              <input
+                id="parts"
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                value={parts}
+                onChange={(e) => setParts(e.target.value)}
+                placeholder="1"
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+              <p className="text-xs text-slate-500">Quotient familial : 1 (célibataire), 2 (couple), +0,5 par enfant…</p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1 sm:max-w-xs">
             <label htmlFor="tmi" className="text-sm font-medium text-slate-700">
               Votre tranche marginale d'imposition (TMI)
             </label>
@@ -246,7 +312,7 @@ export default function ComparateurPfuBareme() {
               ))}
             </select>
           </div>
-        </div>
+        )}
 
         <LegendeTaux millesime={millesime} />
 
@@ -306,7 +372,11 @@ export default function ComparateurPfuBareme() {
             />
             <CarteRegime
               titre="Option barème (case 2OP)"
-              sousTitre={`IR à votre TMI (${LIBELLE_TMI[tmiBp]}) + prélèvements sociaux`}
+              sousTitre={
+                modePrecis
+                  ? "IR réel au barème (revenu + parts) + prélèvements sociaux"
+                  : `IR à votre TMI (${LIBELLE_TMI[tmiBp]}) + prélèvements sociaux`
+              }
               regime={resultat.bareme}
               gagnant={resultat.gagnant === "bareme"}
             />
@@ -345,11 +415,20 @@ export default function ComparateurPfuBareme() {
       <section className="rounded-xl border border-slate-200 bg-white p-4 text-xs text-slate-600">
         <p className="mb-2 text-sm font-semibold text-slate-900">À savoir</p>
         <ul className="flex list-disc flex-col gap-1.5 pl-5">
-          <li>
-            <strong>Hypothèse de calcul</strong> : l'impôt au barème est estimé à votre TMI, comme
-            si vos revenus du capital restaient dans cette tranche. Si ces revenus vous font changer
-            de tranche, l'écart réel peut différer — vérifiez avec le simulateur officiel.
-          </li>
+          {modePrecis ? (
+            <li>
+              <strong>Mode précis</strong> : le barème est calculé tranche par tranche (franchissement
+              de tranche géré). Restent non modélisés : la <strong>décote</strong> (bas revenus) et le
+              <strong> plafonnement du quotient familial</strong> (hauts revenus) — pour un cas limite,
+              confirmez au simulateur officiel.
+            </li>
+          ) : (
+            <li>
+              <strong>Mode rapide</strong> : l'impôt au barème est estimé à votre TMI, comme si vos
+              revenus du capital restaient dans cette tranche. S'ils vous font changer de tranche,
+              l'écart réel diffère — passez en <strong>mode précis</strong> ou vérifiez au simulateur officiel.
+            </li>
+          )}
           <li>
             <strong>L'option barème (case 2OP) est globale</strong> : elle s'applique à
             l'ensemble de vos revenus du capital de l'année, pas à un placement isolé.

@@ -25,8 +25,22 @@ export type Millesime = 2025 | 2026;
  */
 export interface ComparateurInput {
   readonly millesime: Millesime;
-  /** Taux marginal d'imposition du foyer, en points de base (0 / 1100 / 3000 / 4100 / 4500). */
-  readonly tmiBp: number;
+  /**
+   * **Mode rapide** — taux marginal d'imposition du foyer, en points de base
+   * (0 / 1100 / 3000 / 4100 / 4500). Utilisé uniquement si le mode précis n'est pas fourni
+   * (`revenuImposableHorsCapitalCents` absent). Approximation : le revenu du capital est
+   * imposé entièrement à ce taux, sans gérer un éventuel franchissement de tranche.
+   */
+  readonly tmiBp?: number;
+  /**
+   * **Mode précis** — revenu net imposable du foyer **hors** revenus du capital comparés
+   * (en centimes). Si fourni, le barème est calculé réellement (différence de deux impositions
+   * avec/sans le revenu du capital), ce qui gère le franchissement de tranche. Prend le pas
+   * sur `tmiBp`. cf. SOURCES-PFU-BAREME.md §6.
+   */
+  readonly revenuImposableHorsCapitalCents?: Cents;
+  /** Mode précis — nombre de parts de quotient familial (défaut 1 si absent ou ≤ 0). */
+  readonly parts?: number;
   /** Dividendes (montant brut perçu), en centimes. */
   readonly dividendesCents: Cents;
   /**
