@@ -40,11 +40,28 @@ chaque push sur `main`** (et via *workflow_dispatch*). Il fonctionne avec
 
 **Secrets à définir** (Settings → Secrets and variables → Actions) :
 
-| Secret         | Valeur                                   |
-| -------------- | ---------------------------------------- |
-| `FTP_SERVER`   | hôte SFTP                                |
-| `FTP_USER`     | identifiant SFTP                         |
-| `FTP_PASSWORD` | mot de passe SFTP                        |
+| Secret             | Valeur                                                  |
+| ------------------ | ------------------------------------------------------- |
+| `FTP_SERVER`       | hôte SFTP                                               |
+| `FTP_USER`         | identifiant SFTP                                        |
+| `FTP_PASSWORD`     | mot de passe SFTP                                       |
+| `SFTP_KNOWN_HOSTS` | *(recommandé)* clé(s) d'hôte du serveur (anti-MITM)     |
+
+**Épinglage de la clé d'hôte (`SFTP_KNOWN_HOSTS`).** L'auth se faisant par mot de
+passe (l'offre OVH mutualisée ne gère pas les clés SSH), la seule protection qui
+reste contre une interception du mot de passe est de **vérifier l'identité du
+serveur**. Récupérez sa clé d'hôte une fois (avec **la valeur exacte** de
+`FTP_SERVER`) :
+
+```sh
+ssh-keyscan -p 22 ssh.clusterXXX.hosting.ovh.net
+```
+
+Collez la sortie (une ou plusieurs lignes) dans le secret `SFTP_KNOWN_HOSTS`. Le
+workflow bascule alors en `StrictHostKeyChecking=yes` et **refuse de déployer si
+l'empreinte change**. Tant que le secret n'est pas posé, le déploiement
+fonctionne mais **sans vérification d'hôte** (un *warning* le signale dans les
+logs Actions).
 
 **Méthode (et pourquoi).** Le transfert se fait via `sshpass -e sftp` (port 22),
 avec un **batch généré à la volée : une commande `put` par entrée** de `dist/`.
