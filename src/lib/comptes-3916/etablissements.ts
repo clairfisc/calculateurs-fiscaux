@@ -18,6 +18,9 @@ import type { Formulaire, TypeCompte } from "./types";
 export interface GabaritCompte {
   readonly type: TypeCompte;
   readonly libelle: string;
+  /** Pays/adresse propres à ce compte s'ils diffèrent de l'établissement (ex. DEGIRO titres NL vs espèces DE). */
+  readonly pays?: string;
+  readonly adresse?: string;
   readonly note?: string;
 }
 
@@ -98,8 +101,8 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     formulaireParDefaut: "3916",
     adresse: "Omniturm, Große Gallusstraße 16-18, 60312 Francfort-sur-le-Main, Allemagne",
     comptes: [
-      { type: "titres_cto", libelle: "Compte-titres DEGIRO (succursale néerlandaise, Amsterdam)" },
-      { type: "banque", libelle: "Compte espèces flatex (flatexDEGIRO Bank, Allemagne, IBAN DE)", note: "Compte espèces distinct du compte-titres (depuis ~2020/2022)." },
+      { type: "titres_cto", libelle: "Compte-titres DEGIRO (succursale néerlandaise)", pays: "Pays-Bas", adresse: "flatexDEGIRO Bank Dutch Branch, Amstelplein 1, 1096 HA Amsterdam, Pays-Bas" },
+      { type: "banque", libelle: "Compte espèces flatex (Allemagne, IBAN DE)", pays: "Allemagne", adresse: "flatexDEGIRO Bank AG, Omniturm, Große Gallusstraße 16-18, 60312 Francfort-sur-le-Main, Allemagne", note: "Compte espèces distinct du compte-titres (depuis ~2020/2022)." },
     ],
     note: "Ajoutez vos éventuels sous-comptes devises (AutoFX USD/GBP/CHF) s'ils ont un IBAN propre — à vérifier sur votre relevé.",
   },

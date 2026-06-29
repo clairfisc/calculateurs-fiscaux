@@ -43,6 +43,9 @@ interface CompteLigne {
   readonly type: TypeCompte;
   readonly sousCompteLibelle?: string;
   readonly note?: string;
+  /** Pays/adresse du compte (pré-remplis depuis l'établissement, éditables ; peuvent différer par compte). */
+  readonly pays?: string;
+  readonly adresse?: string;
   readonly emoneyUsageVentesBiens?: boolean;
   readonly emoneyAdosseCompteFrancais?: boolean;
   readonly emoneyEncaissementsAnnuelsEur?: number;
@@ -51,7 +54,6 @@ interface Poste {
   readonly id: string;
   readonly etablissementId?: string;
   readonly etablissementLibre?: string;
-  readonly pays?: string;
   readonly comptes: readonly CompteLigne[];
 }
 
@@ -66,7 +68,7 @@ function buildCompte(p: Poste, l: CompteLigne): Compte {
     type: l.type,
     etablissementId: p.etablissementId,
     etablissementLibre: p.etablissementLibre,
-    pays: p.pays,
+    pays: l.pays,
     emoneyUsageVentesBiens: l.emoneyUsageVentesBiens,
     emoneyAdosseCompteFrancais: l.emoneyAdosseCompteFrancais,
     emoneyEncaissementsAnnuelsEur: l.emoneyEncaissementsAnnuelsEur,
@@ -85,8 +87,8 @@ function ficheChamps(p: Poste, l: CompteLigne): FicheChamp[] {
   const etab = p.etablissementId ? etablissementParId(p.etablissementId) : undefined;
   const r = evalueCompte(buildCompte(p, l));
   const designation = etab?.designation ?? p.etablissementLibre ?? "";
-  const adresse = etab?.adresse ?? "";
-  const pays = p.pays ?? etab?.pays ?? "";
+  const adresse = l.adresse ?? etab?.adresse ?? "";
+  const pays = l.pays ?? etab?.pays ?? "";
   const champs: FicheChamp[] = [
     { label: "Formulaire", value: r.formulaire ?? "—" },
     { label: "Établissement", value: designation || "à renseigner", aRenseigner: !designation },
@@ -126,7 +128,7 @@ export default function ChecklistComptes() {
     const etab = id ? etablissementParId(id) : undefined;
     let comptes: CompteLigne[];
     if (etab?.comptes && etab.comptes.length > 0) {
-      comptes = etab.comptes.map((g) => ({ id: uid("l"), type: g.type, sousCompteLibelle: g.libelle, note: g.note }));
+      comptes = etab.comptes.map((g) => ({ id: uid("l"), type: g.type, sousCompteLibelle: g.libelle, note: g.note, pays: g.pays, adresse: g.adresse }));
     } else if (etab) {
       comptes = [ligneVide(etab.typeParDefaut)];
     } else {
@@ -213,11 +215,6 @@ export default function ChecklistComptes() {
                     <input type="text" autoComplete="off" value={p.etablissementLibre ?? ""} onChange={(e) => majPoste(p.id, { etablissementLibre: e.target.value })} className="rounded-md border border-slate-300 px-2 py-1.5" />
                   </label>
                 )}
-
-                <label className="flex flex-col gap-1 text-sm">
-                  <span className="text-slate-700">Pays</span>
-                  <input type="text" autoComplete="off" value={p.pays ?? etab?.pays ?? ""} onChange={(e) => majPoste(p.id, { pays: e.target.value })} className="rounded-md border border-slate-300 px-2 py-1.5" />
-                </label>
               </div>
 
               {etab?.note && <p className="rounded-md bg-slate-100 px-3 py-2 text-sm italic text-slate-700">{etab.note}</p>}
@@ -229,7 +226,7 @@ export default function ChecklistComptes() {
                   const style = VERDICT_STYLE[r.verdict];
                   return (
                     <div key={l.id} className="flex flex-col gap-2 rounded-md border border-slate-200 p-3">
-                      <div className="flex items-end justify-between gap-3">
+                      <div className="flex items-end gap-3">
                         <label className="flex flex-1 flex-col gap-1 text-sm">
                           <span className="text-slate-700">{l.sousCompteLibelle ?? "Type de compte"}</span>
                           <select value={l.type} onChange={(e) => majLigne(p.id, l.id, { type: e.target.value as TypeCompte })} className="rounded-md border border-slate-300 px-2 py-1.5">
@@ -237,6 +234,10 @@ export default function ChecklistComptes() {
                               <option key={t} value={t}>{TYPE_LABELS[t]}</option>
                             ))}
                           </select>
+                        </label>
+                        <label className="flex w-40 flex-col gap-1 text-sm">
+                          <span className="text-slate-700">Pays</span>
+                          <input type="text" autoComplete="off" value={l.pays ?? etab?.pays ?? ""} onChange={(e) => majLigne(p.id, l.id, { pays: e.target.value })} className="rounded-md border border-slate-300 px-2 py-1.5" />
                         </label>
                         {p.comptes.length > 1 && (
                           <button type="button" onClick={() => supprimerCompte(p.id, l.id)} className="pb-2 text-xs text-slate-400 underline">retirer</button>
