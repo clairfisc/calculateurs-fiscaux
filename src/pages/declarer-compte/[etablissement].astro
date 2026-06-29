@@ -1,5 +1,5 @@
 ---
-import "../../styles/global.css";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import Disclaimer from "../../components/content/Disclaimer.astro";
 import { ETABLISSEMENTS, evalueCompte, type Etablissement } from "../../lib/comptes-3916";
 
@@ -28,32 +28,10 @@ const verdictTexte =
 
 const title = `Déclarer son compte ${etab.designation} aux impôts (3916${estCrypto ? " / 3916-bis" : ""}) — 2026`;
 const description = `Faut-il déclarer votre compte ${etab.designation} aux impôts ? ${verdictTexte}. Formulaire ${etab.formulaireParDefaut}, règles, amendes et fiche à recopier. Outil gratuit, 100 % local.`;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL("/og-default.png", Astro.site).href;
 const lienOutil = "/comptes-etrangers-3916";
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="fr_FR" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-  </head>
-  <body class="bg-slate-50 text-slate-900">
+<BaseLayout title={title} description={description} ogType="article">
     <main class="mx-auto w-full max-w-3xl px-4 py-8">
       <article class="flex flex-col gap-4 text-slate-700">
         <header>
@@ -117,5 +95,4 @@ const lienOutil = "/comptes-etrangers-3916";
         <Disclaimer />
       </article>
     </main>
-  </body>
-</html>
+</BaseLayout>

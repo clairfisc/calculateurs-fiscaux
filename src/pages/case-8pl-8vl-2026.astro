@@ -1,40 +1,16 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Disclaimer from "../components/content/Disclaimer.astro";
 
 const title =
   "Case 8PL et 8VL 2026 : que mettre, et l'erreur « ligne 8VL sans code 8PL »";
 const description =
   "Déclaration 2026 : à quoi servent les cases 8VL et 8PL du formulaire 2047, que faut-il y inscrire, et comment corriger l'erreur « ligne 8VL sans code 8PL » sur impots.gouv.fr. Explication claire, sans jargon.";
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL("/og-default.png", Astro.site).href;
 const noticeUrl =
   "https://www.impots.gouv.fr/sites/default/files/formulaires/2047/2026/2047_5490.pdf";
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="fr_FR" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-  </head>
-  <body>
+<BaseLayout title={title} description={description} ogType="article">
     <main class="page">
       <article>
         <header>
@@ -140,7 +116,7 @@ const noticeUrl =
             <li>Base des revenus ouvrant droit au crédit → <strong>8PL</strong></li>
           </ul>
           <p>
-            Notre <a href="/">calculateur</a> sort directement ces deux valeurs,
+            Notre <a href="/dividendes-etrangers-2047">calculateur</a> sort directement ces deux valeurs,
             sans que vos données quittent votre navigateur.
           </p>
         </section>
@@ -157,7 +133,7 @@ const noticeUrl =
       </article>
     </main>
 
-    <style>
+  <style>
       .page {
         max-width: 46rem;
         margin: 0 auto;
@@ -203,5 +179,4 @@ const noticeUrl =
         border-top: 1px solid #e2e2e2;
       }
     </style>
-  </body>
-</html>
+</BaseLayout>

@@ -1,0 +1,62 @@
+---
+import { CALCULATEURS, GUIDES } from "../lib/site-nav";
+
+const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
+---
+
+<footer class="mt-12 border-t border-slate-200 bg-white">
+  <div class="mx-auto grid w-full max-w-5xl gap-8 px-4 py-10 text-sm sm:grid-cols-3">
+    <nav aria-label="Calculateurs">
+      <h2 class="mb-2 text-xs font-semibold tracking-wide text-slate-400 uppercase">
+        Calculateurs
+      </h2>
+      <ul class="space-y-1">
+        {
+          CALCULATEURS.map((l) => (
+            <li>
+              <a class="text-slate-600 hover:text-blue-700 hover:underline" href={l.href}>
+                {l.court}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <nav aria-label="Guides">
+      <h2 class="mb-2 text-xs font-semibold tracking-wide text-slate-400 uppercase">
+        Guides
+      </h2>
+      <ul class="space-y-1">
+        {
+          GUIDES.map((l) => (
+            <li>
+              <a class="text-slate-600 hover:text-blue-700 hover:underline" href={l.href}>
+                {l.court}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="text-slate-500">
+      <h2 class="mb-2 text-xs font-semibold tracking-wide text-slate-400 uppercase">
+        Clairfisc
+      </h2>
+      <p class="leading-relaxed">
+        Calculateurs fiscaux gratuits, <strong>open source (AGPLv3)</strong>. Calcul 100 % local
+        dans votre navigateur&nbsp;: aucune donnée transmise, zéro compte, zéro tracker.
+      </p>
+      <p class="mt-2">
+        <a class="text-blue-700 hover:underline" rel="noopener" target="_blank" href={repoUrl}>
+          Voir le code →
+        </a>
+      </p>
+      <p class="mt-3 text-xs text-slate-400">
+        Outils d'aide informative, ne remplacent pas la doctrine officielle ni un conseil
+        professionnel.
+      </p>
+    </div>
+  </div>
+</footer>
