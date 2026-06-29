@@ -91,6 +91,18 @@ La `fractionImputée` est le « capital initial » consommé par la cession ; el
 prix d'acquisition disponible pour les cessions suivantes (ligne 221 du formulaire). Démonstration
 sur l'exemple officiel (§ ci-dessous, cas B).
 
+**Acquisitions en cours d'année (rachats entre deux ventes).** Le prix total d'acquisition n'est
+pas figé : il **intègre toute acquisition réalisée avant chaque cession** (III-B : « somme des
+prix… de **l'ensemble des acquisitions… réalisées avant la cession** » ; cerfa ligne 220 = prix
+total d'acquisition *cumulé* à la date de la cession, ligne 221 = fractions déjà imputées, ligne
+223 = 220 − 221). Donc un **rachat de crypto entre deux ventes augmente** le prix d'acquisition
+disponible pour les ventes postérieures. Modélisation : le moteur traite un **journal
+chronologique d'opérations** (achats + ventes) ; à chaque **achat**, `prixAcquisitionNet += montant
+payé` ; à chaque **vente**, imputation puis `prixAcquisitionNet -= fractionImputée`. C'est
+équivalent à la ligne 223 du cerfa : `ptaNet(vente n) = Σ achats avant n − Σ fractions imputées
+avant n`. Voir cas H. *(Les frais d'**acquisition** ne sont pas déductibles du prix d'acquisition —
+seuls les frais de **cession** réduisent le prix de cession, BOFiP ; un « achat » = le montant payé.)*
+
 > **Soultes d'échanges antérieurs (ligne 222)** : non modélisées en v0 (hors périmètre DeFi,
 > §X). Le moteur ne gère pas les soultes ; les cessions à soulte sont signalées « à vérifier »
 > côté UI.
@@ -175,11 +187,24 @@ division exacte pour un oracle non ambigu.
 | **E** crypto→crypto ignoré | PTA 1000 ; [2000, 1000, 0] (fiat) + 1 échange actif-num. | l'échange est filtré (II-A) | identique à A ; **3AN 500** |
 | **F** moins-value | PTA 2000 ; [1000, 500, 0] | 500 − 2000×(500/1000) = 500 − 1000 | MV −500 ; **3BN 500** |
 | **G** compensation → MV nette | PTA 1000 ; [2000, 200, 0] puis [500, 400, 0] | +100 puis 400 − (1000−100)×(400/500) = 400 − 720 = −320 | net −220 ; **3BN 220** |
+| **H** rachat entre 2 ventes | achat 1000 ; vente [1200, 450, 0] ; achat 500 ; vente [2000, 1000, 0] | 75 ; ptaNet 625+500=1125 ; 1000 − 1125×(1000/2000) = 437,50 | net 512,50 ; **3AN ~513** |
+
+*(Notation : pour A-G, « PTA n » = un achat unique initial ; cessions notées [VGP, prix, frais].
+Depuis la refonte « journal », les entrées sont une suite d'opérations achat/vente datées — A-G
+équivalent à « un achat initial puis les ventes ».)*
 
 **Détail cas B (exemple officiel, notice 2086 / BOFiP §110)** :
 - Cession 1 (mars) : `450 − (1000 × 450/1200) = 450 − 375 = 75 €`. Fraction imputée = 375 €.
 - Cession 2 (août) : PTA net = 1000 − 375 = 625 ; `1300 − (625 × 1300/1300) = 1300 − 625 = 675 €`.
 - PV nette = 75 + 675 = **750 €** → 3AN.
+
+**Détail cas H (rachat entre deux ventes — dérivé, recoupé cerfa ligne 220/221/223)** :
+- Achat 01 : 1000 → ptaNet 1000.
+- Vente 03 : `450 − (1000 × 450/1200) = 75 €` ; fraction 375 ; ptaNet 625.
+- Achat 06 : 500 (rachat) → ptaNet **1125**.
+- Vente 09 : `1000 − (1125 × 1000/2000) = 1000 − 562,50 = 437,50 €` ; ptaNet 562,50.
+- Recoupe cerfa (vente 09) : ligne 220 = 1000+500 = 1500 ; 221 = 375 ; 223 = 1125 ; PV = 1000 − 1125×(1000/2000) = 437,50 ✓
+- PV nette = 75 + 437,50 = **512,50 €** → 3AN (≈ 513 € après arrondi à l'euro).
 
 ## 9. Caveats / à vérifier
 
