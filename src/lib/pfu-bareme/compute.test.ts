@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { compareRegimes, arrondiEuro } from "./compute";
+import { compareRegimes, arrondiEuro, impotBareme } from "./compute";
 import { PARAMETRES, TMI_DISPONIBLES_BP } from "./rates";
 import type { ComparateurInput } from "./types";
 
@@ -175,6 +175,71 @@ describe("comparateur PFU vs barème — paramètres millésimes (oracle taux)",
 
   it("les TMI proposables couvrent les 5 tranches du barème", () => {
     expect(TMI_DISPONIBLES_BP).toEqual([0, 1100, 3000, 4100, 4500]);
+  });
+});
+
+describe("impotBareme — oracle tranches officielles (revenus 2025, 1 part)", () => {
+  it("revenu sous le seuil de 11 600 € → IR 0", () => {
+    expect(impotBareme(eur(11_600), 1)).toBe(0);
+  });
+
+  it("haut de la tranche à 11 % (29 579 €) → 11 % × (29 579 − 11 600) = 1 978 €", () => {
+    // 17 979 × 11 % = 1 977,69 → 1 978 €.
+    expect(arrondiEuro(impotBareme(eur(29_579), 1))).toBe(1978);
+  });
+
+  it("50 000 € (1 part) → 1 977,69 + 30 % × (50 000 − 29 579) = 8 104 €", () => {
+    // 1 977,69 + 6 126,30 = 8 103,99 → 8 104 €.
+    expect(arrondiEuro(impotBareme(eur(50_000), 1))).toBe(8104);
+  });
+
+  it("quotient familial : 100 000 € sur 2 parts = barème de 50 000 €/part × 2 = 16 208 €", () => {
+    expect(arrondiEuro(impotBareme(eur(100_000), 2))).toBe(8104 * 2);
+  });
+
+  it("parts ≤ 0 ou absent → traité comme 1 part", () => {
+    expect(impotBareme(eur(50_000), 0)).toBe(impotBareme(eur(50_000), 1));
+  });
+});
+
+describe("comparateur PFU vs barème — mode précis (revenu + parts)", () => {
+  it("PP1 — capital qui reste dans la tranche : mode précis ≈ mode rapide à la même TMI", () => {
+    // R = 40 000 € (1 part) → TMI 30 %. +1 000 € d'intérêts reste dans la tranche à 30 %.
+    const precis = compareRegimes(
+      input({ tmiBp: undefined, revenuImposableHorsCapitalCents: eur(40_000), parts: 1, interetsCents: eur(1_000) }),
+    );
+    const rapide = compareRegimes(input({ tmiBp: 3000, interetsCents: eur(1_000) }));
+    expect(precis.bareme.irEur).toBe(rapide.bareme.irEur); // 280 € de part et d'autre
+  });
+
+  it("PP2 — franchissement de tranche : le mode précis coûte PLUS que la TMI plate", () => {
+    // R = 28 000 € (TMI 11 %) ; +10 000 € d'intérêts poussent dans la tranche à 30 %.
+    const precis = compareRegimes(
+      input({ tmiBp: undefined, revenuImposableHorsCapitalCents: eur(28_000), parts: 1, interetsCents: eur(10_000) }),
+    );
+    const rapide = compareRegimes(input({ tmiBp: 1100, interetsCents: eur(10_000) }));
+    // Le revenu franchit 11 %→30 % : l'IR réel (≈2 496 €) dépasse largement la TMI plate (≈1 025 €).
+    expect(precis.bareme.irEur).toBeGreaterThan(rapide.bareme.irEur);
+    expect(precis.bareme.irEur).toBe(2496);
+  });
+
+  it("PP3 — le mode précis prend le pas sur tmiBp s'il est fourni", () => {
+    const r = compareRegimes(
+      input({ tmiBp: 4500, revenuImposableHorsCapitalCents: eur(40_000), parts: 1, interetsCents: eur(1_000) }),
+    );
+    // tmiBp 45 % ignoré : on reste sur le barème réel (TMI effective 30 %) → 280 €, pas 450 €.
+    expect(r.bareme.irEur).toBe(280);
+  });
+
+  it("PP4 — abattement 40 % pris en compte en mode précis", () => {
+    // 10 000 € de dividendes éligibles, R = 40 000 € (30 %). Assiette = 6 000 € − CSG déductible.
+    const elig = compareRegimes(
+      input({ tmiBp: undefined, revenuImposableHorsCapitalCents: eur(40_000), parts: 1, dividendesCents: eur(10_000) }),
+    );
+    const nonElig = compareRegimes(
+      input({ tmiBp: undefined, revenuImposableHorsCapitalCents: eur(40_000), parts: 1, dividendesCents: eur(10_000), dividendesEligiblesAbattement40: false }),
+    );
+    expect(elig.bareme.irEur).toBeLessThan(nonElig.bareme.irEur);
   });
 });
 

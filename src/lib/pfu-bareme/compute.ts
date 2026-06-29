@@ -11,6 +11,7 @@ import {
   ABATTEMENT_DIVIDENDES_BP,
   CSG_DEDUCTIBLE_BP,
   PARAMETRES,
+  BAREME_2025,
 } from "./rates";
 
 /**
@@ -27,6 +28,33 @@ function appliqueBp(montantCents: Cents, bp: number): Cents {
 }
 
 /**
+ * Impôt sur le revenu au barème progressif, par quotient familial, en centimes.
+ *
+ * `IR = barème(revenu imposable / parts) × parts`, calculé tranche par tranche sur les seuils
+ * de `BAREME_2025`. ⚠️ Approximations assumées (cf. SOURCES-PFU-BAREME.md §6) : décote et
+ * plafonnement du quotient familial **non modélisés** ; les seuils 2026 ne sont pas connus →
+ * on applique le barème 2025 pour les deux millésimes.
+ *
+ * Exporté pour l'oracle de test (points de référence officiels des tranches).
+ */
+export function impotBareme(revenuImposableCents: Cents, parts: number): Cents {
+  const nbParts = parts > 0 ? parts : 1;
+  const quotient = Math.max(0, revenuImposableCents) / nbParts;
+  let impotParPart = 0;
+  let bas = 0;
+  for (const tranche of BAREME_2025) {
+    const plafondCents = tranche.plafondEur === null ? Infinity : tranche.plafondEur * 100;
+    if (quotient > bas) {
+      const assietteTranche = Math.min(quotient, plafondCents) - bas;
+      impotParPart += (assietteTranche * tranche.tauxBp) / 10_000;
+    }
+    bas = plafondCents;
+    if (quotient <= plafondCents) break;
+  }
+  return Math.round(impotParPart * nbParts);
+}
+
+/**
  * Compare le coût d'impôt total des revenus du capital sous PFU vs option barème (case 2OP).
  *
  * Prélèvements sociaux (PS) : identiques dans les deux régimes, sur le **brut** (D + I + PV).
@@ -39,7 +67,7 @@ function appliqueBp(montantCents: Cents, bp: number): Cents {
  * la CSG déductible n'existe que sous barème. cf. SOURCES-PFU-BAREME.md §4, §5.
  */
 export function compareRegimes(input: ComparateurInput): ComparaisonResult {
-  const { millesime, tmiBp } = input;
+  const { millesime } = input;
   const D = Math.max(0, input.dividendesCents);
   const I = Math.max(0, input.interetsCents);
   const PV = Math.max(0, input.plusValuesCents);
@@ -58,15 +86,33 @@ export function compareRegimes(input: ComparateurInput): ComparaisonResult {
   const irPfuCents = appliqueBp(brutTotal, PFU_IR_BP);
   const totalPfuCents = irPfuCents + psCents;
 
-  // --- Barème : abattement 40 % sur dividendes ÉLIGIBLES, CSG déductible, IR à la TMI.
+  // --- Barème : abattement 40 % sur dividendes ÉLIGIBLES, CSG déductible.
   // Dividendes non éligibles (SIIC, certains ETF, jetons de présence…) → imposés à 100 %.
   const abattementBp =
     input.dividendesEligiblesAbattement40 === false ? 0 : ABATTEMENT_DIVIDENDES_BP;
   const assietteIrCents = appliqueBp(D, 10_000 - abattementBp) + I + PV;
-  const irBrutBaremeCents = appliqueBp(assietteIrCents, tmiBp);
   const csgDeductibleCents = appliqueBp(brutTotal, CSG_DEDUCTIBLE_BP);
-  const economieCsgCents = appliqueBp(csgDeductibleCents, tmiBp);
-  const irBaremeCents = Math.max(0, irBrutBaremeCents - economieCsgCents);
+
+  // Deux modes de calcul de l'IR marginal du capital au barème :
+  let irBaremeCents: Cents;
+  let economieCsgCents: Cents;
+  if (input.revenuImposableHorsCapitalCents !== undefined) {
+    // MODE PRÉCIS : différence de deux impositions (gère le franchissement de tranche).
+    const R = Math.max(0, input.revenuImposableHorsCapitalCents);
+    const parts = input.parts && input.parts > 0 ? input.parts : 1;
+    const irSans = impotBareme(R, parts);
+    const irAvecSansCsg = impotBareme(R + assietteIrCents, parts);
+    const irAvec = impotBareme(R + assietteIrCents - csgDeductibleCents, parts);
+    irBaremeCents = Math.max(0, irAvec - irSans);
+    // Valeur marginale de la CSG déductible = ce qu'elle fait gagner en franchissant les tranches.
+    economieCsgCents = Math.max(0, irAvecSansCsg - irAvec);
+  } else {
+    // MODE RAPIDE : taux marginal plat (TMI fournie), approximation §6.
+    const tmiBp = input.tmiBp ?? 0;
+    const irBrutBaremeCents = appliqueBp(assietteIrCents, tmiBp);
+    economieCsgCents = appliqueBp(csgDeductibleCents, tmiBp);
+    irBaremeCents = Math.max(0, irBrutBaremeCents - economieCsgCents);
+  }
   const totalBaremeCents = irBaremeCents + psCents;
 
   // Comparaison exacte au centime ; valeurs reportées arrondies à l'euro.
