@@ -200,6 +200,53 @@ pourra s'imputer […] des 10 années suivantes* » (fiche 2074-CMV).
 
 ---
 
+## 6bis. Aller-retour « vente puis rachat » & absence de wash-sale (licéité de la purge)
+
+> **Question :** est-il licite de vendre des titres à perte pour réaliser une moins-value, puis de
+> **racheter les mêmes titres aussitôt** (« purge » / *tax-loss harvesting* de fin d'année) ?
+> Sert d'oracle au garde-fou du simulateur d'arbitrage (levier L1, `GARDE_FOUS_PURGE_MV`).
+
+**Conclusion (tranchée, vérifiée multi-sources) : OUI, c'est licite sur un compte-titres ordinaire.**
+
+- **Pas de règle « wash-sale » en droit français.** À la différence des États-Unis (IRS : moins-value
+  neutralisée en cas de rachat sous 30 jours), la France — comme la quasi-totalité des pays européens —
+  **n'a aucune disposition équivalente**. **Aucun délai minimum** entre la vente et le rachat n'est
+  imposé. La presse financière et les banques recommandent ouvertement de réaliser ses pertes avant le
+  31/12 (ex. LCL, Zonebourse).
+- **Réaliser et imputer une moins-value est l'usage *prévu* par le législateur** (CGI art. **150-0 D, 11**,
+  §6 ci-dessus) : ce n'est pas un détournement de la loi.
+- **L'abus de droit (LPF art. L64, et « mini-abus » L64 A depuis le 1ᵉʳ janv. 2020) ne mord pas** sur un
+  aller-retour **réel** : ses deux branches supposent soit un **acte fictif / artificiel** (or une vraie
+  cession de marché transfère réellement la propriété au prix de marché → non fictive), soit un bénéfice
+  **contraire à l'intention du législateur** (or imputer une moins-value est l'usage voulu du régime).
+
+**Seule limite = la réalité de l'opération.** Le risque réapparaît uniquement si la transaction n'est
+**pas réelle** : vente à **soi-même** ou à une **personne/société liée**, **croisement d'ordres**
+organisé, **prix hors marché**, opération sans réel transfert ni exposition au marché → la moins-value
+peut alors être écartée (acte fictif). *Distinct :* il existe une règle anti-abus sur les moins-values,
+mais **uniquement entre entreprises liées** (BIC/IS) — **sans objet** pour le particulier sur un CTO.
+*Hors périmètre :* le **PEA** a ses propres règles (moins-values utilisables seulement à la clôture).
+
+**Sources (vérifiées) :** LPF art. **L64** (BOFiP **BOI-CF-IOR-30-10**) et **L64 A** (BOFiP
+**BOI-CF-IOR-30-20**) — deux branches : acte fictif / but exclusivement (L64) ou principalement (L64 A)
+fiscal contraire à l'objectif du législateur ; CGI art. **150-0 D, 11** (régime d'imputation/report,
+BOFiP **BOI-RPPM-PVBMI-20-10-40**) ; absence de wash-sale FR / pratique de la purge avant le 31/12
+(LCL « fiscalité des plus-values sur compte-titres » ; Zonebourse « ne laissez pas vos moins-values se
+perdre »). Recherche web juin 2026.
+
+**Opportunité ≠ licéité — limite du modèle.** *Licite* ne veut pas dire *toujours avantageux*.
+Réaliser une moins-value latente n'a d'intérêt **immédiat** que s'il existe une **plus-value de l'année**
+(même nature) à effacer ; sinon elle ne crée qu'un **report** (valeur-temps moindre, **expire à 10 ans**,
+même nature). Surtout, si l'investisseur **rachète** les titres (aller-retour pour garder la position),
+le rachat se fait au **prix de marché courant** → le **PMP baisse** → la **plus-value imposable future
+augmente** d'autant : la purge **décale** l'impôt, elle ne le supprime pas (sauf usage de la perte contre
+une PV de l'année, ou conservation jusqu'à la **transmission**, qui purge la PV latente au décès).
+**Le module L1 ne chiffre que l'année en cours** : il ne modélise ni cet **effet de base différé** (PMP
+abaissé), ni les **frais de courtage**. C'est l'objet d'un garde-fou neutre (`GARDE_FOUS_PURGE_MV`),
+non d'un calcul.
+
+---
+
 ## 7. Conventions de calcul du module (implémentation)
 
 - **Argent en centimes d'euro entiers** ; arrondi à l'euro **seulement en sortie** (valeurs des

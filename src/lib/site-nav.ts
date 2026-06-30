@@ -51,6 +51,13 @@ export const CALCULATEURS: LienOutil[] = [
     resume:
       "Comparez la flat tax (30 % / 31,4 % en 2026) et l'option barème progressif : abattement 40 %, CSG déductible.",
   },
+  {
+    href: "/purger-ses-moins-values",
+    court: "Purge moins-values",
+    long: "Purger ses moins-values (simulateur)",
+    resume:
+      "Avant le 31/12 : simulez l'impact de réaliser vos moins-values latentes pour effacer vos plus-values de l'année — différence d'impôt et report sur 10 ans.",
+  },
 ];
 
 /** Guides éditoriaux (contenu SEO de support). */

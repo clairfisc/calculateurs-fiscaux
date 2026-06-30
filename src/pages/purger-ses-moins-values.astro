@@ -1,0 +1,106 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SimulateurPurgeMv from "../components/simulateur-arbitrage/SimulateurPurgeMv.tsx";
+
+const title =
+  "Purge de moins-values : simulateur avant le 31 décembre (impôt) — gratuit";
+const description =
+  "Faut-il vendre à perte avant le 31 décembre ? Simulez gratuitement l'impact fiscal de réaliser vos moins-values latentes pour effacer vos plus-values de l'année : différence d'impôt + prélèvements sociaux et report sur 10 ans. Calcul 100 % local, open source, sans compte ni tracker.";
+const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
+---
+
+<BaseLayout title={title} description={description}>
+    <main>
+      <!-- Simulateur : îlot React hydraté côté client -->
+      <SimulateurPurgeMv client:load />
+
+      <!-- Contenu / SEO -->
+      <section class="mx-auto w-full max-w-4xl px-4 pb-10">
+        <article class="prose prose-slate max-w-none text-sm leading-relaxed text-slate-700">
+          <h2 class="text-base font-semibold text-slate-900">
+            Purger ses moins-values : de quoi parle-t-on ?
+          </h2>
+          <p>
+            En fin d'année, si vous avez réalisé des <strong>plus-values</strong> sur un compte-titres
+            ordinaire, vous pouvez <strong>réaliser des moins-values latentes</strong> (vendre des
+            lignes en perte) pour les <strong>imputer sur ces plus-values</strong> et réduire votre
+            base imposable de l'année. C'est ce qu'on appelle la <em>purge</em> ou
+            <em>tax-loss harvesting</em>. La décision se prend <strong>avant le 31 décembre</strong> :
+            l'imputation joue sur les plus-values <strong>de la même année</strong>.
+          </p>
+          <p>
+            Le simulateur ci-dessus compare deux scénarios — <strong>réaliser</strong> ou
+            <strong>ne pas réaliser</strong> vos moins-values latentes — et chiffre la différence
+            d'impôt sur le revenu + prélèvements sociaux, ainsi que l'effet sur votre
+            <strong>moins-value reportable</strong>.
+          </p>
+
+          <h2 class="text-base font-semibold text-slate-900">Les points à garder en tête</h2>
+          <p>
+            <strong>Sans plus-value à effacer, la purge ne réduit pas l'impôt de l'année</strong> : la
+            moins-value est alors simplement <strong>reportée</strong> et reste imputable
+            <strong>pendant 10 ans</strong> sur des plus-values <strong>de même nature</strong>. L'ordre
+            d'imputation est fixé par la loi : moins-values de l'année d'abord, puis moins-values
+            antérieures, le reliquat étant reporté (case <strong>3VH</strong>).
+          </p>
+          <p>
+            <strong>Réaliser une moins-value latente n'est pas toujours avantageux.</strong> Si vous
+            <strong>rachetez</strong> les titres pour garder la position, vous le faites au prix actuel :
+            votre <strong>prix de revient baisse</strong> d'autant, donc votre
+            <strong>plus-value imposable future augmente</strong>. La purge <strong>décale</strong> alors
+            l'impôt dans le temps plutôt qu'elle ne le supprime — l'intérêt réel se limite à la
+            valeur-temps de ce report, <strong>moins les frais de courtage</strong>. Elle est en revanche
+            nettement utile quand elle <strong>efface une plus-value de l'année</strong>, ou si vous
+            conservez jusqu'à la transmission (la plus-value latente est alors purgée au décès).
+          </p>
+          <p>
+            Contrairement aux États-Unis, il n'existe <strong>pas de règle « wash-sale »</strong> en
+            France : vous pouvez vendre à perte puis <strong>racheter les mêmes titres sans délai</strong>.
+            Réaliser une moins-value pour l'imputer est un <strong>usage prévu par la loi</strong>
+            (CGI art. 150-0 D, 11), pas un détournement — l'abus de droit (LPF art. L64 / L64 A) ne
+            vise que les actes fictifs ou au but exclusivement (ou principalement) fiscal contraire à
+            l'intention du législateur, ce qu'une vraie cession de marché n'est pas. <strong>La seule
+            limite</strong> : l'opération doit être une <strong>vraie transaction de marché</strong>.
+            Une vente fictive, à soi-même ou à un prix hors marché pourrait, elle, être écartée.
+          </p>
+          <p>
+            Pour aller plus loin :
+            <a class="text-blue-700 underline" href="/reporter-ses-moins-values-bourse"
+              >reporter ses moins-values de bourse (guide complet)</a
+            >, le
+            <a class="text-blue-700 underline" href="/plus-values-cession-titres-etrangers"
+              >calculateur de plus-values de titres (2074)</a
+            >
+            et le comparateur
+            <a class="text-blue-700 underline" href="/pfu-ou-bareme">PFU ou barème (case 2OP)</a>.
+          </p>
+        </article>
+
+        <aside class="mt-8 rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed text-slate-700">
+          <p class="m-0">
+            <strong>Aide informative, pas un conseil fiscal</strong> — ce simulateur compare des
+            scénarios chiffrés et ne constitue ni un conseil fiscal ni un conseil en investissement.
+            Il ne remplace pas un professionnel ni le
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href="https://www.impots.gouv.fr">site officiel des impôts</a>.
+          </p>
+          <p class="m-0 mt-3 text-slate-600">
+            <strong>Open source (AGPLv3)</strong> — règles, taux et logique sont publics&nbsp;:
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href={repoUrl}>voir le code</a>.
+            Aucune donnée ne quitte votre navigateur ; zéro compte, zéro tracker.
+          </p>
+        </aside>
+
+        <nav class="mt-6 text-sm" aria-label="Calculateurs">
+          <h2 class="mb-2 text-base font-semibold text-slate-900">Autres calculateurs</h2>
+          <ul class="list-inside list-disc text-blue-700">
+            <li>
+              <a class="underline" href="/plus-values-cession-titres-etrangers">Plus-values de cession de titres (2074-CMV)</a>
+            </li>
+            <li>
+              <a class="underline" href="/pfu-ou-bareme">PFU ou barème (case 2OP)</a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </main>
+</BaseLayout>
