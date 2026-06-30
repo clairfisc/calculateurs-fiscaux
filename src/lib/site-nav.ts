@@ -51,12 +51,41 @@ export const CALCULATEURS: LienOutil[] = [
     resume:
       "Comparez la flat tax (30 % / 31,4 % en 2026) et l'option barème progressif : abattement 40 %, CSG déductible.",
   },
+];
+
+/**
+ * Simulateur d'arbitrage (mode A, year-round) — leviers décisionnels « avant chaque décision ».
+ * Sous-groupe distinct des calculateurs déclaratifs : ils composent les moteurs existants et
+ * comparent deux scénarios A/B. Cf. réf. §X. Regroupés sous un menu dédié dans la nav.
+ */
+export const SIMULATEUR: LienOutil[] = [
   {
     href: "/purger-ses-moins-values",
     court: "Purge moins-values",
     long: "Purger ses moins-values (simulateur)",
     resume:
       "Avant le 31/12 : simulez l'impact de réaliser vos moins-values latentes pour effacer vos plus-values de l'année — différence d'impôt et report sur 10 ans.",
+  },
+  {
+    href: "/quand-convertir-ses-cryptos",
+    court: "Timing conversion crypto",
+    long: "Quand convertir ses cryptos (simulateur)",
+    resume:
+      "Convertir en une fois ou fractionner sur plusieurs années : simulez l'impôt sur la plus-value crypto (150 VH bis), l'effet du seuil 305 € et du PFU.",
+  },
+  {
+    href: "/pea-ou-compte-titres",
+    court: "PEA ou CTO",
+    long: "PEA ou compte-titres (fiscalité)",
+    resume:
+      "Comparez le coût fiscal de sortie d'une plus-value en PEA vs compte-titres : avant 5 ans (clôture + imposition) ou après 5 ans (exonération d'impôt, prélèvements sociaux 17,2 % / 18,6 %).",
+  },
+  {
+    href: "/donner-ou-vendre-des-actions",
+    court: "Donner ou vendre",
+    long: "Donner ou vendre des actions",
+    resume:
+      "Donation avant cession : comparez vendre puis donner le net (plus-value taxée) ou donner les titres appréciés (plus-value latente non imposée) — droits de donation, abattement 100 000 €, avertissement abus de droit.",
   },
 ];
 

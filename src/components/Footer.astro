@@ -1,5 +1,5 @@
 ---
-import { CALCULATEURS, GUIDES } from "../lib/site-nav";
+import { CALCULATEURS, SIMULATEUR, GUIDES } from "../lib/site-nav";
 
 const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
 ---
@@ -13,6 +13,21 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
       <ul class="space-y-1">
         {
           CALCULATEURS.map((l) => (
+            <li>
+              <a class="text-slate-600 hover:text-blue-700 hover:underline" href={l.href}>
+                {l.court}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2 class="mt-4 mb-2 text-xs font-semibold tracking-wide text-slate-400 uppercase">
+        Simulateur
+      </h2>
+      <ul class="space-y-1">
+        {
+          SIMULATEUR.map((l) => (
             <li>
               <a class="text-slate-600 hover:text-blue-700 hover:underline" href={l.href}>
                 {l.court}

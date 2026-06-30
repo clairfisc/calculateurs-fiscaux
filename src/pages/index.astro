@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { CALCULATEURS, GUIDES } from "../lib/site-nav";
+import { CALCULATEURS, SIMULATEUR, GUIDES } from "../lib/site-nav";
 
 const title = "Calculateurs fiscaux gratuits et open source — Clairfisc";
 const description =
@@ -22,6 +22,27 @@ const description =
     <ul class="grid gap-4 sm:grid-cols-2">
       {
         CALCULATEURS.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class="block h-full rounded-lg border border-slate-200 bg-white p-5 transition hover:border-blue-300 hover:shadow-sm"
+            >
+              <span class="font-semibold text-slate-900">{l.long}</span>
+              <span class="mt-1 block text-sm text-slate-600">{l.resume}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2 class="mt-10 mb-1 text-base font-semibold text-slate-900">Simulateur d'arbitrage</h2>
+    <p class="mb-4 max-w-3xl text-sm text-slate-600">
+      Des outils de décision « avant chaque choix » : ils comparent deux scénarios chiffrés (faire / ne
+      pas faire) sans rien recommander. Aide informative, pas un conseil fiscal.
+    </p>
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {
+        SIMULATEUR.map((l) => (
           <li>
             <a
               href={l.href}
