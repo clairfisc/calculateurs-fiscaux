@@ -173,6 +173,7 @@ export default function ComparateurPfuBareme() {
   const [dividendes, setDividendes] = useState("");
   const [interets, setInterets] = useState("");
   const [plusValues, setPlusValues] = useState("");
+  const [plusValuesAvant2018, setPlusValuesAvant2018] = useState("");
   const [dividendesEligibles, setDividendesEligibles] = useState(true);
   const [modePrecis, setModePrecis] = useState(false);
   const [revenuImposable, setRevenuImposable] = useState("");
@@ -181,6 +182,7 @@ export default function ComparateurPfuBareme() {
   const dividendesCents = toCents(dividendes) ?? 0;
   const interetsCents = toCents(interets) ?? 0;
   const plusValuesCents = toCents(plusValues) ?? 0;
+  const plusValuesAvant2018Cents = Math.min(toCents(plusValuesAvant2018) ?? 0, plusValuesCents);
   const revenuImposableCents = toCents(revenuImposable) ?? 0;
   const partsNum = (() => {
     const n = parseFloat((parts || "").replace(",", "."));
@@ -199,10 +201,12 @@ export default function ComparateurPfuBareme() {
         dividendesEligiblesAbattement40: dividendesEligibles,
         interetsCents,
         plusValuesCents,
+        plusValuesAbattablesCents: plusValuesAvant2018Cents,
       }),
     [
       millesime, modePrecis, tmiBp, revenuImposableCents, partsNum,
       dividendesCents, dividendesEligibles, interetsCents, plusValuesCents,
+      plusValuesAvant2018Cents,
     ],
   );
 
@@ -347,13 +351,24 @@ export default function ComparateurPfuBareme() {
             valeur={interets}
             onChange={setInterets}
           />
-          <ChampMontant
-            id="plusvalues"
-            libelle="Plus-values mobilières"
-            aide="Cessions de titres (hors PEA)."
-            valeur={plusValues}
-            onChange={setPlusValues}
-          />
+          <div className="flex flex-col gap-2">
+            <ChampMontant
+              id="plusvalues"
+              libelle="Plus-values mobilières"
+              aide="Cessions de titres (hors PEA)."
+              valeur={plusValues}
+              onChange={setPlusValues}
+            />
+            {plusValuesCents > 0 && (
+              <ChampMontant
+                id="plusvalues-avant-2018"
+                libelle="Dont titres acquis avant 2018"
+                aide="Abattement durée de détention (65 % au barème, détention ≥ 8 ans). Sans objet au PFU."
+                valeur={plusValuesAvant2018}
+                onChange={setPlusValuesAvant2018}
+              />
+            )}
+          </div>
         </div>
       </section>
 
@@ -402,6 +417,16 @@ export default function ComparateurPfuBareme() {
               L'option barème inclut une économie liée à la CSG déductible (6,8 %) de{" "}
               {formateEurosEntiers(resultat.economieCsgDeductibleEur)}, imputée ici sur l'année —
               en pratique cette déduction joue sur le revenu de l'année suivante.
+            </p>
+          )}
+
+          {resultat.abattementDureeDetentionEur > 0 && (
+            <p className="rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-800">
+              <strong>Abattement pour durée de détention</strong> : au barème,{" "}
+              {formateEurosEntiers(resultat.abattementDureeDetentionEur)} sont retranchés de l'assiette
+              imposable à l'IR (titres acquis avant 2018). Il n'existe <strong>qu'au barème</strong> et
+              ne réduit <strong>que l'IR</strong> — les prélèvements sociaux restent sur 100 % de la
+              plus-value. C'est souvent lui qui fait basculer l'avantage vers le barème.
             </p>
           )}
         </section>
@@ -461,8 +486,11 @@ export default function ComparateurPfuBareme() {
           )}
           {plusValuesCents > 0 && (
             <li>
-              Les <strong>plus-values</strong> sont prises à 100 % : l'abattement pour durée de
-              détention des titres acquis <em>avant 2018</em> n'est pas modélisé (cas à vérifier).
+              <strong>Abattement pour durée de détention</strong> : pour des titres acquis
+              <em> avant le 1ᵉʳ janvier 2018</em>, un abattement (65 % au-delà de 8 ans) réduit la part
+              <strong> IR</strong> de la plus-value <strong>au barème uniquement</strong> (jamais au
+              PFU ; les prélèvements sociaux restent sur 100 %). Renseignez la part concernée dans
+              « Dont titres acquis avant 2018 ». Titres acquis depuis 2018 : aucun abattement.
             </li>
           )}
           <li>

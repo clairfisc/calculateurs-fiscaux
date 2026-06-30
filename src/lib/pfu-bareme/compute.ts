@@ -86,11 +86,18 @@ export function compareRegimes(input: ComparateurInput): ComparaisonResult {
   const irPfuCents = appliqueBp(brutTotal, PFU_IR_BP);
   const totalPfuCents = irPfuCents + psCents;
 
-  // --- Barème : abattement 40 % sur dividendes ÉLIGIBLES, CSG déductible.
+  // --- Barème : abattement 40 % sur dividendes ÉLIGIBLES, abattement durée de détention sur les
+  // PV pré-2018, CSG déductible.
   // Dividendes non éligibles (SIIC, certains ETF, jetons de présence…) → imposés à 100 %.
   const abattementBp =
     input.dividendesEligiblesAbattement40 === false ? 0 : ABATTEMENT_DIVIDENDES_BP;
-  const assietteIrCents = appliqueBp(D, 10_000 - abattementBp) + I + PV;
+  // Abattement pour durée de détention (titres pré-2018, CGI 150-0 D 1 ter) : réduit la SEULE part
+  // IR du barème ; les PS et le PFU restent sur 100 % de la PV. Plafonné au montant de PV saisi.
+  const pvAbattableCents = Math.min(Math.max(0, input.plusValuesAbattablesCents ?? 0), PV);
+  const tauxAbDureeBp = input.tauxAbattementDureeDetentionBp ?? 6500;
+  const abattementDureeCents = appliqueBp(pvAbattableCents, tauxAbDureeBp);
+  const pvBaremeIrCents = PV - abattementDureeCents;
+  const assietteIrCents = appliqueBp(D, 10_000 - abattementBp) + I + pvBaremeIrCents;
   const csgDeductibleCents = appliqueBp(brutTotal, CSG_DEDUCTIBLE_BP);
 
   // Deux modes de calcul de l'IR marginal du capital au barème :
@@ -136,5 +143,6 @@ export function compareRegimes(input: ComparateurInput): ComparaisonResult {
     gagnant,
     ecartEur: arrondiEuro(Math.abs(totalPfuCents - totalBaremeCents)),
     economieCsgDeductibleEur: arrondiEuro(economieCsgCents),
+    abattementDureeDetentionEur: arrondiEuro(abattementDureeCents),
   };
 }

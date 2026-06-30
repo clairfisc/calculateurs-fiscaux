@@ -243,6 +243,55 @@ describe("comparateur PFU vs barème — mode précis (revenu + parts)", () => {
   });
 });
 
+describe("abattement durée de détention (titres pré-2018, barème seul) — CGI 150-0 D 1 ter", () => {
+  it("AD1 — 65 % sur 10 000 € de PV au barème (TMI 30 %) : assiette IR ramenée à 3 500 €", () => {
+    const r = compareRegimes(input({ tmiBp: 3000, plusValuesCents: eur(10_000), plusValuesAbattablesCents: eur(10_000) }));
+    // PFU inchangé : 12,8 % × 10 000 + PS 18,6 % = 1 280 + 1 860 = 3 140 €.
+    expect(r.pfu.totalEur).toBe(3140);
+    // Barème : assiette IR = 10 000 − 65 % = 3 500 € ; IR 30 % = 1 050 − CSG déd. (204) = 846 € ; PS 1 860.
+    expect(r.bareme.irEur).toBe(846);
+    expect(r.bareme.totalEur).toBe(2706);
+    expect(r.abattementDureeDetentionEur).toBe(6500);
+  });
+
+  it("AD2 — l'abattement RENVERSE le verdict (PFU sans → barème avec)", () => {
+    const sans = compareRegimes(input({ tmiBp: 3000, plusValuesCents: eur(10_000) }));
+    const avec = compareRegimes(input({ tmiBp: 3000, plusValuesCents: eur(10_000), plusValuesAbattablesCents: eur(10_000) }));
+    // Sans abattement, le barème (PV à 100 %) perd ; avec l'abattement 65 %, il gagne.
+    expect(sans.gagnant).toBe("pfu");
+    expect(avec.gagnant).toBe("bareme");
+    // L'abattement ne touche QUE l'IR du barème : PFU et PS du barème inchangés.
+    expect(avec.pfu.totalEur).toBe(sans.pfu.totalEur);
+    expect(avec.bareme.psEur).toBe(sans.bareme.psEur);
+    expect(avec.bareme.irEur).toBeLessThan(sans.bareme.irEur);
+    expect(sans.abattementDureeDetentionEur).toBe(0);
+  });
+
+  it("AD3 — abattement partiel : seule une fraction des PV est pré-2018", () => {
+    const r = compareRegimes(input({ tmiBp: 3000, plusValuesCents: eur(10_000), plusValuesAbattablesCents: eur(4_000) }));
+    // 65 % × 4 000 = 2 600 € retranchés de l'assiette IR.
+    expect(r.abattementDureeDetentionEur).toBe(2600);
+  });
+
+  it("AD4 — la part abattable est plafonnée au montant de PV saisi", () => {
+    const clamp = compareRegimes(input({ tmiBp: 3000, plusValuesCents: eur(10_000), plusValuesAbattablesCents: eur(20_000) }));
+    const full = compareRegimes(input({ tmiBp: 3000, plusValuesCents: eur(10_000), plusValuesAbattablesCents: eur(10_000) }));
+    expect(clamp.abattementDureeDetentionEur).toBe(6500);
+    expect(clamp.bareme.totalEur).toBe(full.bareme.totalEur);
+  });
+
+  it("AD5 — taux 50 % (tranche 2-8 ans) si explicitement fourni", () => {
+    const r = compareRegimes(input({ tmiBp: 3000, plusValuesCents: eur(10_000), plusValuesAbattablesCents: eur(10_000), tauxAbattementDureeDetentionBp: 5000 }));
+    expect(r.abattementDureeDetentionEur).toBe(5000);
+  });
+
+  it("AD6 — sans abattement saisi, comportement et résultat strictement inchangés (régression)", () => {
+    const r = compareRegimes(input({ tmiBp: 3000, plusValuesCents: eur(10_000) }));
+    expect(r.abattementDureeDetentionEur).toBe(0);
+    expect(r.bareme.totalEur).toBe(4656); // PV à 100 % : 30 % × 10 000 − CSG déd. + PS = 2 796 + 1 860.
+  });
+});
+
 describe("arrondiEuro", () => {
   it("arrondit au plus proche, 0,5 → euro supérieur", () => {
     expect(arrondiEuro(0)).toBe(0);

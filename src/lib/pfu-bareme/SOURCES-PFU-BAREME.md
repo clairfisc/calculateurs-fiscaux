@@ -191,9 +191,21 @@ Soit, pour un millésime donné, `tIR_pfu = 12,8 %`, `tPS` (17,2 % ou 18,6 %), `
   sur le **total**, jamais ligne par ligne.
 - **Révocabilité** : pour les **revenus 2026** (décl. 2027) l'option 2OP devient **révocable** ;
   pour les **revenus 2025** elle reste **irrévocable** → afficher l'avertissement selon le millésime.
-- **Plus-values pré-2018 (abattement durée de détention)** : `⚠️ à vérifier / OUT v0`. Sous
-  barème, les titres acquis **avant 2018** peuvent ouvrir un abattement pour durée de détention
-  (50 %/65 %) — **non modélisé** ; les PV sont prises à 100 % d'assiette. Cas signalé, non tranché.
+- **Plus-values pré-2018 (abattement durée de détention) — MODÉLISÉ (recherche juin 2026).** Sous
+  **barème uniquement** (jamais au PFU), les plus-values de cession de titres **acquis avant le
+  1ᵉʳ janvier 2018** ouvrent l'abattement pour durée de détention de **CGI art. 150-0 D, 1 ter**
+  (**50 %** entre 2 et 8 ans, **65 %** au-delà de 8 ans). L'abattement réduit la **seule part IR** ;
+  les **prélèvements sociaux** et le **PFU** restent sur **100 %** de la plus-value. Le moteur le
+  prend en compte via `plusValuesAbattablesCents` (part ⊆ `plusValuesCents`) + `tauxAbattementDureeDetentionBp`
+  (défaut **6500**). **Pourquoi c'est important** : ignorer cet abattement biaisait la comparaison à
+  la défaveur du barème et pouvait **inverser le verdict** pour un porteur de titres anciens.
+  *Note pratique :* pour des revenus 2025, tout titre acquis avant 2018 est détenu ≥ 8 ans → la
+  tranche **50 % est devenue quasi-théorique** (65 % en pratique). **Sources :** CGI 150-0 D, 1 ter
+  (Légifrance) ; BOFiP **BOI-RPPM-PVBMI-20-20-10** (v. 18/08/2025) — abattement réservé aux titres
+  « acquis ou souscrits antérieurement au 1er janvier 2018 » et « imposés suivant le barème » ;
+  toujours en vigueur, sans date d'extinction. *Hors périmètre :* abattement renforcé PME (1 quater,
+  jusqu'à 85 %) et abattement fixe dirigeant retraite (150-0 D ter) — réservés aux titres de PME /
+  dirigeants, non pertinents pour l'investisseur en bourse via courtier.
 - **PEA / assurance-vie / PEL** : régimes propres, **hors périmètre** (PS parfois à 9,2 %, pas
   31,4 %). Le module ne traite que les RCM et PV mobilières de droit commun.
 - **Le module produit une aide à la décision, pas l'impôt dû** ; disclaimer « aide informative,

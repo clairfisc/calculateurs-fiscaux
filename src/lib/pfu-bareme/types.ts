@@ -52,8 +52,21 @@ export interface ComparateurInput {
   readonly dividendesEligiblesAbattement40?: boolean;
   /** Intérêts et autres RCM (aucun abattement), en centimes. */
   readonly interetsCents: Cents;
-  /** Plus-values mobilières (aucun abattement v0 — pré-2018 OUT, §6), en centimes. */
+  /** Plus-values mobilières (montant brut, 100 %), en centimes. */
   readonly plusValuesCents: Cents;
+  /**
+   * Part des plus-values ci-dessus (⊆ `plusValuesCents`) ouvrant l'**abattement pour durée de
+   * détention** — titres **acquis avant le 1ᵉʳ janvier 2018** (CGI 150-0 D, 1 ter). L'abattement
+   * ne joue **que sous barème** et **seulement sur la part IR** ; les prélèvements sociaux et le PFU
+   * restent sur 100 % de la plus-value. Défaut 0. cf. SOURCES-PFU-BAREME.md §6.
+   */
+  readonly plusValuesAbattablesCents?: Cents;
+  /**
+   * Taux de l'abattement pour durée de détention, en points de base : **6500** (détention ≥ 8 ans)
+   * ou **5000** (≥ 2 et < 8 ans). Défaut **6500** — en pratique, pour des revenus 2025, tout titre
+   * acquis avant 2018 est détenu ≥ 8 ans, donc 65 % (la tranche 50 % est devenue quasi-théorique).
+   */
+  readonly tauxAbattementDureeDetentionBp?: number;
 }
 
 /** Détail chiffré d'un régime (PFU ou barème), valeurs en euros arrondies pour affichage. */
@@ -83,4 +96,10 @@ export interface ComparaisonResult {
    * c'est un effet souvent ignoré et décalé à N+1 (cf. SOURCES-PFU-BAREME.md §3, §6).
    */
   readonly economieCsgDeductibleEur: number;
+  /**
+   * Montant de l'abattement pour durée de détention retranché de l'assiette **IR du barème**
+   * (titres pré-2018), en euros — 0 si non renseigné. Exposé pour expliquer pourquoi le barème
+   * peut devenir plus avantageux qu'il n'y paraît (cf. SOURCES-PFU-BAREME.md §6).
+   */
+  readonly abattementDureeDetentionEur: number;
 }
