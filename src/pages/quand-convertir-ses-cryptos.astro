@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SimulateurTimingCrypto from "../components/simulateur-arbitrage/SimulateurTimingCrypto.tsx";
+
+const title =
+  "Quand convertir ses cryptos : simulateur d'impôt selon le timing — gratuit";
+const description =
+  "Convertir sa crypto en euros en une fois ou fractionner sur plusieurs années change-t-il l'impôt ? Simulez gratuitement la plus-value (150 VH bis, formulaire 2086), l'effet du seuil 305 € et le PFU. Comparatif neutre, calcul 100 % local, open source, sans compte ni tracker.";
+const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
+---
+
+<BaseLayout title={title} description={description}>
+    <main>
+      <!-- Simulateur : îlot React hydraté côté client -->
+      <SimulateurTimingCrypto client:load />
+
+      <!-- Contenu / SEO -->
+      <section class="mx-auto w-full max-w-4xl px-4 pb-10">
+        <article class="prose prose-slate max-w-none text-sm leading-relaxed text-slate-700">
+          <h2 class="text-base font-semibold text-slate-900">
+            Le timing de conversion change-t-il l'impôt sur les plus-values crypto ?
+          </h2>
+          <p>
+            Pour un particulier, la plus-value de cession d'actifs numériques se calcule selon la
+            <strong> méthode de la valeur globale du portefeuille</strong> (CGI art. 150 VH bis) :
+            la quote-part de prix d'acquisition imputée à chaque vente est proportionnelle à la part
+            cédée du portefeuille. Conséquence directe&nbsp;: <strong>répartir une même conversion sur
+            plusieurs années n'augmente ni ne diminue, en règle générale, la plus-value nette totale</strong> —
+            elle est simplement étalée. À taux d'imposition constant, l'impôt total est alors le même.
+          </p>
+          <p>
+            Le simulateur ci-dessus compare deux scénarios&nbsp;: <strong>tout convertir en une fois</strong>
+            cette année (scénario A) ou <strong>fractionner sur N années</strong> (scénario B). Il chiffre
+            la plus-value imposable (case 3AN) et l'impôt sur le revenu + prélèvements sociaux de chaque
+            scénario, et expose la différence. Il <strong>compare sans recommander</strong>.
+          </p>
+
+          <h2 class="text-base font-semibold text-slate-900">Les points à garder en tête</h2>
+          <p>
+            <strong>Seule la conversion en euros (ou en bien/service) est imposable.</strong> Un échange
+            <strong> crypto → crypto</strong> sans soulte bénéficie d'un sursis d'imposition (150 VH bis,
+            II-A)&nbsp;: il n'est ni imposable ni à déclarer. Multiplier ces échanges ne réduit pas l'impôt
+            et n'est pas un levier&nbsp;: ce n'est pas la fréquence des opérations internes qui compte, mais
+            la sortie vers la monnaie.
+          </p>
+          <p>
+            <strong>Le seuil d'exonération de 305 €</strong> s'apprécie sur le total des prix de cession
+            <strong> d'une même année</strong>&nbsp;: en dessous, les plus-values de l'année sont exonérées
+            (150 VH bis, II-B). C'est le seul cas où le fractionnement change réellement le résultat — mais
+            le seuil est <strong>si bas</strong> qu'il ne concerne que de très petites cessions. Il est
+            rappelé ici comme un <strong>fait du calcul</strong>, pas comme un montant à viser&nbsp;: étaler
+            ses ventes dans le seul but de passer sous 305 € chaque année <strong>n'est pas une démarche que
+            ce site propose</strong>, et un montage à but uniquement fiscal peut être écarté par
+            l'administration (LPF art. L64 / L64 A).
+          </p>
+          <p>
+            <strong>Les revenus de staking, lending, minage ou airdrops</strong> relèvent de régimes
+            distincts (BNC ou RCM) et <strong>ne sont pas couverts</strong> par cette simulation, qui ne
+            porte que sur la plus-value de cession. La <strong>moins-value</strong> crypto d'une année ne
+            s'impute que sur des plus-values crypto de la <strong>même année</strong> (pas de report).
+          </p>
+          <p>
+            Cette simulation <strong>isole le seul effet du timing</strong>&nbsp;: elle suppose la valeur du
+            portefeuille et le prix d'acquisition identiques d'une année à l'autre. Elle ne prédit ni
+            l'évolution du cours, ni un changement futur de barème ou de taux, qui peuvent modifier le
+            résultat réel.
+          </p>
+          <p>
+            Pour aller plus loin&nbsp;:
+            <a class="text-blue-700 underline" href="/plus-values-crypto-2086"
+              >le calculateur de plus-values crypto (2086)</a
+            >, le guide
+            <a class="text-blue-700 underline" href="/declarer-ses-cryptos-aux-impots"
+              >faut-il déclarer ses cryptos&nbsp;?</a
+            >
+            et le comparateur
+            <a class="text-blue-700 underline" href="/pfu-ou-bareme">PFU ou barème (case 2OP)</a>.
+          </p>
+        </article>
+
+        <aside class="mt-8 rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed text-slate-700">
+          <p class="m-0">
+            <strong>Aide informative, pas un conseil fiscal</strong> — ce simulateur compare des
+            scénarios chiffrés et ne constitue ni un conseil fiscal ni un conseil en investissement.
+            Il ne remplace pas un professionnel ni le
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href="https://www.impots.gouv.fr">site officiel des impôts</a>.
+          </p>
+          <p class="m-0 mt-3 text-slate-600">
+            <strong>Open source (AGPLv3)</strong> — règles, taux et logique sont publics&nbsp;:
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href={repoUrl}>voir le code</a>.
+            Aucune donnée ne quitte votre navigateur ; zéro compte, zéro tracker.
+          </p>
+        </aside>
+
+        <nav class="mt-6 text-sm" aria-label="Calculateurs">
+          <h2 class="mb-2 text-base font-semibold text-slate-900">Autres calculateurs</h2>
+          <ul class="list-inside list-disc text-blue-700">
+            <li>
+              <a class="underline" href="/plus-values-crypto-2086">Plus-values crypto (2086, 150 VH bis)</a>
+            </li>
+            <li>
+              <a class="underline" href="/purger-ses-moins-values">Purger ses moins-values (simulateur)</a>
+            </li>
+            <li>
+              <a class="underline" href="/pfu-ou-bareme">PFU ou barème (case 2OP)</a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </main>
+</BaseLayout>
