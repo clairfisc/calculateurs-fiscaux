@@ -1,7 +1,9 @@
 # Clairfisc — calculateurs fiscaux open source pour l'investisseur
 
-Super-app **gratuite et open source** de calculateurs fiscaux pour l'investisseur français :
-dividendes et plus-values étrangers, crypto, comptes à l'étranger, choix PFU / barème.
+Super-app **gratuite et open source** pour l'investisseur français : des **calculateurs** qui
+produisent les bonnes cases (dividendes et plus-values étrangers, crypto, comptes à l'étranger,
+choix PFU / barème) et un **simulateur d'arbitrage** qui compare deux scénarios chiffrés avant une
+décision (purge de moins-values, timing de conversion crypto, PEA / compte-titres, donation).
 
 Le calcul s'exécute **entièrement dans votre navigateur** — sans compte, sans tracker, sans envoi de données.
 En ligne : **[clairfisc.fr](https://clairfisc.fr)**.
@@ -22,6 +24,21 @@ vérifier les calculs**. C'est le cœur du projet : la justesse fiscale **audita
 - **PFU ou barème (case 2OP)** — comparateur flat tax (30 % / 31,4 % en 2026) vs barème progressif : abattement 40 %, CSG déductible.
 
 Chaque calculateur est accompagné de **guides explicatifs** (contenu pédagogique sourcé) — voir [`src/pages/`](src/pages/).
+
+## Le simulateur d'arbitrage
+
+Des outils de décision « avant chaque choix » : ils **comparent deux scénarios chiffrés** (faire / ne
+pas faire) sans jamais recommander. Ils ne réinventent aucun chiffre fiscal — ils **composent les
+moteurs ci-dessus** et exposent le différentiel d'impôt + prélèvements sociaux.
+
+- **Purge des moins-values** — réaliser ses moins-values latentes avant le 31/12 pour effacer ses plus-values de l'année : différentiel de case **3VG** et de report sur 10 ans.
+- **Timing de conversion crypto** — convertir en une fois ou fractionner sur plusieurs années : effet du seuil 305 € et du régime (PFU / barème case 3CN).
+- **PEA ou compte-titres** — coût fiscal de sortie d'une plus-value selon l'enveloppe et l'horizon (avant / après 5 ans : exonération d'IR, prélèvements sociaux).
+- **Donation avant cession** — vendre puis donner le net (plus-value taxée) vs donner les titres appréciés (plus-value latente purgée) : droits de donation et avertissement abus de droit.
+
+> Ces simulateurs sont en **mode informatif strict** : ils simulent et visualisent, ils ne
+> conseillent pas. Les cas ambigus (abus de droit, éligibilité PEA…) sont **signalés et sourcés,
+> jamais tranchés à tort**.
 
 ## Vie privée
 
@@ -56,9 +73,11 @@ Prérequis : **Node ≥ 22**.
 ```text
 src/lib/        moteurs fiscaux purs, un dossier par module (tax-engine, cessions-2074,
                 crypto-2086, comptes-3916, pfu-bareme), chacun avec ses tests + SOURCES-*.md
+                simulateur-arbitrage/ : couche de composition (un sous-dossier par levier),
+                  ne calcule rien en propre — appelle les moteurs et diffe les scénarios A/B
                 site-nav.ts : source unique de la navigation (header, footer, hub)
-src/components/ UI : îlots React des calculateurs, layout, disclaimer
-src/pages/      pages calculateurs + guides explicatifs (SEO) + hub d'accueil
+src/components/ UI : îlots React des calculateurs et du simulateur, layout, disclaimer
+src/pages/      pages calculateurs + simulateur + guides explicatifs (SEO) + hub d'accueil
 ```
 
 ## Déploiement
