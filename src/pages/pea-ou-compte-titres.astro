@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SimulateurPeaCto from "../components/simulateur-arbitrage/SimulateurPeaCto.tsx";
+
+const title =
+  "PEA ou compte-titres : fiscalité et impôt comparés (simulateur) — gratuit";
+const description =
+  "PEA ou CTO : quel impôt à la sortie ? Simulez gratuitement le coût fiscal de sortie d'une plus-value sur un compte-titres ordinaire (PFU 30 % / 31,4 %) ou sur un PEA, avant 5 ans (clôture + imposition) ou après 5 ans (exonération d'impôt sur le revenu, prélèvements sociaux 17,2 % / 18,6 %). Calcul 100 % local, open source, sans compte ni tracker.";
+const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
+---
+
+<BaseLayout title={title} description={description}>
+    <main>
+      <!-- Simulateur : îlot React hydraté côté client -->
+      <SimulateurPeaCto client:load />
+
+      <!-- Contenu / SEO -->
+      <section class="mx-auto w-full max-w-4xl px-4 pb-10">
+        <article class="prose prose-slate max-w-none text-sm leading-relaxed text-slate-700">
+          <h2 class="text-base font-semibold text-slate-900">
+            PEA ou compte-titres : que change la fiscalité ?
+          </h2>
+          <p>
+            Un même titre (action ou ETF éligible) peut être logé sur un <strong>compte-titres
+            ordinaire (CTO)</strong> ou sur un <strong>plan d'épargne en actions (PEA)</strong>. À la
+            sortie, l'<strong>impôt</strong> n'est pas le même. Sur un CTO, la plus-value est une
+            plus-value mobilière de droit commun : <strong>PFU</strong> (12,8 % d'impôt sur le revenu
+            + prélèvements sociaux, soit 30 % en 2025 et 31,4 % en 2026) ou, sur option, le
+            <strong>barème progressif</strong> (case 2OP). Sur un PEA, tout dépend de la
+            <strong>durée de détention</strong>.
+          </p>
+
+          <h2 class="text-base font-semibold text-slate-900">PEA : avant 5 ans, après 5 ans</h2>
+          <p>
+            <strong>Avant 5 ans</strong>, un retrait entraîne en principe la <strong>clôture du
+            plan</strong> et l'imposition du <strong>gain net réalisé depuis l'ouverture</strong> :
+            impôt sur le revenu (au PFU ou au barème) <strong>plus prélèvements sociaux</strong> —
+            soit, en pratique, une fiscalité très proche de celle d'un compte-titres.
+          </p>
+          <p>
+            <strong>Après 5 ans</strong>, les gains du PEA sont <strong>exonérés d'impôt sur le
+            revenu</strong> (CGI art. 157, 5° bis). Restent dus les <strong>prélèvements
+            sociaux</strong> au taux en vigueur au jour du retrait : <strong>17,2 % jusqu'en 2025,
+            18,6 % à compter du 1ᵉʳ janvier 2026</strong>. C'est là tout l'intérêt fiscal du PEA :
+            sur un gain de 10 000 €, l'économie d'impôt sur le revenu (la part PFU de 12,8 %) est
+            d'environ 1 280 € par rapport à une sortie en compte-titres.
+          </p>
+          <p>
+            Le simulateur ci-dessus compare deux scénarios — <strong>sortie en compte-titres</strong>
+            vs <strong>sortie en PEA</strong> — pour un gain donné et un horizon de détention donné,
+            et chiffre la <strong>différence de coût fiscal</strong> (impôt sur le revenu +
+            prélèvements sociaux).
+          </p>
+
+          <h2 class="text-base font-semibold text-slate-900">Les points à garder en tête</h2>
+          <p>
+            <strong>L'éligibilité au PEA conditionne tout.</strong> Seules les actions de sociétés
+            ayant leur siège dans l'<strong>Union européenne ou l'EEE</strong> (ou les fonds et ETF
+            investis à au moins 75 % en de telles actions) peuvent y être logées (C. mon. fin. art.
+            L221-31). Un titre américain ou un ETF non éligible ne peut tout simplement pas figurer
+            dans un PEA : la comparaison n'a alors pas d'objet.
+          </p>
+          <p>
+            Le PEA a un <strong>plafond de versements de 150 000 €</strong> (225 000 € cumulé avec un
+            PEA-PME). C'est un plafond de versements, pas de valorisation : le plan peut dépasser ce
+            montant par capitalisation. Enfin, pour un PEA <strong>ouvert avant 2018</strong>, une
+            partie des prélèvements sociaux peut relever de « <strong>taux historiques</strong> » par
+            couches — un cas particulier non traité par ce simulateur, qui applique un taux unique au
+            jour du retrait.
+          </p>
+          <p>
+            Pour aller plus loin : le comparateur
+            <a class="text-blue-700 underline" href="/pfu-ou-bareme">PFU ou barème (case 2OP)</a>, le
+            <a class="text-blue-700 underline" href="/plus-values-cession-titres-etrangers"
+              >calculateur de plus-values de titres (2074)</a
+            >
+            et le simulateur de
+            <a class="text-blue-700 underline" href="/purger-ses-moins-values"
+              >purge des moins-values</a
+            >.
+          </p>
+        </article>
+
+        <aside class="mt-8 rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed text-slate-700">
+          <p class="m-0">
+            <strong>Aide informative, pas un conseil fiscal</strong> — ce simulateur compare des
+            scénarios chiffrés et ne constitue ni un conseil fiscal ni un conseil en investissement.
+            Il ne remplace pas un professionnel ni le
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href="https://www.impots.gouv.fr">site officiel des impôts</a>.
+          </p>
+          <p class="m-0 mt-3 text-slate-600">
+            <strong>Open source (AGPLv3)</strong> — règles, taux et logique sont publics&nbsp;:
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href={repoUrl}>voir le code</a>.
+            Aucune donnée ne quitte votre navigateur ; zéro compte, zéro tracker.
+          </p>
+        </aside>
+
+        <nav class="mt-6 text-sm" aria-label="Calculateurs">
+          <h2 class="mb-2 text-base font-semibold text-slate-900">Autres calculateurs</h2>
+          <ul class="list-inside list-disc text-blue-700">
+            <li>
+              <a class="underline" href="/pfu-ou-bareme">PFU ou barème (case 2OP)</a>
+            </li>
+            <li>
+              <a class="underline" href="/plus-values-cession-titres-etrangers">Plus-values de cession de titres (2074-CMV)</a>
+            </li>
+            <li>
+              <a class="underline" href="/purger-ses-moins-values">Purger ses moins-values (simulateur)</a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </main>
+</BaseLayout>
