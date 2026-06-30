@@ -1,0 +1,140 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SimulateurDonation from "../components/simulateur-arbitrage/SimulateurDonation.tsx";
+
+const title =
+  "Donner ou vendre des actions : simulateur d'impôt (donation avant cession) — gratuit";
+const description =
+  "Donner ou vendre des actions ? Simulez gratuitement les deux situations : vendre les titres puis donner le net (plus-value taxée) ou donner les titres appréciés (plus-value latente non imposée à la donation, restent les droits de donation). Comparatif chiffré, abattement 100 000 €, barème des droits. Calcul 100 % local, open source, sans compte ni tracker.";
+const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
+---
+
+<BaseLayout title={title} description={description}>
+    <main>
+      <!-- Simulateur : îlot React hydraté côté client -->
+      <SimulateurDonation client:load />
+
+      <!-- Contenu / SEO -->
+      <section class="mx-auto w-full max-w-4xl px-4 pb-10">
+        <!-- Avertissement abus de droit : répété dans la page, en clair, non contournable -->
+        <aside
+          role="alert"
+          class="mb-6 rounded-md border border-red-200 border-l-4 border-l-red-600 bg-red-50 px-4 py-3 text-sm leading-relaxed text-red-900"
+        >
+          <p class="m-0 font-semibold">Abus de droit « donation-cession » — à lire avant tout</p>
+          <p class="m-0 mt-2">
+            Donner des titres avant qu'ils soient vendus n'est <strong>pas un montage</strong> que ce
+            site vous propose. Si la cession est <strong>déjà convenue avant la donation</strong>, ou si
+            le donateur <strong>se réapproprie le prix</strong> de vente, l'administration peut
+            requalifier l'opération (LPF art. L64) : la <strong>plus-value latente redevient imposable</strong>
+            chez le donateur, en plus des droits de donation et de <strong>pénalités</strong>. Une donation
+            est par ailleurs <strong>irrévocable</strong>. Le simulateur ci-dessus se borne à
+            <strong>chiffrer deux situations</strong> ; il ne décrit pas une marche à suivre et ne
+            recommande rien. La mise en œuvre relève d'un <strong>notaire</strong> et d'un professionnel.
+          </p>
+        </aside>
+
+        <article class="prose prose-slate max-w-none text-sm leading-relaxed text-slate-700">
+          <h2 class="text-base font-semibold text-slate-900">
+            Donner ou vendre des actions : de quoi parle-t-on ?
+          </h2>
+          <p>
+            Quand on détient des actions <strong>fortement appréciées</strong> et qu'on souhaite en
+            transmettre la valeur, deux situations existent et n'ont pas le même coût fiscal :
+          </p>
+          <ul>
+            <li>
+              <strong>Vendre les titres, puis donner le montant net.</strong> La vente déclenche
+              l'imposition de la <strong>plus-value</strong> (PFU 30 % / 31,4 % en 2026, ou barème
+              progressif sur option). On donne ensuite le net, soumis aux <strong>droits de donation</strong>.
+            </li>
+            <li>
+              <strong>Donner les titres tels quels.</strong> La donation <strong>n'est pas une cession à
+              titre onéreux</strong> : la <strong>plus-value latente n'est pas imposée</strong> au moment
+              de la donation (CGI art. 150-0 D, 1). Le donataire reçoit pour <strong>prix de revient la
+              valeur des titres au jour de la donation</strong> : s'il revend aussitôt, il n'a quasiment
+              aucune plus-value. Restent dus les <strong>droits de donation</strong>, calculés sur cette
+              même valeur.
+            </li>
+          </ul>
+          <p>
+            Le simulateur compare le <strong>coût fiscal total</strong> de chacune de ces situations
+            (impôt sur la plus-value + droits de donation) selon le lien avec le donataire. Il
+            <strong>ne désigne pas de « bonne » solution</strong> : il affiche la différence, vous
+            décidez avec un professionnel.
+          </p>
+
+          <h2 class="text-base font-semibold text-slate-900">Les droits de donation</h2>
+          <p>
+            Les droits dépendent du <strong>lien de parenté</strong> et d'un <strong>abattement</strong>
+            renouvelable <strong>tous les 15 ans</strong> : <strong>100 000 €</strong> par parent et par
+            enfant (CGI art. 779), 31 865 € pour un petit-enfant, 15 932 € entre frères et sœurs, 7 967 €
+            pour un neveu ou une nièce, 80 724 € entre conjoints ou partenaires de PACS. Au-delà de
+            l'abattement, on applique le <strong>barème progressif</strong> en ligne directe (5 % à 45 %)
+            ou les taux propres aux autres liens (55 % pour un neveu/nièce, 60 % pour un tiers). Les
+            donations consenties à la même personne depuis <strong>moins de 15 ans</strong> réduisent
+            l'abattement disponible (rappel fiscal, CGI art. 784).
+          </p>
+          <p>
+            Important : <strong>l'abattement réduit les droits de donation, pas le prix de revient</strong>
+            transmis au donataire. Même si la donation est exonérée, le donataire conserve comme base de
+            revient la <strong>valeur vénale entière</strong> au jour de la donation (BOFiP
+            BOI-RPPM-PVBMI-20-10-20-30).
+          </p>
+
+          <h2 class="text-base font-semibold text-slate-900">Le risque : l'abus de droit</h2>
+          <p>
+            La donation avant cession est <strong>licite dans son principe</strong> : le Conseil d'État
+            admet que l'on transmette des titres avant qu'ils soient cédés plutôt que de vendre soi-même
+            puis donner le prix (CE, 30 déc. 2011, Motte-Sauvaige, n° 330940). <strong>Mais</strong>
+            l'opération est <strong>requalifiable en abus de droit</strong> (LPF art. L64) si la
+            <strong>vente était déjà convenue avant la donation</strong> (la donation porte alors en
+            réalité sur le prix, pas sur les titres) ou si le donateur <strong>se réapproprie les fonds</strong>.
+            Conséquence : la <strong>purge de la plus-value est anéantie</strong>, la plus-value redevient
+            imposable chez le donateur, avec <strong>pénalités</strong>. C'est pourquoi cette opération
+            relève d'un <strong>notaire</strong> et d'un conseil patrimonial, et non d'un simulateur.
+          </p>
+
+          <p>
+            Pour aller plus loin :
+            <a class="text-blue-700 underline" href="/plus-values-cession-titres-etrangers"
+              >calculateur de plus-values de titres (2074)</a
+            >, le comparateur
+            <a class="text-blue-700 underline" href="/pfu-ou-bareme">PFU ou barème (case 2OP)</a> et le
+            <a class="text-blue-700 underline" href="/purger-ses-moins-values"
+              >simulateur de purge de moins-values</a
+            >.
+          </p>
+        </article>
+
+        <aside class="mt-8 rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed text-slate-700">
+          <p class="m-0">
+            <strong>Aide informative, pas un conseil fiscal</strong> — ce simulateur compare des
+            scénarios chiffrés et ne constitue ni un conseil fiscal, juridique ni en investissement. Une
+            donation est un acte notarié irrévocable : il ne remplace pas un professionnel ni le
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href="https://www.impots.gouv.fr">site officiel des impôts</a>.
+          </p>
+          <p class="m-0 mt-3 text-slate-600">
+            <strong>Open source (AGPLv3)</strong> — règles, taux et logique sont publics&nbsp;:
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href={repoUrl}>voir le code</a>.
+            Aucune donnée ne quitte votre navigateur ; zéro compte, zéro tracker.
+          </p>
+        </aside>
+
+        <nav class="mt-6 text-sm" aria-label="Calculateurs">
+          <h2 class="mb-2 text-base font-semibold text-slate-900">Autres calculateurs</h2>
+          <ul class="list-inside list-disc text-blue-700">
+            <li>
+              <a class="underline" href="/plus-values-cession-titres-etrangers">Plus-values de cession de titres (2074-CMV)</a>
+            </li>
+            <li>
+              <a class="underline" href="/pfu-ou-bareme">PFU ou barème (case 2OP)</a>
+            </li>
+            <li>
+              <a class="underline" href="/purger-ses-moins-values">Purger ses moins-values (simulateur)</a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </main>
+</BaseLayout>
