@@ -159,11 +159,13 @@ titres / 2074-CMV). Une MV nette annuelle est définitivement perdue.
 
 ## 6. Hors périmètre (régimes distincts) — à signaler, pas à calculer
 
-- **Minage** : régime **BNC** (BOFiP, ACTU-2019-00174), hors 150 VH bis.
-- **Staking / lending / airdrops** : revenus (BNC, ou RCM pour certaines mises à disposition de
-  capital), **hors 2086**. La ventilation exacte BNC/RCM reste `⚠️ à vérifier` (pas de citation
-  primaire dédiée obtenue) — mais leur **exclusion du 2086** est certaine (le 2086 ne couvre que
-  les *cessions*). Le module les signale « hors périmètre », ne les calcule pas.
+- **Minage** : régime **BNC (art. 92 CGI)** — source primaire **BOI-BNC-CHAMP-10-10-20-40 §1080**
+  (imposition à la perception, valeur d'acquisition réputée nulle), hors 150 VH bis.
+- **Staking / lending / airdrops** : revenus **hors 2086** (exclusion **certaine** — le 2086 ne
+  couvre que les *cessions*). Ventilation **graduée**, détaillée en §9 : staking = BNC par analogie
+  (`⚠️ incertain`) ; lending = RCM/BNC (`⚠️ débattu`) ; airdrop = BNC à la perception si contrepartie,
+  sinon 150 VH bis à la revente (`⚠️ pas de doctrine ferme`). Le module les signale « hors
+  périmètre » avec orientation par type, ne les calcule pas.
 
 ## 7. Taux (BOI-RPPM-PVBMC-30-30 §10) — pour information
 
@@ -215,9 +217,27 @@ Tests additionnels : ordre chronologique, « achats seuls », « vente sans acha
   les revenus 2026+.
 - **Numéros de § BOFiP** : extraits via lecture WebFetch ; à revérifier visuellement avant toute
   publication d'une page citant un § précis (le BOFiP renumérote).
-- **Soultes** (lignes 216/222) : non modélisées en v0 (hors périmètre). Cessions à soulte = signaler
-  « à vérifier ».
+- **Soultes** (lignes 216/222) — **DÉFINITION FERME, hors périmètre DIY assumé** (recherche juin
+  2026, plus un « doute »). Une soulte = compensation **monétaire** d'un **échange crypto↔crypto
+  déséquilibré** : ligne **216** = soulte reçue/versée **lors de la cession** (majore/minore le prix
+  de cession) ; ligne **222** = soulte reçue lors d'un **échange antérieur** (minore le prix total
+  d'acquisition). Source : **CGI art. 150 VH bis III-A et III-B** + notice 2086. **Point clé :** une
+  soulte n'apparaît **jamais** dans une cession crypto→fiat ni crypto→bien/service — uniquement dans
+  un échange crypto↔crypto avec compensation (DeFi/OTC structuré, déjà hors périmètre §14.10.3). Le
+  garde-fou doit donc dire « **non géré — hors périmètre** » (cas de périmètre), pas « à vérifier »
+  (doute). Aucun calcul à ajouter.
 - **Frais sur le seuil 305 €** : le moteur suit la ligne 51 du formulaire (Σ ligne 218, nette de
   frais). Lecture conforme au formulaire officiel ; conservée comme telle.
-- **Ventilation BNC/RCM** des revenus staking/lending : `⚠️ à vérifier` (hors périmètre 2086 de
-  toute façon).
+- **Revenus crypto (staking / lending / mining / airdrops) — qualification graduée** (recherche juin
+  2026). **Tous hors 2086** (le 2086 = cessions au sens 150 VH bis ; ces revenus se déclarent en
+  **2042-C-PRO**, imposés **à la perception** à la valeur du jour) — *certain*. Par type :
+  - **Mining = BNC (art. 92 CGI)** — *ferme*, source **BOI-BNC-CHAMP-10-10-20-40 §1080** (corrige
+    l'ancienne réf. « ACTU-2019-00174 »).
+  - **Staking = BNC par analogie au minage** — `⚠️ incertain` (aucun texte dédié ; RCM art. 122
+    parfois défendu, non stabilisé).
+  - **Lending = RCM (art. 122, intérêts) ou BNC** — `⚠️ débattu`.
+  - **Airdrop** = **BNC à la perception** si contrepartie/action requise ; sinon **non imposable
+    avant revente** (150 VH bis) — `⚠️ pas de doctrine ferme`.
+  → Le garde-fou peut désormais **énoncer la règle par type** (mining ferme ; staking/lending/airdrop
+  = orientation probable + marqueur d'incertitude) au lieu d'un « à vérifier » indifférencié. Le
+  moteur ne calcule toujours pas ces revenus (hors périmètre confirmé).

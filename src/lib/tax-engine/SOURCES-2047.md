@@ -174,8 +174,24 @@ sociétés UE/à convention).
 - ⚠️ **Cas incertain non tranché dans le moteur** : la qualification fine 2DC vs 2TS d'un fonds
   ou ETF donné dépend de sa nature juridique et des indications de son **IFU** (imprimé fiscal
   unique), pas seulement du pays d'émission. Le moteur ne devine pas : à défaut d'indicateur,
-  il route en 2DC (par défaut raisonnable pour un titre vif UE/convention) et laisse l'appelant
+  il route en 2DC (par défaut raisonnable pour un **titre vif** UE/convention) et laisse l'appelant
   forcer 2TS via `eligibleAbattement40: false` plutôt que d'inventer une règle de détection.
+- 🔎 **Présomption à INVERSER pour les ETF/fonds (recherche juin 2026).** Un OPC (SICAV/FCP/ETF,
+  y compris UCITS) ne transmet l'abattement 40 % **que** s'il pratique le **couponnage**
+  (ventilation des distributions par nature/origine), et **seulement** sur la fraction « dividendes
+  éligibles » indiquée par l'**IFU** — **pas** déductible du pays. Donc pour une ligne « ETF/fonds »,
+  le défaut prudent côté appelant est `eligibleAbattement40: false` (→ 2TS), sauf IFU attestant la
+  part éligible. Source : **BOI-RPPM-RCM-20-10-30-10** et **BOI-RPPM-RCM-40-30**.
+- 📋 **Exclusions de l'abattement 40 % → ne JAMAIS router en 2DC** (CGI art. 158-3-2° ; BOFiP
+  **BOI-RPPM-RCM-20-10-30-10**) : sociétés/organismes **exonérés d'IS** (SICAV, OPC exonérés) ;
+  **SIIC / SPPICAV-OPCI** (fraction de bénéfices exonérés — foncières cotées) ; **sociétés de
+  capital-risque** ; **sociétés hors UE sans convention** à clause d'assistance ; **jetons de
+  présence** (administrateurs / conseil de surveillance) ; distributions **sans décision régulière**
+  d'un organe compétent ; **revenus réputés distribués** (art. 111, 111 bis, 123 bis CGI). Ces cas
+  relèvent de **2TS** (ou 2TR pour la part intérêts) — responsabilité de l'appelant.
+- ☑️ **Rappel (lien avec §6.3)** : l'abattement 40 % ne joue **que sous barème** (2OP cochée). Au
+  PFU, aucune réduction — la distinction 2DC/2TS reste utile pour le report mais n'ouvre pas
+  d'abattement.
 - Le report 2042 porte sur le **montant net** (déduction faite de l'impôt étranger), et il a
   lieu **même si la ligne n'ouvre pas droit à crédit** (forfait `c/` ou retenue nulle) : le
   revenu reste imposable en France. La condition `ouvreDroitCredit` ne concerne que 8VL/8PL.
@@ -193,9 +209,12 @@ sociétés UE/à convention).
   (« Montant des plus-values et revenus de capitaux mobiliers **nets** ouvrant droit à crédit
   d'impôt étranger »), aussi reportée en 2042C. L'administration s'en sert pour calculer
   l'impôt français théorique et plafonner le crédit.
-  → **Confirme le moteur** : `case8plEur` = somme des montants **nets** (pas le brut).
-  L'hypothèse « 8PL = brut avant abattement 40 % » a été **explicitement réfutée** (vote 0-3)
-  contre la notice (« nets »).
+  → ⚠️ « nets » recouvre **deux axes distincts** à ne pas confondre (détail §6.3) : (a) net
+  **d'impôt étranger** — le libellé du formulaire en ligne dit en réalité « **sans déduction** de
+  l'impôt étranger » (≈ brut de retenue), point resté **ouvert** ; (b) **avant/après abattement
+  40 %** — le libellé « après abattement éventuel » penche pour **après** (sous barème seulement).
+  Le moteur porte aujourd'hui le net encaissé, **avant** abattement ; toute correction est
+  conditionnée à une confirmation chiffrée officielle (§6.3).
 - **Anomalie « ligne 8VL sans code 8PL » (code 833)** : déclencher en ligne un 8VL sans 8PL
   associé lève une **incohérence non bloquante** — l'administration peut la corriger ensuite,
   potentiellement au détriment du contribuable. D'où l'intérêt de toujours produire les deux.
@@ -214,11 +233,20 @@ sociétés UE/à convention).
   via le 2047 — à régulariser auprès de l'IRS). Le moteur reçoit le **net réellement encaissé** et
   l'**impôt réellement supporté**, donc gère les deux cas via `min(205,206)`.
 
-### 6.3 Question ouverte (non tranchée, même en source officielle)
+### 6.3 8PL × abattement 40 % — tranché *probable*, calcul NON modifié (recherche juin 2026)
 
-- ❓ **8PL × abattement 40 %** : lorsqu'un dividende ouvre l'abattement de 40 % (case 2OP, barème),
-  le montant à porter en 8PL est-il le net **avant** ou **après** abattement de 40 % ? La notice dit
-  « nets » (et la lecture « brut » est réfutée), mais l'interaction exacte avec l'abattement n'a pas
-  pu être adossée à un exemple chiffré officiel. Le moteur porte aujourd'hui le **net encaissé**
-  (net de l'impôt étranger, **avant** abattement 40 %). À confirmer via le simulateur officiel
-  impots.gouv.fr sur un cas DE/US/NL avant de s'appuyer dessus pour la génération payante.
+- 🟡 **Verdict probable : 8PL = net imposable APRÈS abattement de 40 %** (quand l'abattement
+  s'applique, c.-à-d. **option barème / 2OP cochée**). Le libellé du formulaire en ligne dit
+  « revenus nets imposables étrangers **après abattement éventuel**, sans déduction de l'impôt
+  étranger » ; « après abattement éventuel » = après l'abattement 40 % de l'art. 158-3 CGI. La
+  notice 2047/2042-C ne dit que « nets » (ambigu). **Niveau de preuve = praticien** (libellé en
+  ligne relayé par 2 guides concordants), **pas une source primaire chiffrée** ; le **simulateur
+  officiel n'intègre pas la 8PL** → impossible à confirmer à la source.
+- ⚠️ **Le moteur n'est PAS modifié** (décision : ne pas toucher une valeur qui alimente le crédit
+  d'impôt sur preuve non primaire). Il porte aujourd'hui le net **avant** abattement → s'il faut
+  confirmer « après abattement », `case8plEur` sera **surévaluée** quand 2OP est cochée. **À
+  confirmer sur un cas chiffré officiel (DE/US/NL) avant la génération payante**, puis corriger.
+- ❓ **Sous-question RÉELLEMENT ouverte (base brute vs nette d'impôt étranger)** : le libellé dit
+  « sans déduction de l'impôt étranger » (≈ **brut** de retenue), mais l'auto-remplissage en ligne
+  applique le forfait pays sur le **net** → contradiction non résolue, simulateur muet. Reste
+  `⚠️ à vérifier` sur **cet axe uniquement**.

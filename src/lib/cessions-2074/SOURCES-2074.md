@@ -102,11 +102,18 @@ base des taux de change applicables respectivement à la date d'acquisition ou d
 prix qui ont été réglés au moment de ces opérations en devises* » ; et « *les gains ou pertes de
 change […] constituent une composante des gains nets ou moins-values réalisés* ».
 
-> **Nuance « à vérifier » (documentée, sans incidence sur le calcul) :** le CE fixe le **cours
-> du jour de l'opération** ; il ne désigne pas une source de cours unique. Le module retient le
-> **cours de référence BCE** (cohérent avec le 2047 et la pratique courante). Un cours de
-> référence différent (ex. celui du relevé courtier) donnerait un montant légèrement différent —
-> à la marge, et non tranché par les sources comme obligatoire.
+> **Point TRANCHÉ (recherche juin 2026) — la source du cours n'est pas imposée.** Le CE n° 443914
+> impose le **moment** (cours du **jour de l'opération**, prix par prix) mais **aucune source de
+> cours** : ni le CE, ni le BOFiP (**BOI-RPPM-PVBMI-20-10-10-10 §20** : « taux applicable à la date
+> de l'opération », sans qualifier la source), ni la notice 2074 ne désignent un organisme
+> obligatoire (BCE, Banque de France, courtier). Le seul critère réel est la **cohérence et la
+> justifiabilité** (même méthode achat/vente, cours documentable). → Le **cours de référence BCE du
+> jour** retenu par le module (repli dernier jour ouvré) est **conforme et le choix le plus
+> défendable** (référence publique, vérifiable, cohérente avec le 2047). Seul écart possible : le
+> **cours d'exécution du relevé courtier** (qui inclut la marge de change du courtier) diffère
+> légèrement — l'un comme l'autre est admis, aucun n'est obligatoire. Confirmé par 2 commentaires
+> doctrinaux (Banque Transatlantique, Deloitte) + DGFiP (taux du jour ou moyen annuel admis, si
+> cohérent).
 
 ---
 
@@ -323,8 +330,10 @@ non d'un calcul.
 - **Millésime :** structure du 2074 millésime 2026 + fiche 2074-CMV (la fiche échantillonnée était
   le millésime 2024/revenus 2023, mais la mécanique cadre 5/cadre 11 est stable). Re-vérifier les
   **numéros de lignes** à chaque nouveau millésime.
-- **Cours de change :** BCE retenu comme référence (cf. §3) ; le CE impose le cours du jour, pas la
-  source — choix documenté, à confirmer si un cours « relevé courtier » est exigé.
+- **Cours de change :** TRANCHÉ (cf. §3) — le CE impose le cours du **jour de l'opération**, mais
+  **aucune source** n'est imposée (BOFiP BOI-RPPM-PVBMI-20-10-10-10 §20). Le **cours BCE du jour**
+  retenu par le module est conforme ; seul écart possible = le cours d'exécution du relevé courtier,
+  toléré sans être obligatoire. Plus un point « à vérifier ».
 - **Abattement × imputation portefeuille mixte sous barème :** non modélisé (cf. §5).
 - **Prélèvements sociaux / impôt final :** hors module (on produit l'assiette et les cases).
 - **OST (splits, fusions, spin-offs), dérivés, apport-cession, abattement renforcé PME, PEA,
