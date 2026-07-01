@@ -60,6 +60,11 @@ proposer une amélioration ou l'héberger vous-même.
 - Chaque **moteur fiscal** est un module **pur, sans dépendance, testé** (Vitest). Montants en **centimes entiers** (jamais de flottant pour de l'argent).
 - **Validation-d'abord** : chaque module gèle un oracle fiscal sourcé (`SOURCES-*.md`, citations Legifrance / BOFiP / notices officielles) dans ses tests. Voir par exemple [`src/lib/tax-engine/SOURCES-2047.md`](src/lib/tax-engine/SOURCES-2047.md).
 
+> Ce projet est développé avec l'assistance d'outils d'IA. La justesse ne repose pas sur la manière dont
+> le code est écrit, mais sur sa **validation** : chaque règle est gelée contre une source officielle dans
+> les tests, et la CI bloque tout écart. Le code étant **public**, chaque calcul reste vérifiable
+> indépendamment de l'outil qui a aidé à l'écrire.
+
 ## Développement
 
 Prérequis : **Node ≥ 22**.
