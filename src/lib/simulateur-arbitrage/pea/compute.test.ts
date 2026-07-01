@@ -110,6 +110,47 @@ describe("L4 PEA/CTO — O4 : PV 50 k€, PFU 2026", () => {
   });
 });
 
+describe("L4 PEA/CTO — O6 : mode précis (barème par différence de tranches), PV 50 k€ 2025, avant 5 ans", () => {
+  // Mode précis = revenu hors capital + parts (au lieu d'une TMI plate). Barème 2025 par part :
+  // 0 % ≤ 11 600 · 11 % ≤ 29 579 · 30 % ≤ 84 577 · 41 % ≤ 181 917 · 45 % au-delà.
+  // R = 40 000 € (parts 1), PV = 50 000 € :
+  //   IR barème du capital = impôt(40 000 + 50 000 − CSGdéd 3 400) − impôt(40 000) = 19 306,52 − 5 103,99
+  //     = 14 202,53 € → arrondi euro 14 203 € (part IR CTO, et PEA avant 5 ans = même IR).
+  //   PS CTO (patrimoine 18,6 %) = 9 300 € ; PS PEA (placement 17,2 % en 2025) = 8 600 €.
+  const base = {
+    plusValueLatenteCents: eur(50_000),
+    imposition: {
+      millesime: 2025 as const,
+      regime: "BAREME" as const,
+      revenuImposableHorsCapitalCents: eur(40_000),
+      parts: 1,
+    },
+  };
+
+  it("CTO : IR barème précis 14 203 € + PS 9 300 € = 23 503 €", () => {
+    const r = calculePeaCto(input({ ...base, horizonPea: "AVANT_5_ANS" }));
+    expect(r.details.irCtoCents).toBe(eur(14_203));
+    expect(r.details.psCtoCents).toBe(eur(9_300)); // patrimoine 18,6 %
+    expect(r.scenarioA.impotEtPsCents).toBe(eur(23_503));
+    expect(r.details.regime).toBe("BAREME");
+  });
+
+  it("PEA < 5 ans : IR précis 14 203 € (= IR CTO) + PS 8 600 € (17,2 %) ; delta = −700 € (PS seule)", () => {
+    const r = calculePeaCto(input({ ...base, horizonPea: "AVANT_5_ANS" }));
+    expect(r.details.irPeaCents).toBe(eur(14_203)); // avant 5 ans = IR CTO, via mode précis
+    expect(r.details.psPeaCents).toBe(eur(8_600)); // placement 17,2 % en 2025
+    expect(r.scenarioB.impotEtPsCents).toBe(eur(22_803));
+    expect(r.deltaImpotEtPsCents).toBe(-eur(700)); // 1,4 pt de PS × 50 000 €
+  });
+
+  it("PEA ≥ 5 ans : IR 0 (exonéré) + PS 8 600 € ; delta vs CTO = −14 903 €", () => {
+    const r = calculePeaCto(input({ ...base, horizonPea: "APRES_5_ANS" }));
+    expect(r.details.irPeaCents).toBe(0);
+    expect(r.scenarioB.impotEtPsCents).toBe(eur(8_600));
+    expect(r.deltaImpotEtPsCents).toBe(eur(8_600) - eur(23_503)); // −14 903 €
+  });
+});
+
 describe("L4 PEA/CTO — O5 & bornes : gain net nul, invariants, audit mode A", () => {
   it("O5 — PV 0 € → tous les coûts nuls", () => {
     for (const horizon of ["AVANT_5_ANS", "APRES_5_ANS"] as const) {

@@ -141,6 +141,123 @@ describe("L5 donation — cas (e) : tiers (60 %, aucun abattement), valeur 50 k�
   });
 });
 
+describe("L5 donation — cas (f) : petit-enfant (abattement 31 865 €, barème ligne directe)", () => {
+  const r = calculeDonation(
+    input({ valeurVenaleCents: eur(200_000), prixRevientCents: eur(50_000), lienDonataire: "petit-enfant" }),
+  );
+
+  it("A : PV 150 000 € → impôt 47 100 €, droits sur 121 035 € = 22 401 €, coût total 69 501 €", () => {
+    expect(r.details.abattementBaseCents).toBe(eur(31_865));
+    expect(r.details.impotPlusValueACents).toBe(eur(47_100));
+    expect(r.details.assietteDroitsACents).toBe(eur(121_035)); // 152 900 − 31 865
+    expect(r.details.droitsDonationACents).toBe(eur(22_401));
+    expect(r.scenarioA.impotEtPsCents).toBe(eur(69_501));
+  });
+
+  it("B : droits sur 168 135 € = 31 821 € ; Δ = −37 680 €", () => {
+    expect(r.details.assietteDroitsBCents).toBe(eur(168_135)); // 200 000 − 31 865
+    expect(r.details.droitsDonationBCents).toBe(eur(31_821));
+    expect(r.deltaImpotEtPsCents).toBe(eur(31_821) - eur(69_501));
+  });
+});
+
+describe("L5 donation — cas (g) : neveu/nièce (55 % proportionnel, abattement 7 967 €)", () => {
+  const r = calculeDonation(
+    input({ valeurVenaleCents: eur(100_000), prixRevientCents: eur(40_000), lienDonataire: "neveu-niece" }),
+  );
+
+  it("A : PV 60 000 € → impôt 18 840 €, droits 55 %×73 193 = 40 256 €, coût total 59 096 €", () => {
+    expect(r.details.abattementBaseCents).toBe(eur(7_967));
+    expect(r.details.impotPlusValueACents).toBe(eur(18_840));
+    expect(r.details.assietteDroitsACents).toBe(eur(73_193)); // 81 160 − 7 967
+    expect(r.details.droitsDonationACents).toBe(eur(40_256));
+    expect(r.scenarioA.impotEtPsCents).toBe(eur(59_096));
+  });
+
+  it("B : droits 55 %×92 033 = 50 618 € ; Δ = −8 478 €", () => {
+    expect(r.details.droitsDonationBCents).toBe(eur(50_618));
+    expect(r.deltaImpotEtPsCents).toBe(eur(50_618) - eur(59_096));
+  });
+});
+
+describe("L5 donation — cas (h) : conjoint/PACS (abattement 80 724 €, barème ligne directe)", () => {
+  const r = calculeDonation(
+    input({ valeurVenaleCents: eur(200_000), prixRevientCents: eur(50_000), lienDonataire: "conjoint-pacs" }),
+  );
+
+  it("A : droits sur 72 176 € = 12 630 €, coût total 59 730 €", () => {
+    expect(r.details.abattementBaseCents).toBe(eur(80_724));
+    expect(r.details.assietteDroitsACents).toBe(eur(72_176)); // 152 900 − 80 724
+    expect(r.details.droitsDonationACents).toBe(eur(12_630));
+    expect(r.scenarioA.impotEtPsCents).toBe(eur(59_730));
+  });
+
+  it("B : droits sur 119 276 € = 22 050 € ; Δ = −37 680 €", () => {
+    expect(r.details.assietteDroitsBCents).toBe(eur(119_276)); // 200 000 − 80 724
+    expect(r.details.droitsDonationBCents).toBe(eur(22_050));
+    expect(r.deltaImpotEtPsCents).toBe(eur(22_050) - eur(59_730));
+  });
+});
+
+describe("L5 donation — cas (j) : enfant, valeur 1,2 M€ (tranches hautes 20/30/40 %)", () => {
+  const r = calculeDonation(
+    input({ valeurVenaleCents: eur(1_200_000), prixRevientCents: 0, lienDonataire: "enfant" }),
+  );
+
+  it("A : impôt PV 376 800 €, droits sur 723 200 € = 159 922 € (jusqu'à la tranche 30 %)", () => {
+    expect(r.details.impotPlusValueACents).toBe(eur(376_800)); // 31,4 % × 1 200 000
+    expect(r.details.assietteDroitsACents).toBe(eur(723_200)); // net donné 823 200 − 100 000 abattement
+    expect(r.details.droitsDonationACents).toBe(eur(159_922));
+    expect(r.scenarioA.impotEtPsCents).toBe(eur(536_722));
+  });
+
+  it("B : droits sur 1 100 000 € = 292 678 € (traverse 20/30/40 %) ; Δ = −244 044 €", () => {
+    expect(r.details.assietteDroitsBCents).toBe(eur(1_100_000)); // 1 200 000 − 100 000
+    expect(r.details.droitsDonationBCents).toBe(eur(292_678));
+    expect(r.deltaImpotEtPsCents).toBe(eur(292_678) - eur(536_722));
+  });
+});
+
+describe("L5 donation — cas (i) : impôt PV sous option barème (case 2OP), enfant 2025", () => {
+  // regime BAREME + mode précis (R = 30 000 €, parts 1) : l'impôt sur la PV passe par la branche
+  // barème de `pfu-bareme` (≠ PFU). PV 60 000 € → impôt + PS barème 28 084 € (vs 18 840 € en PFU).
+  const r = calculeDonation(
+    input({
+      valeurVenaleCents: eur(60_000),
+      prixRevientCents: 0,
+      lienDonataire: "enfant",
+      imposition: {
+        millesime: 2025,
+        regime: "BAREME",
+        revenuImposableHorsCapitalCents: eur(30_000),
+        parts: 1,
+      },
+    }),
+  );
+
+  it("l'impôt PV emprunte bien la branche barème (28 084 €, ≠ PFU 18 840 €)", () => {
+    expect(r.details.regime).toBe("BAREME");
+    expect(r.details.impotPlusValueACents).toBe(eur(28_084));
+  });
+
+  it("net donné < abattement 100 000 € → droits nuls des deux côtés ; Δ = −28 084 €", () => {
+    expect(r.details.droitsDonationACents).toBe(0);
+    expect(r.details.droitsDonationBCents).toBe(0);
+    expect(r.deltaImpotEtPsCents).toBe(-eur(28_084));
+  });
+});
+
+describe("L5 donation — cas (k) : base des droits arrondie à l'euro avant barème", () => {
+  it("assiette 100,60 € (tiers, 60 %) → base arrondie à 101 € → droits 61 € (et non 60 €)", () => {
+    // Saisie au centime : valeur vénale 100,60 €, tiers (abattement 0) → assiette droits B = 100,60 €.
+    // Le barème s'applique sur la base arrondie à l'euro (101 €) : 60 % × 101 = 60,60 → 61 €.
+    // Sans l'arrondi de base, 60 % × 100,60 = 60,36 → 60 € : ce test fige la convention (pratique CGI).
+    const r = calculeDonation(input({ valeurVenaleCents: 100_60, prixRevientCents: 0, lienDonataire: "tiers" }));
+    expect(r.details.assietteDroitsBCents).toBe(100_60);
+    expect(r.details.droitsDonationBCents).toBe(eur(61));
+  });
+});
+
 describe("L5 donation — bornes & invariants", () => {
   it("valeur = revient (pas de PV) : aucune purge, A et B ne diffèrent que par l'assiette des droits", () => {
     const r = calculeDonation(input({ valeurVenaleCents: eur(200_000), prixRevientCents: eur(200_000) }));

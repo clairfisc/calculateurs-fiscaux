@@ -75,7 +75,12 @@ const ABATTEMENT_EUR: Record<LienDonataire, number> = {
  * proportionnel (neveu/nièce 55 %, tiers 60 %) → taux unique. Arrondi euro en sortie (CGI/pratique).
  */
 function droitsDonationEur(taxableEur: number, lien: LienDonataire): number {
-  const taxable = clampMin0(taxableEur);
+  // Base imposable arrondie à l'euro le plus proche AVANT le barème (pratique fiscale, CGI 1657) :
+  // les appelants passent une assiette en euros pouvant comporter des centimes (montant net donné,
+  // ou valeur vénale saisie au centime dans l'UI) → on fige l'euro pour que barème progressif et
+  // taux proportionnels s'appliquent sur une base entière déterministe. Sans effet sur des entrées
+  // en euros ronds (Math.round(n) = n).
+  const taxable = clampMin0(Math.round(taxableEur));
   if (taxable === 0) return 0;
 
   // Taux proportionnels (CGI 777, tableau III) — pas de barème progressif.
