@@ -1,5 +1,9 @@
 # Clairfisc — calculateurs fiscaux open source pour l'investisseur
 
+[![En ligne : clairfisc.fr](https://img.shields.io/badge/en%20ligne-clairfisc.fr-2ea44f)](https://clairfisc.fr)
+[![CI](https://github.com/clairfisc/calculateurs-fiscaux/actions/workflows/ci.yml/badge.svg)](https://github.com/clairfisc/calculateurs-fiscaux/actions/workflows/ci.yml)
+[![Licence : AGPL v3](https://img.shields.io/badge/licence-AGPL%20v3-blue.svg)](LICENSE)
+
 Super-app **gratuite et open source** pour l'investisseur français : des **calculateurs** qui
 produisent les bonnes cases (dividendes et plus-values étrangers, crypto, comptes à l'étranger,
 choix PFU / barème) et un **simulateur d'arbitrage** qui compare deux scénarios chiffrés avant une
