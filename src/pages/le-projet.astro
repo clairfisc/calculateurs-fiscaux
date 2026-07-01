@@ -1,0 +1,170 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Disclaimer from "../components/content/Disclaimer.astro";
+
+const title = "Le projet Clairfisc — une aide communautaire à la déclaration fiscale";
+const description =
+  "Pourquoi Clairfisc existe : des calculateurs fiscaux gratuits, exécutés dans votre navigateur, dont chaque calcul est vérifiable parce que le code est public et gelé contre les sources officielles.";
+
+const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
+const sourcesUrl =
+  "https://github.com/clairfisc/calculateurs-fiscaux/blob/main/src/lib/tax-engine/SOURCES-2047.md";
+---
+
+<BaseLayout title={title} description={description} ogType="article">
+  <main class="page">
+    <article>
+      <header>
+        <h1>Le projet Clairfisc</h1>
+        <p class="lede">
+          Déclarer ses revenus d'investissement en France, c'est se battre avec des formulaires
+          obscurs, des cases numérotées et des règles éparpillées entre le code général des impôts,
+          le BOFiP et des notices que presque personne ne lit. Clairfisc existe pour une seule
+          raison : rendre cette déclaration juste, gratuite et vérifiable. L'ambition, à terme, est
+          d'en faire une <strong>aide communautaire à la déclaration fiscale</strong> — un outillage
+          partagé, ouvert, que chacun peut relire, corriger et améliorer.
+        </p>
+      </header>
+
+      <Disclaimer />
+
+      <section aria-labelledby="valeur">
+        <h2 id="valeur">Ce que Clairfisc apporte</h2>
+        <p>
+          Concrètement, Clairfisc est une collection de calculateurs qui prennent vos montants et
+          vous rendent les <strong>bonnes cases</strong> : crédit d'impôt sur dividendes et intérêts
+          étrangers (2047), plus-values de cession de titres (2074-CMV), plus-values crypto (2086),
+          comptes à l'étranger à déclarer (3916), choix entre PFU et barème (case 2OP). À côté, un
+          simulateur d'arbitrage compare deux scénarios chiffrés avant une décision, sans jamais
+          rien conseiller.
+        </p>
+        <p>
+          Tout est <strong>gratuit</strong> et le calcul s'exécute <strong>entièrement dans votre
+          navigateur</strong> : aucun compte, aucun tracker, aucun montant envoyé sur un serveur. La
+          valeur n'est pas dans une prouesse technique, elle est dans une promesse simple et
+          contrôlable : le calcul est juste, et vous pouvez le vérifier.
+        </p>
+      </section>
+
+      <section aria-labelledby="ambition">
+        <h2 id="ambition">L'ambition : une aide communautaire</h2>
+        <p>
+          La fiscalité de l'investisseur n'appartient à personne, mais elle est aujourd'hui surtout
+          servie par des outils fermés, payants ou dont on ne peut pas vérifier ce qu'ils calculent.
+          Le pari de Clairfisc est inverse : mettre en commun l'outillage, pas le cacher. Chaque
+          règle est écrite noir sur blanc dans un code public, sous licence
+          <strong>AGPLv3</strong> — libre de le lire, de l'auditer, de le corriger, de proposer une
+          amélioration ou de l'héberger soi-même.
+        </p>
+        <p>
+          L'idée d'« aide communautaire » n'est pas un slogan : c'est la seule façon durable de
+          suivre une fiscalité qui change chaque année. Une personne qui repère une erreur, une case
+          qui bouge, un taux qui évolue peut la signaler, et la correction profite à tout le monde.
+          Un outil que personne ne peut vérifier vieillit en silence ; un outil ouvert se corrige au
+          grand jour.
+        </p>
+      </section>
+
+      <section aria-labelledby="justesse">
+        <h2 id="justesse">Comment on obtient la justesse</h2>
+        <p>
+          La méthode tient en un principe : <strong>la validation d'abord</strong>. Avant d'écrire
+          la moindre règle de calcul, on fige un « oracle » — un cas dont le résultat attendu vient
+          d'une source officielle (Legifrance, BOFiP, la notice du formulaire concerné). Ce résultat
+          attendu devient un test automatisé. Le calcul n'est considéré comme correct que lorsqu'il
+          reproduit exactement l'oracle, et l'intégration continue bloque toute modification qui
+          s'en écarterait.
+        </p>
+        <p>
+          Ces sources sont documentées, fichier par fichier, à côté du code — voir par exemple les
+          <a href={sourcesUrl} rel="noopener" target="_blank">sources du calculateur 2047</a>. Les
+          montants sont manipulés en <strong>centimes entiers</strong>, jamais en nombres à
+          virgule flottante, pour éviter les erreurs d'arrondi sur l'argent. Autrement dit : la
+          justesse ne repose pas sur une parole, mais sur des tests publics que vous pouvez relancer
+          vous-même.
+        </p>
+      </section>
+
+      <section aria-labelledby="ia">
+        <h2 id="ia">Le rôle de l'intelligence artificielle</h2>
+        <p>
+          Autant le dire franchement : le code de Clairfisc a été <strong>écrit avec l'assistance
+          d'outils d'IA</strong>. Ce qui garantit la justesse d'un calcul fiscal, ce n'est pas la
+          main — humaine ou assistée — qui a tapé le code, c'est la <strong>validation</strong>.
+          Chaque règle a été recoupée manuellement contre sa source officielle, puis gelée dans un
+          test qui échoue au moindre écart.
+        </p>
+        <p>
+          C'est précisément parce que le code est <strong>public</strong> que cette transparence a
+          un sens : n'importe qui peut lire une règle, ouvrir la source citée à côté, relancer les
+          tests et juger sur pièces. La confiance ne vous est pas demandée sur parole ni sur la
+          réputation d'un outil — elle se vérifie. Un calcul faux se repère et se corrige ; c'est
+          exactement ce que permet un projet ouvert.
+        </p>
+      </section>
+
+      <section aria-labelledby="vie-privee">
+        <h2 id="vie-privee">Vos données ne partent nulle part</h2>
+        <p>
+          Le site est entièrement <strong>statique</strong> et le calcul est
+          <strong>100 % local</strong>. Vos montants ne quittent jamais votre navigateur : pas de
+          compte, pas d'analytics tierce, pas de tracker. Même les taux de change de la Banque
+          centrale européenne sont embarqués au moment de la construction du site — le navigateur ne
+          contacte aucun serveur, pas même pour convertir une devise. Là encore, ce n'est pas une
+          promesse à croire : l'absence de requête réseau se vérifie dans le code et dans les outils
+          de développement de votre navigateur.
+        </p>
+      </section>
+
+      <section aria-labelledby="contribuer">
+        <h2 id="contribuer">Vérifier, corriger, contribuer</h2>
+        <p>
+          Le code vit sur
+          <a href={repoUrl} rel="noopener" target="_blank">GitHub</a>. Vous pouvez l'explorer,
+          relancer les tests, signaler une erreur ou proposer une amélioration. Une case qui a
+          changé, un taux à mettre à jour, un cas particulier mal géré : chaque signalement rend
+          l'outil plus juste pour tout le monde. C'est ainsi qu'une aide à la déclaration devient,
+          peu à peu, une aide communautaire.
+        </p>
+      </section>
+
+      <Disclaimer />
+
+      <footer class="page-footer">
+        <p><a href="/">Voir tous les calculateurs →</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <style>
+    .page {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 2.5rem;
+    }
+    .lede {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    a {
+      color: #1d4ed8;
+    }
+    .page-footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e2e2;
+    }
+  </style>
+</BaseLayout>
