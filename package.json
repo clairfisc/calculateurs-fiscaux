@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:citations": "node scripts/check-citations.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",
