@@ -2,12 +2,11 @@
 
 > **Périmètre :** plus ou moins-values de cession de **valeurs mobilières et droits sociaux**
 > détenus sur un **compte-titres ordinaire** (typiquement chez un **courtier étranger**),
-> **millésime de déclaration 2026 (revenus 2025)**. **PEA exclu** (régime propre). Partie
-> **GRATUITE** de l'périmètre (§X / §X ) : **calcul + saisie manuelle**.
-> L'import d'historique, les OST, le cerfa pré-rempli et le suivi pluriannuel du report
-> sont **hors module** .
+> **millésime de déclaration 2026 (revenus 2025)**. **PEA exclu** (régime propre).
+> **Calcul + saisie manuelle**. L'import d'historique, les OST, le cerfa pré-rempli et le suivi
+> pluriannuel du report sont **hors périmètre**.
 >
-> **Méthode (règle  « valider avant déployer ») :** cet oracle a été établi par recherche
+> **Méthode (« valider avant déployer ») :** cet oracle a été établi par recherche
 > multi-sources + **vérification adversariale** (chaque règle confirmée par vote 3-0 contre
 > la source primaire). Les valeurs des cas-types ci-dessous sont **calculées à la main** et
 > figées en tests (`compute.test.ts`) ; la CI gèle l'oracle. Ce module **n'invente aucun
@@ -174,8 +173,8 @@ souscrits avant le 1er janvier 2018* » ; « *plus-values de cession de titres a
 > **Limite assumée (documentée) :** le module applique l'abattement **par cession** (taux fonction
 > de la durée de détention de la ligne). L'interaction fine **abattement × imputation de
 > moins-values sur un portefeuille à durées mixtes** sous barème (mécanique cadre 3 / 2074-ABT)
-> n'est **pas** modélisée dans la Périmètre — c'est un coin d'un chemin déjà secondaire, qui
-> relève de l'traitement hors périmètre . Marqué **« à vérifier »** pour toute extension.
+> n'est **pas** modélisée ici — c'est un coin d'un chemin déjà secondaire. Marqué **« à vérifier »**
+> pour toute extension.
 
 ---
 
@@ -192,8 +191,8 @@ souscrits avant le 1er janvier 2018* » ; « *plus-values de cession de titres a
   (col. B), puis (2) imputer les **moins-values antérieures** (col. D) sur le reliquat.
 - **3VH = moins-value de l'ANNÉE non imputée uniquement** (`ligne 1163 = ligne 946 − ligne 1162`).
   Le **reliquat de moins-values ANTÉRIEURES** non utilisé **n'apparaît PAS en 3VH** : il reste
-  suivi dans le stock de report (suivi pluriannuel hors périmètre ; ici seul le **montant restant** est
-  affiché).
+  suivi dans le stock de report (suivi pluriannuel non conservé par cet outil ; seul le **montant
+  restant** est affiché).
 - Reliquat reportable : **10 années suivantes**.
 
 **Sources (vérifiées 3-0) :** « *Les moins-values subies au cours d'une année sont imputables
@@ -269,7 +268,7 @@ non d'un calcul.
   et **moins-value reportable restante** (année + antérieures, montant affiché — non persisté).
 - **Garde-fous** : **PEA exclu** (le module refuse / ne traite pas un compte PEA) ; FX obligatoire
   si devise ≠ EUR ; cas ambigus jamais tranchés à tort.
-- **Hors module  :** import historique/OST, cerfa pré-rempli, persistance pluriannuelle
+- **Hors périmètre :** import historique/OST, cerfa pré-rempli, persistance pluriannuelle
   du report. **Hors v0 :** produits dérivés/options, apport-cession 150-0 B ter, abattement
   renforcé PME, crypto (→ module 2086).
 

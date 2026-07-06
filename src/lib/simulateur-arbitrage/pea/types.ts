@@ -1,6 +1,6 @@
 /**
  * Levier **L4 — Arbitrage PEA / CTO** (simulateur d'arbitrage, mode A, year-round).
- * Cadrage : §X (simulateur) + méthode  (VALIDATION-D'ABORD : oracle gelé avant le code).
+ * VALIDATION-D'ABORD : oracle gelé avant le code.
  *
  * Ce levier introduit **le seul sous-moteur fiscal neuf autorisé** du module : la **part PEA**
  * (exonération d'IR après 5 ans — CGI art. 157, 5° bis ; prélèvements sociaux dus au retrait). Il
@@ -8,7 +8,7 @@
  * le **CTO** (plus-value mobilière de droit commun) et pour la **part IR** de la sortie PEA avant
  * 5 ans, il **compose** `pfu-bareme.compareRegimes` — aucun recalcul propre de l'IR/PS du CTO.
  *
- * On expose un **comparatif neutre A vs B** (mode A, §X) : A = sortie en CTO maintenant,
+ * On expose un **comparatif neutre A vs B** (mode A) : A = sortie en CTO maintenant,
  * B = sortie en PEA selon l'horizon. Aucune chaîne ne désigne un scénario comme préférable.
  */
 
@@ -86,7 +86,7 @@ export interface DetailsPeaCto {
 }
 
 /**
- * Garde-fous L4 en **texte neutre** (mode A, §X). Établis et sourcés dans `SOURCES-PEA.md` §6.
+ * Garde-fous L4 en **texte neutre** (mode A). Établis et sourcés dans `SOURCES-PEA.md` §6.
  * L'éligibilité UE/EEE est en **premier** : elle **conditionne tout** le levier (un titre non
  * éligible ne peut pas être logé en PEA, la comparaison n'a alors pas d'objet). L'UI peut les
  * porter ; on les expose ici pour qu'ils voyagent avec le calcul.

@@ -1,5 +1,5 @@
 /**
- * Contrat partagé du **simulateur d'arbitrage** (mode A, year-round — réf. §X ).
+ * Contrat partagé du **simulateur d'arbitrage** (mode A, year-round).
  *
  * Principe invariant, valable pour TOUS les leviers (L1 purge-MV, L2 PFU/barème, L3 timing crypto,
  * L4 PEA/CTO, L5 donation) : on expose un **comparatif neutre A vs B**, jamais une recommandation.

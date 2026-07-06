@@ -39,16 +39,16 @@ export class AbattementDateRequiseError extends Error {
 }
 
 /**
- * Erreur : combinaison non modélisée par la Périmètre — abattement durée de détention (barème,
+ * Erreur : combinaison non modélisée par ce module — abattement durée de détention (barème,
  * titres pré-2018) **et** imputation de moins-values sur un portefeuille à durées potentiellement
- * mixtes. L'interaction fine (cadre 3 / 2074-ABT) relève de l'traitement hors périmètre .
+ * mixtes. L'interaction fine (cadre 3 / 2074-ABT) n'est pas modélisée ici.
  * cf. SOURCES-2074.md §5 (limite assumée). On refuse explicitement plutôt que de calculer faux.
  */
 export class AbattementImputationNonSupporteError extends Error {
   constructor() {
     super(
       "Abattement durée de détention + imputation de moins-values : combinaison non supportée " +
-        "par la Périmètre (cf. SOURCES-2074.md §5). Relève de l'traitement hors périmètre .",
+        "par ce module (cf. SOURCES-2074.md §5).",
     );
     this.name = "AbattementImputationNonSupporteError";
   }

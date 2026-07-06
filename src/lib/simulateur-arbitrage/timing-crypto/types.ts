@@ -1,6 +1,6 @@
 /**
  * Levier **L3 — Timing / fractionnement de la conversion fiat (crypto)**, simulateur d'arbitrage
- * mode A. Cadrage : §X (mode A / composition), périmètre 150 VH bis.
+ * mode A. Périmètre 150 VH bis.
  *
  * Question utilisateur : « Convertir X € de crypto en une fois cette année, ou en N fois sur
  * plusieurs années, change-t-il l'impôt total ? ». Ce sous-module n'invente **aucune** règle
@@ -119,8 +119,8 @@ export interface DetailsTimingCrypto {
 export const MAX_FRACTIONS = 20;
 
 /**
- * Garde-fous L3 en **texte neutre** (mode A). Points propres au timing de conversion crypto
- * (réf. §X) : crypto→crypto non imposable (ne pas inciter au churn), revenus
+ * Garde-fous L3 en **texte neutre** (mode A). Points propres au timing de conversion crypto :
+ * crypto→crypto non imposable (ne pas inciter au churn), revenus
  * (staking/lending/airdrops) hors périmètre, et le seuil 305 € présenté comme un fait — pas comme
  * un levier à exploiter de façon répétée (frontière de l'abus de droit). L'UI peut les porter à la
  * place ; on les expose ici pour qu'ils voyagent avec le calcul.

@@ -6,10 +6,10 @@
  * la case 3VG et la moins-value reportable de chaque scénario, en laissant le moteur 2074 appliquer
  * l'ordre d'imputation réel (moins-values de l'année, puis antérieures, reliquat reporté 10 ans même
  * nature). Puis on estime impôt + PS de chaque scénario via `pfu-bareme.compareRegimes` (sur la
- * plus-value nette = case 3VG) et on **diffe** les sorties. cf. §X.
+ * plus-value nette = case 3VG) et on **diffe** les sorties.
  *
  * RÈGLE D'OR : montants en centimes entiers ; on n'arrondit à l'euro que là où les moteurs composés
- * le font déjà (case 3VG, impôt + PS). Mode A : libellés descriptifs et neutres (§X).
+ * le font déjà (case 3VG, impôt + PS). Mode A : libellés descriptifs et neutres.
  */
 
 import { calculeDeclaration } from "../../cessions-2074/index";

@@ -9,10 +9,9 @@
 >
 > **RISQUE MODE A LE PLUS ÉLEVÉ** (frontière conseil patrimonial + **abus de droit donation-cession**).
 > Ce levier **ne présente JAMAIS un montage comme avantageux** : il chiffre deux scénarios décrits et
-> expose un **avertissement abus de droit non contournable**. cf. réf. §X (L5) et  (valider
-> avant déployer).
+> expose un **avertissement abus de droit non contournable**. Principe : valider avant de déployer.
 >
-> **Méthode ( « valider avant déployer ») :** oracle établi par recherche multi-sources, **vérifié à
+> **Méthode (« valider avant déployer ») :** oracle établi par recherche multi-sources, **vérifié à
 > la main**, figé en tests (`compute.test.ts`). Seul calcul fiscal **neuf** autorisé : les **droits de
 > donation** (barème + abattement). L'imposition de la plus-value du scénario « vendre puis donner »
 > est **composée** des moteurs déjà sous test (`cessions-2074`, `pfu-bareme`). Tout point non tranché

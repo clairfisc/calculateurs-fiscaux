@@ -5,9 +5,8 @@
 > entreprendre.service-public.gouv.fr, BOFiP, CGI. Toute valeur ou règle non confirmée par
 > une source primaire est marquée `⚠️ à vérifier` ici et dans `rates.ts`.
 >
-> Périmètre : **Périmètre** (frontière périmètre §X) — calcul comparatif à l'écran,
-> saisie manuelle, aucun pré-remplissage cerfa, aucune persistance. Module (§X) :
-> feature SEO / crédibilité, **pas** une élément du périmètre.
+> Périmètre : calcul comparatif à l'écran, saisie manuelle, aucun pré-remplissage cerfa,
+> aucune persistance.
 
 ## 0. Ce que le module calcule (et ce qu'il ne calcule PAS)
 
@@ -172,7 +171,7 @@ Soit, pour un millésime donné, `tIR_pfu = 12,8 %`, `tPS` (17,2 % ou 18,6 %), `
 > PFU/barème se joue **uniquement** sur la composante IR + l'effet de la CSG déductible. Le moteur
 > calcule néanmoins les totaux complets car c'est ce que l'utilisateur veut voir.
 
-## 6. Garde-fous & hypothèses v0 (= crédibilité, §X)
+## 6. Garde-fous & hypothèses v0 (= crédibilité)
 
 - **Mode rapide (TMI)** : `IR_bareme` est calculé à la **TMI fournie**, comme si toute l'assiette
   restait dans cette tranche. **Faux si** les revenus du capital font franchir une tranche → d'où

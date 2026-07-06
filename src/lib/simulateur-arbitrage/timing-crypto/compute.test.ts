@@ -4,7 +4,7 @@ import type { TimingCryptoInput } from "./types";
 
 /**
  * Oracle dérivé des moteurs **déjà testés** (`crypto-2086` pour la case 3AN / le seuil 305 €,
- * `pfu-bareme` pour impôt + PS). Valeurs vérifiées à la main dans les commentaires. cf. DoD §X.
+ * `pfu-bareme` pour impôt + PS). Valeurs vérifiées à la main dans les commentaires.
  *
  * Méthode de la valeur globale (150 VH bis) : pour une cession de prix `M` sur un portefeuille de
  * valeur globale `V` avec un prix d'acquisition total `P`, la quote-part imputée vaut `round(P·M/V)`

@@ -5,13 +5,13 @@ import { toCents, formateCents } from "../fx";
 
 /**
  * Levier **L4 — Arbitrage PEA / CTO**, îlot React autonome du simulateur d'arbitrage (mode A).
- * Cadrage : §X + méthode  (sous-moteur PEA neuf, sourcé et gelé en tests).
+ * Sous-moteur PEA neuf, sourcé et gelé en tests.
  *
  * Compare **sans recommander** le coût fiscal de sortie d'un gain donné : A « compte-titres
  * ordinaire » vs B « PEA » selon l'horizon de détention (avant / après 5 ans). Tout le calcul est
  * délégué à `simulateur-arbitrage/pea` (sous-moteur PEA + composition `pfu-bareme`).
  *
- * Mode A (§X) : libellés descriptifs et neutres, aucun « recommandé / vous devriez ».
+ * Mode A : libellés descriptifs et neutres, aucun « recommandé / vous devriez ».
  * 100 % client-side : aucune donnée saisie ne quitte le navigateur.
  */
 

@@ -6,12 +6,11 @@
 > Toute valeur ou règle non confirmée par une source primaire est marquée `⚠️ à vérifier`
 > ici **et** signalée dans les garde-fous du moteur (`GARDE_FOUS_PEA_CTO`).
 >
-> **VALIDATION-D'ABORD (méthode  )** : ce levier introduit un **sous-moteur fiscal
+> **VALIDATION-D'ABORD** : ce levier introduit un **sous-moteur fiscal
 > neuf** (la part PEA, non encore modélisée dans le repo). On a donc **établi et gelé l'oracle
-> chiffré AVANT d'écrire le calcul** ( ci-dessous → tests `compute.test.ts`).
+> chiffré AVANT d'écrire le calcul** (ci-dessous → tests `compute.test.ts`).
 >
-> Périmètre : **Périmètre** (frontière périmètre). Comparatif **neutre A vs B** (mode A,
-> §X ) : on **décrit** le coût fiscal de loger/sortir un titre en PEA vs en CTO
+> Périmètre : comparatif **neutre A vs B** (mode A) : on **décrit** le coût fiscal de loger/sortir un titre en PEA vs en CTO
 > selon l'horizon de détention. **Aucune recommandation** (« recommandé / optimisez / vous
 > devriez / meilleure stratégie » bannis ; vocabulaire : simuler / estimer / comparer).
 

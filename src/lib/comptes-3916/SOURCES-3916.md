@@ -8,7 +8,7 @@
 > Ce module est un **moteur de règles juridiques** (verdict par compte :
 > **à déclarer / exonéré / à vérifier**), pas un calcul. Il dérive de cet oracle.
 > ⚠️ Les **cas ambigus (§9)** doivent être rendus « à vérifier + source », **jamais
-> tranchés à tort** (= crédibilité, §X de la notes internes).
+> tranchés à tort** (= crédibilité).
 
 ## 1. Sources officielles (à citer)
 
@@ -119,7 +119,7 @@ traitement d'un **compte-titres / PEA** actions-ETF chez TR (§9).
 Désignation + **adresse complète** de l'établissement · pays · n°/identifiant du compte · nature ·
 usage (privé/professionnel) · dates d'**ouverture / clôture** dans l'année · marqueur **3916**
 (bancaire/titres) vs **3916-bis** (actifs numériques). *(Identité du déclarant : saisie par l'usager
-sur impots.gouv, **non stockée** — frontière §X.)*
+sur impots.gouv, **non stockée**.)*
 
 ---
 

@@ -1,5 +1,5 @@
 /**
- * Base d'établissements pré-remplie (la « vraie valeur d'usage » du module, §X).
+ * Base d'établissements pré-remplie (la « vraie valeur d'usage » du module).
  *
  * Source des CODES PSAN : formulaire 3916-bis officiel (rubrique 4.2), vérifiés dans
  * SOURCES-3916.md §5. ADRESSES : sourcées (registres officiels / imprints / Bank of

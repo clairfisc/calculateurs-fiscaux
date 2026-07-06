@@ -245,7 +245,7 @@ sociétés UE/à convention).
 - ⚠️ **Le moteur n'est PAS modifié** (décision : ne pas toucher une valeur qui alimente le crédit
   d'impôt sur preuve non primaire). Il porte aujourd'hui le net **avant** abattement → s'il faut
   confirmer « après abattement », `case8plEur` sera **surévaluée** quand 2OP est cochée. **À
-  confirmer sur un cas chiffré officiel (DE/US/NL) avant la génération**, puis corriger.
+  confirmer sur un cas chiffré officiel (DE/US/NL)**, puis corriger.
 - ❓ **Sous-question RÉELLEMENT ouverte (base brute vs nette d'impôt étranger)** : le libellé dit
   « sans déduction de l'impôt étranger » (≈ **brut** de retenue), mais l'auto-remplissage en ligne
   applique le forfait pays sur le **net** → contradiction non résolue, simulateur muet. Reste

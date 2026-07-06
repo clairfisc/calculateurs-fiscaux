@@ -7,7 +7,7 @@ import { toCents, formateCents } from "../fx";
 /**
  * Levier **L5 — Donation avant cession** (purge de plus-value latente), îlot React autonome du
  * simulateur d'arbitrage (mode A — **risque le plus élevé** : frontière conseil patrimonial + abus de
- * droit donation-cession). Cadrage : §X (L5) /  .
+ * droit donation-cession).
  *
  * Compare **sans recommander** deux scénarios décrits :
  *   - A « je vends les titres, puis je donne le montant net » → la plus-value est taxée ;

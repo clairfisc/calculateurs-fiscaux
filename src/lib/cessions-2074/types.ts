@@ -1,7 +1,7 @@
 /**
  * Moteur de calcul des plus/moins-values de cession de valeurs mobilières (formulaire 2074 /
- * fiche 2074-CMV, compte-titres ordinaire — courtier étranger, PEA exclu). Périmètre de
- * l'périmètre : calcul + saisie manuelle. Mécanique et sources fiscales : voir SOURCES-2074.md.
+ * fiche 2074-CMV, compte-titres ordinaire — courtier étranger, PEA exclu). Périmètre : calcul +
+ * saisie manuelle. Mécanique et sources fiscales : voir SOURCES-2074.md.
  *
  * RÈGLE D'OR (identique au tax-engine 2047) : jamais de flottant pour de l'argent. Les montants
  * circulent en **centimes entiers** ; on n'arrondit à l'euro qu'en sortie (valeurs des cases).
@@ -41,8 +41,7 @@ export interface Lot {
 /**
  * Base d'acquisition d'une cession : soit la liste des **lots** (le moteur calcule le PMP en
  * convertissant chaque lot à son cours), soit un **PMP fourni directement** en EUR (cas où
- * l'utilisateur connaît déjà son prix de revient unitaire). cf. §X (« soit le PMP, soit
- * les lots »).
+ * l'utilisateur connaît déjà son prix de revient unitaire) : soit le PMP, soit les lots.
  */
 export type BaseAcquisition =
   | { readonly type: "lots"; readonly lots: readonly Lot[] }

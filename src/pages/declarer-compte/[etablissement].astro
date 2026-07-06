@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Disclaimer from "../../components/content/Disclaimer.astro";
 import { ETABLISSEMENTS, evalueCompte, type Etablissement } from "../../lib/comptes-3916";
 
-/** Une page SEO par établissement (longue traîne « déclarer compte {X} impôts », §X). */
+/** Une page SEO par établissement (longue traîne « déclarer compte {X} impôts »). */
 export function getStaticPaths() {
   return ETABLISSEMENTS.map((etab) => ({
     params: { etablissement: etab.id },

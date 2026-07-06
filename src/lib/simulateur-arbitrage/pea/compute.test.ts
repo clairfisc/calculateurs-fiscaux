@@ -4,7 +4,7 @@ import { GARDE_FOUS_PEA_CTO } from "./types";
 import type { PeaCtoInput } from "./types";
 
 /**
- * Oracle **gelé AVANT le code** (VALIDATION-D'ABORD, méthode  ; cas-types de SOURCES-PEA.md §8).
+ * Oracle **gelé AVANT le code** (VALIDATION-D'ABORD ; cas-types de SOURCES-PEA.md §8).
  * Valeurs vérifiées à la main dans les commentaires.
  *
  * Conventions (cf. SOURCES-PEA.md §7) :

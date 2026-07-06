@@ -4,7 +4,7 @@ import { GARDE_FOUS_DONATION, type DonationInput } from "./types";
 
 /**
  * Oracle gelé du levier **L5 — donation avant cession**. Valeurs **vérifiées à la main** et sourcées
- * dans SOURCES-DONATION.md §4 (barème CGI 777, abattements CGI 779, purge CGI 150-0 D 1). cf. .
+ * dans SOURCES-DONATION.md §4 (barème CGI 777, abattements CGI 779, purge CGI 150-0 D 1).
  *
  * Convention PV PFU 2025 (composée via `pfu-bareme`) : impôt + PS = **31,4 %** de la 3VG (12,8 % IR +
  * 18,6 % PS, fait générateur PS différencié — même base que l'oracle purge-mv : 10 000 € → 3 140 €).

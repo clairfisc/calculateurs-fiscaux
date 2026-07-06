@@ -1,7 +1,7 @@
 /**
  * Levier **L5 — Donation avant cession** : moteur de **composition** (cessions-2074 + pfu-bareme) **+**
  * le seul calcul fiscal neuf autorisé : les **droits de donation** (barème + abattement). Oracle gelé :
- * SOURCES-DONATION.md. cf. §X (L5) /  (valider avant déployer).
+ * SOURCES-DONATION.md. Principe : valider avant de déployer.
  *
  *   - Scénario A « vendre puis donner le net » : on chiffre la plus-value de cession via `cessions-2074`
  *     (assiette 3VG), l'impôt + PS via `pfu-bareme.compareRegimes`, puis les droits de donation sur le

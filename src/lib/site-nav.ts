@@ -56,7 +56,7 @@ export const CALCULATEURS: LienOutil[] = [
 /**
  * Simulateur d'arbitrage (mode A, year-round) — leviers décisionnels « avant chaque décision ».
  * Sous-groupe distinct des calculateurs déclaratifs : ils composent les moteurs existants et
- * comparent deux scénarios A/B. Cf. réf. §X. Regroupés sous un menu dédié dans la nav.
+ * comparent deux scénarios A/B. Regroupés sous un menu dédié dans la nav.
  */
 export const SIMULATEUR: LienOutil[] = [
   {

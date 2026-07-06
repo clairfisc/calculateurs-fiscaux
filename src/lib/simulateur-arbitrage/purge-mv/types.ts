@@ -1,12 +1,11 @@
 /**
  * Levier **L1 — Purge des moins-values** (tax-loss harvesting), simulateur d'arbitrage mode A.
- * Cadrage : §X (L1), §X (DoD), §X (mode A), §X (composition).
  *
  * Ce sous-module n'invente **aucune** règle fiscale : il **compose** `cessions-2074.calculeDeclaration`
  * (imputation 3VG/3VH, moins-values antérieures, report 10 ans même nature) et `pfu-bareme.compareRegimes`
  * (impôt + PS), puis **diffe** le scénario A (« je ne réalise pas mes moins-values latentes ») et le
  * scénario B (« je réalise N € de moins-values latentes avant le 31/12 »). On expose le différentiel ;
- * aucune chaîne ne désigne un scénario comme préférable (mode A, §X).
+ * aucune chaîne ne désigne un scénario comme préférable (mode A).
  */
 
 import type { Cents } from "../types";
@@ -99,7 +98,7 @@ export interface DetailsPurgeMV {
 }
 
 /**
- * Garde-fous L1 en **texte neutre** (mode A, §X). Le point « wash-sale » est désormais
+ * Garde-fous L1 en **texte neutre** (mode A). Le point « wash-sale » est désormais
  * **tranché et sourcé** (cf. cessions-2074/SOURCES-2074.md §6bis) : la France n'a pas de règle
  * wash-sale, la purge est licite ; seule la fictivité de l'opération est un risque. L'UI peut les
  * porter à la place ; on les expose ici pour qu'ils voyagent avec le calcul.

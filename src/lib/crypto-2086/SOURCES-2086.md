@@ -7,7 +7,7 @@
 > (`compute.test.ts`, cas B). Tout point non confirmé par une source est marqué
 > `⚠️ à vérifier`.
 >
-> **Périmètre du module (réf. §X) :** saisie manuelle des cessions
+> **Périmètre du module :** saisie manuelle des cessions
 > *imposables*, calcul de l'assiette à l'écran. Hors périmètre : import d'exchanges,
 > cerfa pré-rempli, DeFi complexe, soultes d'échange, revenus (staking/lending/mining/
 > airdrops). Le module produit l'**assiette** (PV/MV nette), pas l'impôt.
@@ -103,8 +103,8 @@ payé` ; à chaque **vente**, imputation puis `prixAcquisitionNet -= fractionImp
 avant n`. Voir cas H. *(Les frais d'**acquisition** ne sont pas déductibles du prix d'acquisition —
 seuls les frais de **cession** réduisent le prix de cession, BOFiP ; un « achat » = le montant payé.)*
 
-> **Soultes d'échanges antérieurs (ligne 222)** : non modélisées en v0 (hors périmètre DeFi,
-> §X). Le moteur ne gère pas les soultes ; les cessions à soulte sont signalées « à vérifier »
+> **Soultes d'échanges antérieurs (ligne 222)** : non modélisées en v0 (hors périmètre DeFi).
+> Le moteur ne gère pas les soultes ; les cessions à soulte sont signalées « à vérifier »
 > côté UI.
 
 ## 4. Crypto → crypto = sursis d'imposition (CGI 150 VH bis, II-A)
@@ -114,7 +114,7 @@ seuls les frais de **cession** réduisent le prix de cession, BOFiP ; un « acha
 > « les opérations d'échanges sans soulte entre actifs numériques […] bénéficient d'un **sursis
 > d'imposition**. » — *BOFiP BOI-RPPM-PVBMC-30-10 §80*
 
-→ **Garde-fou (essentiel pour la crédibilité, réf. §X)** : seules les cessions **crypto →
+→ **Garde-fou (essentiel pour la crédibilité)** : seules les cessions **crypto →
 monnaie ayant cours légal** et **crypto → bien/service** sont imposables. Les échanges
 crypto→crypto sans soulte ne sont **pas** un fait générateur : ils n'entrent **pas** dans le calcul
 (ni dans la PV, ni dans l'assiette du seuil 305 €) et n'affectent pas le prix total d'acquisition
@@ -223,7 +223,7 @@ Tests additionnels : ordre chronologique, « achats seuls », « vente sans acha
   de cession) ; ligne **222** = soulte reçue lors d'un **échange antérieur** (minore le prix total
   d'acquisition). Source : **CGI art. 150 VH bis III-A et III-B** + notice 2086. **Point clé :** une
   soulte n'apparaît **jamais** dans une cession crypto→fiat ni crypto→bien/service — uniquement dans
-  un échange crypto↔crypto avec compensation (DeFi/OTC structuré, déjà hors périmètre §X). Le
+  un échange crypto↔crypto avec compensation (DeFi/OTC structuré, déjà hors périmètre). Le
   garde-fou doit donc dire « **non géré — hors périmètre** » (cas de périmètre), pas « à vérifier »
   (doute). Aucun calcul à ajouter.
 - **Frais sur le seuil 305 €** : le moteur suit la ligne 51 du formulaire (Σ ligne 218, nette de

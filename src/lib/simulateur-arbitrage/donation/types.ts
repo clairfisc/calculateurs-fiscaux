@@ -1,6 +1,6 @@
 /**
  * Levier **L5 — Donation avant cession** (purge de plus-value latente), simulateur d'arbitrage mode A.
- * Cadrage : §X (L5),  (valider avant déployer). Oracle fiscal : SOURCES-DONATION.md.
+ * Principe : valider avant de déployer. Oracle fiscal : SOURCES-DONATION.md.
  *
  * **RISQUE MODE A LE PLUS ÉLEVÉ** (frontière conseil patrimonial + abus de droit donation-cession).
  * Ce levier **compare**, sans jamais recommander :

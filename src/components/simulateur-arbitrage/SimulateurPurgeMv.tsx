@@ -5,14 +5,14 @@ import { toCents, formateCents } from "../fx";
 
 /**
  * Levier **L1 — Purge des moins-values** (tax-loss harvesting), îlot React autonome du simulateur
- * d'arbitrage (mode A, year-round). Cadrage : §X / §X / §X .
+ * d'arbitrage (mode A, year-round).
  *
  * Compare **sans recommander** deux scénarios : A « je ne réalise pas mes moins-values latentes »
  * vs B « je réalise N € de moins-values latentes avant le 31/12 ». Tout le calcul est délégué au
  * module `simulateur-arbitrage/purge-mv` (qui compose `cessions-2074` + `pfu-bareme`) — ce composant
  * ne fait que saisir, appeler et restituer le différentiel.
  *
- * Mode A (§X) : libellés descriptifs et neutres, aucun « recommandé / vous devriez ».
+ * Mode A : libellés descriptifs et neutres, aucun « recommandé / vous devriez ».
  * 100 % client-side : aucune donnée saisie ne quitte le navigateur.
  */
 

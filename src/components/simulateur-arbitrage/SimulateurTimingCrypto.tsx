@@ -6,7 +6,7 @@ import { toCents, formateCents } from "../fx";
 
 /**
  * Levier **L3 — Timing / fractionnement de la conversion fiat (crypto)**, îlot React autonome du
- * simulateur d'arbitrage (mode A). Cadrage : §X .
+ * simulateur d'arbitrage (mode A).
  *
  * Compare **sans recommander** deux scénarios : A « je convertis tout en une fois cette année »
  * vs B « je fractionne la conversion sur N années ». Tout le calcul est délégué au module

@@ -1,7 +1,7 @@
 /**
  * Barrel public du levier **L3 — Timing / fractionnement de la conversion fiat (crypto)**
  * (simulateur d'arbitrage, mode A). Compose `crypto-2086` + `pfu-bareme` et diffe les scénarios
- * A (« tout convertir maintenant ») / B (« fractionner sur N années »). cf. §X.
+ * A (« tout convertir maintenant ») / B (« fractionner sur N années »).
  */
 
 export { calculeTimingCrypto } from "./compute";

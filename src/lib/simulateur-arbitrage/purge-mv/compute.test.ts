@@ -4,7 +4,7 @@ import type { PurgeMvInput } from "./types";
 
 /**
  * Oracle dérivé des moteurs **déjà testés** (`cessions-2074` pour 3VG/3VH/report, `pfu-bareme` pour
- * impôt + PS). Valeurs vérifiées à la main dans les commentaires. cf. DoD §X.
+ * impôt + PS). Valeurs vérifiées à la main dans les commentaires.
  *
  * Convention impôt + PS (PFU, plus-value mobilière = revenu du patrimoine) — `pfu-bareme` :
  *   IR PFU = 12,8 % × 3VG ; PS patrimoine = 18,6 % × 3VG dès 2025 (fait générateur différencié, §2bis).

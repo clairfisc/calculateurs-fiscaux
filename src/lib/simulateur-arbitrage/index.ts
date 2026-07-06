@@ -1,5 +1,5 @@
 /**
- * Point d'entrée public du **simulateur d'arbitrage** (mode A, year-round — réf. §X ).
+ * Point d'entrée public du **simulateur d'arbitrage** (mode A, year-round).
  *
  * Couche de **composition** : chaque levier importe un moteur déjà sous test (`cessions-2074`,
  * `pfu-bareme`, …), l'appelle pour le scénario A (statu quo) et le scénario B (arbitrage envisagé),
@@ -13,7 +13,7 @@
  *
  * L2 (PFU vs barème, case 2OP) est **déjà servi** par la page `/pfu-ou-bareme` (composant
  * `ComparateurPfuBareme`, qui compose directement `pfu-bareme`) : pas de levier dédié ici tant
- * qu'un hub unifié multi-leviers n'existe pas. cf. réf. §X.
+ * qu'un hub unifié multi-leviers n'existe pas.
  */
 
 // Contrat partagé (forme du comparatif A/B, commune à tous les leviers).
