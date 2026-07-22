@@ -2,11 +2,25 @@
 # Toutes les directives sont gardées par <IfModule> → aucune erreur 500 si un
 # module manque.
 
-# --- Forcer HTTPS (pattern OVH : X-Forwarded-Proto, évite les boucles) ---
+# --- Canonisation d'URL (un seul saut de redirection quand c'est possible) ---
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # 1) www.clairfisc.fr -> clairfisc.fr, directement en HTTPS (un seul 301).
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+  # 2) Forcer HTTPS sur l'apex (pattern OVH : X-Forwarded-Proto, évite les boucles).
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # 3) Slash final géré par mod_rewrite plutôt que par mod_dir : ce dernier
+  #    injecte un « :443 » disgracieux dans la redirection sur l'hébergement OVH.
+  #    On désactive DirectorySlash et on ajoute le / nous-mêmes, avec le Host propre.
+  DirectorySlash Off
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI}/ [L,R=301]
 </IfModule>
 
 # --- En-têtes de sécurité ---

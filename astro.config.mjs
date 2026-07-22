@@ -11,6 +11,12 @@ export default defineConfig({
   // le sitemap et les URLs Open Graph. À ne changer qu'ici.
   site: 'https://clairfisc.fr',
 
+  // Convention d'URL unique : slash final partout (canonical, sitemap, liens internes).
+  // Évite le motif « Page avec redirection » de la Search Console : un lien interne
+  // vers /page (sans slash) provoque un 301 vers /page/ et Google indexe la redirection.
+  trailingSlash: 'always',
+  build: { format: 'directory' },
+
   integrations: [react(), sitemap()],
 
   vite: {
