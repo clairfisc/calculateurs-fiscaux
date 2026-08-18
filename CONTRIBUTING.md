@@ -24,6 +24,31 @@ Toutes les décisions et citations fiscales déjà actées sont dans
 3. **Ajoutez un test** dans `src/lib/tax-engine/compute.test.ts` qui verrouille le résultat attendu.
 4. `npm test` doit rester vert.
 
+## Ajouter une page
+
+Une page est un `.astro` dans `src/pages/`, mais deux fichiers doivent suivre,
+sans quoi elle sera livrée incomplète **sans erreur ni avertissement** :
+
+1. [`src/lib/site-nav.ts`](src/lib/site-nav.ts) — inscrivez-la dans `CALCULATEURS`,
+   `SIMULATEUR` ou `GUIDES`. C'est la source unique de la navigation (header,
+   footer, page d'accueil), et c'est aussi elle qui **type les données
+   structurées** : un outil devient une `WebApplication`, un guide un `Article`.
+   Une page absente de ce fichier retombe en `WebPage` générique.
+2. [`src/lib/page-dates.ts`](src/lib/page-dates.ts) — ajoutez sa date de
+   publication. Sans entrée, la page sort **sans date affichée, sans
+   `dateModified` et sans `<lastmod>` au sitemap** (dégradation silencieuse,
+   choisie pour ne jamais inventer de date).
+
+Ensuite, ne faites bouger `modifiee` que lors d'une **révision de fond** — taux,
+règle fiscale, correction, section ajoutée. Jamais pour une reformulation, un lien
+ou un renommage de classe : annoncer une fraîcheur que le contenu n'a pas trompe
+le lecteur autant que Google.
+
+Si deux pages visent la même intention de recherche, ne les laissez pas
+concourir : déclarez la délégation dans
+[`src/lib/seo-canonical.ts`](src/lib/seo-canonical.ts) plutôt que d'en supprimer
+une.
+
 ## Mise en route
 
 Prérequis : **Node ≥ 22**.

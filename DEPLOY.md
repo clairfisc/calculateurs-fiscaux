@@ -26,10 +26,21 @@ Centralisé dans `astro.config.mjs` (un seul endroit à changer) :
 site: 'https://clairfisc.fr',
 ```
 
-Tout en dérive au build : `canonical` de chaque page (via `Astro.url.pathname`),
-URLs absolues `og:image` / `og:url`, et `sitemap-index.xml` / `sitemap-0.xml`
-(`@astrojs/sitemap`). `public/robots.txt` pointe vers le sitemap correspondant.
-Pour un fork auto-hébergé, remplacez cette valeur par votre domaine.
+Tout en dérive au build : `canonical` de chaque page, URLs absolues `og:image` /
+`og:url`, et `sitemap-index.xml` / `sitemap-0.xml` (`@astrojs/sitemap`).
+`public/robots.txt` pointe vers le sitemap correspondant. Pour un fork
+auto-hébergé, remplacez cette valeur par votre domaine.
+
+Deux modules infléchissent ce qui en est dérivé :
+
+- [`src/lib/page-dates.ts`](src/lib/page-dates.ts) — dates éditoriales par page.
+  Alimentent le `dateModified` des données structurées, la mention « Mis à jour
+  le » affichée et le `<lastmod>` du sitemap. Le `lastmod` n'est donc **pas** la
+  date de build : republier le site ne signale pas à Google que tout a changé.
+- [`src/lib/seo-canonical.ts`](src/lib/seo-canonical.ts) — pages qui délèguent
+  leur `canonical` à une autre URL. Le `canonical` d'une page vient normalement de
+  `Astro.url.pathname`, **sauf** si elle figure dans ce dictionnaire : elle pointe
+  alors vers sa cible, n'émet plus de données structurées et sort du sitemap.
 
 ## 3. Déploiement automatique (CI → SFTP)
 
