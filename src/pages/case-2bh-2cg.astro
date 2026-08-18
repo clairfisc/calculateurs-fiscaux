@@ -1,0 +1,340 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Disclaimer from "../components/content/Disclaimer.astro";
+
+const title =
+  "Cases 2BH, 2CG et 2DF : revenus déjà soumis aux prélèvements sociaux (2026)";
+const description =
+  "Une case 2BH, 2CG ou 2DF pré-remplie sur votre 2042 ? Ce sont des revenus de capitaux mobiliers (dividendes, intérêts 2TR...) déjà prélevés des prélèvements sociaux. Ce qu'elles évitent, leur lien avec la CSG déductible et la case 2OP, et comment vérifier le montant.";
+const noticeUrl = "https://www.impots.gouv.fr/formulaire/2042/declaration-des-revenus";
+const brochureUrl =
+  "https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2026/pdf_som/08-RCM_121a136.pdf";
+---
+
+<BaseLayout title={title} description={description} ogType="article">
+  <main class="page">
+    <article>
+      <header>
+        <h1>Cases 2BH, 2CG et 2DF : que veulent-elles dire ?</h1>
+        <p class="lede">
+          Dans la rubrique « Revenus des valeurs et capitaux mobiliers » de
+          votre déclaration 2042, trois cases apparaissent souvent déjà
+          remplies sans que rien ne les explique : <strong>2BH</strong>,
+          <strong>2CG</strong> et <strong>2DF</strong>. Rassurez-vous : elles
+          ne créent <strong>aucun impôt supplémentaire</strong>. Elles
+          servent à éviter que vos revenus (dividendes, intérêts de la case
+          2TR, produits d'assurance-vie...) ne soient
+          <strong> taxés deux fois</strong> aux prélèvements sociaux, et pour
+          deux d'entre elles, à calculer la <strong>CSG déductible</strong>.
+          Voici ce que chacune signifie.
+        </p>
+      </header>
+
+      <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2042 (cases 2BH, 2CG et 2DF)" />
+
+      <section aria-labelledby="definition">
+        <h2 id="definition">Pourquoi ces cases existent</h2>
+        <p>
+          La plupart de vos revenus de capitaux mobiliers ont déjà supporté
+          les <strong>prélèvements sociaux</strong> au moment où votre
+          banque, votre courtier ou votre assureur vous les a versés ou les a
+          inscrits en compte : <strong>17,2 %</strong> pour les revenus 2025
+          (ceux qui remplissent les cases 2BH, 2CG et 2DF de la déclaration
+          2026). Ce taux ne monte à <strong>18,6 %</strong> que pour les
+          dividendes et intérêts versés à compter du 1ᵉʳ janvier 2026 ;
+          l'<strong>assurance-vie</strong> reste, elle, soumise au taux de
+          17,2 % (CSG à 9,2 %, non concernée par la hausse). C'est pourquoi
+          ces cases sont <strong>préremplies</strong> sur votre déclaration,
+          à partir des informations que ces établissements ont transmises à
+          l'administration.
+        </p>
+        <p class="note">
+          Source du taux : brochure pratique de l'impôt sur le revenu 2026,
+          « Principales nouveautés revenus 2025 », p. 45 — la hausse de CSG
+          (LFSS 2026) ne s'applique aux produits de placement que pour les
+          revenus versés à compter du 1ᵉʳ janvier 2026 ; « les revenus
+          fonciers, les plus-values immobilières, l'assurance-vie, l'épargne
+          logement restent soumis au taux de 9,2 % [de CSG] ».
+        </p>
+        <p>
+          Problème : si l'administration recalculait les prélèvements
+          sociaux sur l'ensemble de vos revenus déclarés sans distinction,
+          elle les taxerait une seconde fois. Les cases 2BH, 2CG et 2DF
+          servent exactement à ça : signaler les revenus <strong>déjà
+          prélevés</strong>, pour qu'ils soient <strong>exclus de la base de
+          calcul</strong> des prélèvements sociaux lors du traitement de
+          votre déclaration. Leur différence porte sur un second point : le
+          droit (ou non), et à quelle condition, à la
+          <strong> CSG déductible</strong>.
+        </p>
+      </section>
+
+      <section aria-labelledby="2bh">
+        <h2 id="2bh">Case 2BH : CSG déductible, mais seulement si vous cochez 2OP</h2>
+        <p>
+          La case 2BH regroupe les revenus dont les prélèvements sociaux ont
+          déjà été prélevés en amont et qui <strong>ouvrent droit à la CSG
+          déductible</strong>, à une condition : avoir coché la case
+          <strong> 2OP</strong> (option pour le barème). Elle contient
+          notamment :
+        </p>
+        <dl class="cases">
+          <dt>Les revenus distribués et les produits de placement à taux fixe</dt>
+          <dd>
+            en clair, vos dividendes et vos intérêts (ceux qui, avant
+            prélèvement, alimentent les cases 2DC et 2TR) pour la part déjà
+            prélevée par l'établissement payeur.
+          </dd>
+          <dt>Les produits d'assurance-vie et de capitalisation les plus récents</dt>
+          <dd>
+            produits des fonds en unités de compte attachés à des primes
+            versées depuis le 27 septembre 2017, et produits des fonds en
+            euros de l'année de clôture ou de retrait du contrat, pour ces
+            mêmes primes.
+          </dd>
+        </dl>
+        <p>
+          Deux effets, à ne pas confondre : le montant inscrit en 2BH est
+          <strong> toujours</strong> exclu de la base de calcul des
+          prélèvements sociaux (pas de double taxation, que vous ayez ou non
+          coché 2OP). Mais il n'est retenu pour calculer la
+          <strong> CSG déductible</strong> (6,8 % de ce montant, déduit
+          automatiquement de votre revenu global de la même année) que
+          <strong> si vous avez opté pour le barème</strong>. Sans 2OP, la
+          case 2BH n'ouvre aucun droit à déduction.
+        </p>
+        <p class="note">
+          Sources : <a href={brochureUrl} rel="noopener" target="_blank"
+            >brochure pratique de l'impôt sur le revenu 2026</a
+          > (déclaration des revenus 2025), section « Revenus déjà soumis aux
+          prélèvements sociaux, avec CSG déductible en cas d'option pour le
+          barème » (case 2BH), p. 132-133 — « Le montant des revenus indiqué
+          ligne 2BH est exclu de la base de calcul des prélèvements sociaux.
+          [...] retenu pour le calcul du montant de CSG à déduire [...] si
+          vous avez opté pour l'imposition au barème [...] (case 2OP
+          cochée). » « Le taux de CSG déductible reste à 6,8 %. » Base légale
+          de la fraction déductible : CGI, art. 154 quinquies, II. Intitulé de
+          case confirmé sur le formulaire 2042, CERFA n° 10330*30 (revenus
+          2025).
+        </p>
+      </section>
+
+      <section aria-labelledby="2cg">
+        <h2 id="2cg">Case 2CG : jamais de CSG déductible</h2>
+        <p>
+          La case 2CG regroupe des revenus déjà soumis aux prélèvements
+          sociaux mais qui <strong>n'ouvrent jamais droit à la CSG
+          déductible</strong> — même si vous cochez 2OP. Il s'agit
+          notamment :
+        </p>
+        <ul>
+          <li>
+            des produits des <strong>fonds en euros</strong> de contrats
+            d'assurance-vie ou de capitalisation, inscrits en compte et déjà
+            soumis à la CSG au cours d'<strong>années antérieures</strong> à
+            celle du retrait ou de la clôture ;
+          </li>
+          <li>
+            des répartitions de <strong>FCPR</strong> (fonds communs de
+            placement à risques) ou distributions de <strong>SCR</strong>
+            (sociétés de capital-risque) devenues imposables du fait de la
+            perte de leur exonération conditionnelle, dès lors qu'elles ont
+            déjà supporté les prélèvements sociaux au moment de la
+            distribution, une année antérieure ;
+          </li>
+          <li>
+            de la fraction des revenus distribués et des intérêts de comptes
+            courants d'associés de sociétés soumises à l'IS qui excède 10 %
+            du capital social, des primes d'émission et des sommes versées en
+            compte courant, déjà soumise aux cotisations sociales au titre
+            des revenus d'activité — une situation propre aux associés de
+            sociétés d'exercice libéral notamment ; la fraction qui
+            n'excède pas ce seuil, elle, va en case 2BH.
+          </li>
+        </ul>
+        <p>
+          Comme pour la 2BH, ce montant est exclu de la base de calcul des
+          prélèvements sociaux. Mais contrairement à la 2BH, cocher 2OP n'y
+          change rien : ces revenus n'ouvrent <strong>jamais</strong> droit à
+          la CSG déductible.
+        </p>
+        <p class="note">
+          Source : <a href={brochureUrl} rel="noopener" target="_blank"
+            >brochure pratique de l'impôt sur le revenu 2026</a
+          >, section « Revenus déjà soumis aux prélèvements sociaux, sans CSG
+          déductible » (case 2CG), p. 132 — « Les revenus inscrits ligne 2CG
+          sont exclus de la base soumise aux prélèvements sociaux et
+          n'ouvrent pas droit à CSG déductible. » Assiette du seuil de 10 % et
+          ventilation 2CG / 2BH : brochure précitée, p. 132-133. Intitulé de
+          case confirmé sur le formulaire 2042, CERFA n° 10330*30 (revenus
+          2025).
+        </p>
+      </section>
+
+      <section aria-labelledby="2df">
+        <h2 id="2df">Case 2DF : CSG déductible dans tous les cas</h2>
+        <p>
+          La case 2DF regroupe des revenus déjà soumis aux prélèvements
+          sociaux qui <strong>ouvrent toujours droit à la CSG déductible</strong>,
+          <strong> y compris en l'absence d'option pour le barème</strong>
+          (case 2OP non cochée). C'est la différence essentielle avec la case
+          2BH. Elle contient :
+        </p>
+        <dl class="cases">
+          <dt>Les produits des fonds en unités de compte</dt>
+          <dd>
+            de contrats d'assurance-vie ou de capitalisation, attachés à des
+            versements effectués <strong>avant le 27 septembre 2017</strong>.
+          </dd>
+          <dt>Les produits des fonds en euros</dt>
+          <dd>
+            afférents à l'année de clôture ou de retrait du contrat,
+            attachés à ces mêmes versements antérieurs au 27 septembre 2017.
+          </dd>
+        </dl>
+        <p>
+          Comme pour 2BH et 2CG, le montant inscrit en 2DF est exclu de la
+          base de calcul des prélèvements sociaux. Et comme pour 2BH, il est
+          retenu pour calculer la CSG déductible (6,8 % de ce montant) — mais
+          sans qu'il soit nécessaire d'avoir coché 2OP.
+        </p>
+        <p class="note">
+          Source : <a href={brochureUrl} rel="noopener" target="_blank"
+            >brochure pratique de l'impôt sur le revenu 2026</a
+          >, section « Autres revenus déjà soumis aux prélèvements sociaux
+          avec CSG déductible » (case 2DF), p. 133 — le montant est exclu de
+          la base des prélèvements sociaux et retenu pour le calcul de la CSG
+          déductible (6,8 %), sans condition d'option pour le barème.
+          Intitulé de case confirmé sur le formulaire 2042, CERFA n°
+          10330*30 (revenus 2025).
+        </p>
+      </section>
+
+      <section aria-labelledby="lien-2op">
+        <h2 id="lien-2op">Le lien avec la case 2OP</h2>
+        <p>
+          La distinction entre 2BH, 2CG et 2DF ne prend son sens que si vous
+          vous posez la question du <strong>barème</strong>. Par défaut (PFU,
+          case 2OP non cochée), les trois cases jouent le même rôle : éviter
+          une double taxation aux prélèvements sociaux, sans aucun autre
+          effet sur votre impôt — sauf pour 2DF, qui ouvre déjà droit à CSG
+          déductible même sans 2OP. La CSG déductible — l'un des avantages
+          que débloque l'option pour le barème, aux côtés de l'abattement de
+          40 % sur les dividendes éligibles, des frais et charges déductibles
+          (case 2CA) et de l'abattement pour durée de détention sur les
+          titres acquis avant 2018 — se calcule <strong>sur 2BH si 2OP est
+          coché</strong>, et <strong>sur 2DF dans tous les cas</strong>.
+        </p>
+        <p>
+          Faut-il pour autant cocher 2OP à cause de ces quelques points de
+          CSG déductible ? Ça dépend surtout de votre tranche marginale
+          d'imposition (TMI) — voir notre guide
+          <a href="/faut-il-cocher-2op/">faut-il cocher la case 2OP ?</a>
+          pour la règle complète et ses pièges.
+        </p>
+      </section>
+
+      <section aria-labelledby="verifier">
+        <h2 id="verifier">Faut-il modifier ces montants ?</h2>
+        <p>
+          En principe, non : les cases 2BH, 2CG et 2DF sont préremplies à
+          partir de l'<strong>IFU</strong> (imprimé fiscal unique) transmis
+          par vos banques, courtiers et assureurs, et vous n'avez rien à
+          calculer vous-même. Le bon réflexe est simplement de
+          <strong> vérifier</strong> ces montants en les comparant à votre
+          IFU, comme pour toutes les cases de la rubrique 2.
+        </p>
+        <p>
+          Si un montant prérempli vous paraît inexact, la déclaration
+          papier vous permet de le corriger directement (rayer le montant
+          prérempli et indiquer le montant exact dans la case blanche) ; en
+          ligne, il suffit de modifier la valeur affichée. Ne laissez pas un
+          montant erroné tel quel : il fausserait à la fois le calcul des
+          prélèvements sociaux et, selon le cas, celui de la CSG déductible.
+        </p>
+        <p class="note">
+          Source : <a href={brochureUrl} rel="noopener" target="_blank"
+            >brochure pratique de l'impôt sur le revenu 2026</a
+          >, encadré « 2 I Revenus de capitaux mobiliers » : « Si un montant
+          prérempli est inexact, rayez-le et indiquez le montant total exact
+          dans la case blanche. »
+        </p>
+      </section>
+
+      <section aria-labelledby="chiffrer">
+        <h2 id="chiffrer">Chiffrer l'effet sur votre impôt</h2>
+        <p>
+          Le gain apporté par la CSG déductible sur votre case 2BH ne se
+          voit pas isolément : il se combine avec l'abattement de 40 % et
+          avec le passage au barème sur l'ensemble de vos revenus du
+          capital. Notre <a href="/pfu-ou-bareme/">comparateur PFU / barème
+          gratuit</a> chiffre les deux régimes à partir de votre TMI, avec
+          CSG déductible et taux à jour — 100 % côté navigateur, aucune
+          donnée envoyée.
+        </p>
+      </section>
+
+      <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2042 (cases 2BH, 2CG et 2DF)" />
+
+      <footer class="page-footer">
+        <p>
+          Voir aussi&nbsp;:
+          <a href="/faut-il-cocher-2op/">faut-il cocher la case 2OP ?</a>
+          ·
+          <a href="/pfu-ou-bareme/">comparateur PFU ou barème</a>
+        </p>
+      </footer>
+    </article>
+  </main>
+
+  <style>
+    .page {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+      font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 2.5rem;
+    }
+    .lede {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .cases dt {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .cases dd {
+      margin: 0.25rem 0 0;
+    }
+    .note {
+      font-size: 0.92rem;
+      color: #555;
+      background: #f6f6f4;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+    }
+    a {
+      color: #1d4ed8;
+    }
+    .page-footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e2e2;
+    }
+  </style>
+</BaseLayout>

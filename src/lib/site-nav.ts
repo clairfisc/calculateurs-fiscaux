@@ -120,6 +120,13 @@ export const GUIDES: LienOutil[] = [
       "PFU ou barème selon votre TMI : ce que débloque la case 2OP (abattement 40 %, CSG déductible) et les pièges avant de la cocher.",
   },
   {
+    href: "/case-2bh-2cg/",
+    court: "Cases 2BH / 2CG / 2DF",
+    long: "Cases 2BH, 2CG et 2DF",
+    resume:
+      "Revenus déjà soumis aux prélèvements sociaux : ce que signifient ces trois cases préremplies, et à quelles conditions elles ouvrent droit à la CSG déductible (2BH si option 2OP, 2DF dans tous les cas).",
+  },
+  {
     href: "/reporter-ses-moins-values-bourse/",
     court: "Report moins-values",
     long: "Reporter ses moins-values de bourse",
