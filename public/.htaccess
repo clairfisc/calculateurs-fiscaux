@@ -23,6 +23,14 @@
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI}/ [L,R=301]
 </IfModule>
 
+# --- Pas de listing de répertoire ---
+# Sans index.html, Apache sert un « Index of / » indexable par Google
+# (/declarer-compte/, /_astro/, /__ovh_icons/ répondaient 200 en HTML brut).
+# Avec -Indexes ces URL renvoient 403 : plus de contenu parasite dans l'index.
+<IfModule mod_autoindex.c>
+  Options -Indexes
+</IfModule>
+
 # --- En-têtes de sécurité ---
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
