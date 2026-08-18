@@ -12,6 +12,15 @@ export interface LienOutil {
   long: string;
   /** Une phrase d'accroche (carte de la home). */
   resume: string;
+  /**
+   * Type schema.org à forcer, quand la nature de la page ne suit pas son groupe de
+   * navigation. Cas concret : un guide éditorial qui embarque un calculateur est
+   * rangé dans `CALCULATEURS` (c'est là que l'utilisateur le cherche) mais reste un
+   * `Article` — le typer `WebApplication` lui ferait perdre l'auteur, la date et le
+   * titre éditorial, qui pèsent sur du contenu fiscal (YMYL). Par défaut, le type
+   * est déduit du groupe.
+   */
+  typeSchema?: "Article" | "WebApplication";
 }
 
 /** Calculateurs interactifs — le cœur du produit. */
@@ -45,13 +54,19 @@ export const CALCULATEURS: LienOutil[] = [
       "Banque, néobanque, courtier, exchange crypto, PayPal : checklist 3916 / 3916-bis et fiche à recopier, compte par compte.",
   },
   {
-    href: "/pfu-ou-bareme/",
+    // Pointe vers le guide, qui embarque le comparateur depuis la consolidation du
+    // cluster « case 2OP ». /pfu-ou-bareme/ délègue son canonical à cette page (cf.
+    // seo-canonical.ts) : la laisser en cible de navigation ferait pointer 87 liens
+    // internes vers une URL qu'on demande à Google d'ignorer — le maillage interne
+    // est l'un des signaux dont il se sert pour choisir la canonique, et il
+    // contredirait alors la délégation. La page reste jointe par son URL directe.
+    href: "/faut-il-cocher-2op/",
     court: "PFU ou barème",
-    // Le mot-clé « case 2OP » est volontairement porté par /faut-il-cocher-2op/
-    // seul, pour que les deux pages cessent de se cannibaliser dessus.
-    long: "PFU (flat tax) ou barème progressif",
+    long: "PFU ou barème (case 2OP)",
     resume:
-      "Comparez la flat tax (30 % / 31,4 % en 2026) et l'option barème progressif : abattement 40 %, CSG déductible.",
+      "Faut-il cocher la case 2OP ? Comparez la flat tax (30 % / 31,4 % en 2026) et le barème progressif : abattement 40 %, CSG déductible, et les pièges avant de cocher.",
+    // Guide éditorial avec calculateur intégré : rangé ici, mais typé Article.
+    typeSchema: "Article",
   },
 ];
 
@@ -113,13 +128,6 @@ export const GUIDES: LienOutil[] = [
     long: "Faut-il déclarer ses cryptos ?",
     resume:
       "Quand une vente crypto est imposable, pourquoi crypto→crypto ne l'est pas, la méthode 150 VH bis et le seuil de 305 €.",
-  },
-  {
-    href: "/faut-il-cocher-2op/",
-    court: "Faut-il cocher 2OP",
-    long: "Faut-il cocher la case 2OP ?",
-    resume:
-      "PFU ou barème selon votre TMI : ce que débloque la case 2OP (abattement 40 %, CSG déductible) et les pièges avant de la cocher.",
   },
   {
     href: "/case-2bh-2cg/",

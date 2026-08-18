@@ -33,9 +33,19 @@ const dates = datesPour(chemin);
 const entreeNav = [...CALCULATEURS, ...SIMULATEUR, ...GUIDES].find(
   (l) => l.href === chemin,
 );
-const estOutil = [...CALCULATEURS, ...SIMULATEUR].some((l) => l.href === chemin);
-const estGuide = GUIDES.some((l) => l.href === chemin);
 const estAccueil = chemin === "/";
+
+// Le type suit le groupe de navigation, sauf si l'entrée le force explicitement
+// (`typeSchema`) — cas d'un guide rangé parmi les calculateurs parce qu'il en
+// embarque un.
+const groupeOutil = [...CALCULATEURS, ...SIMULATEUR].some((l) => l.href === chemin);
+const groupeGuide = GUIDES.some((l) => l.href === chemin);
+const estOutil = entreeNav?.typeSchema
+  ? entreeNav.typeSchema === "WebApplication"
+  : groupeOutil;
+const estGuide = entreeNav?.typeSchema
+  ? entreeNav.typeSchema === "Article"
+  : groupeGuide;
 
 /**
  * Libellé du fil d'Ariane : Google l'affiche tel quel dans la SERP, où le titre

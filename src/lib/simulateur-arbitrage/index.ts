@@ -11,9 +11,10 @@
  *   - L4 « pea » — arbitrage PEA / CTO (sous-moteur PEA + compose pfu-bareme pour le CTO).
  *   - L5 « donation » — donation avant cession (sous-moteur droits de donation + compose cessions-2074/pfu-bareme).
  *
- * L2 (PFU vs barème, case 2OP) est **déjà servi** par la page `/pfu-ou-bareme` (composant
+ * L2 (PFU vs barème, case 2OP) est **déjà servi** par la page `/faut-il-cocher-2op` (composant
  * `ComparateurPfuBareme`, qui compose directement `pfu-bareme`) : pas de levier dédié ici tant
- * qu'un hub unifié multi-leviers n'existe pas.
+ * qu'un hub unifié multi-leviers n'existe pas. L'ancienne page `/pfu-ou-bareme` reste en ligne
+ * mais délègue son canonical au guide et n'est plus référencée par la navigation.
  */
 
 // Contrat partagé (forme du comparatif A/B, commune à tous les leviers).
