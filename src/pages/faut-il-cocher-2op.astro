@@ -1,11 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Disclaimer from "../components/content/Disclaimer.astro";
+import ComparateurPfuBareme from "../components/ComparateurPfuBareme.tsx";
 
 const title =
-  "Faut-il cocher la case 2OP ? PFU ou barème selon votre TMI (2026)";
+  "Faut-il cocher la case 2OP ? Simulateur PFU ou barème (2026)";
 const description =
-  "Cocher la case 2OP, c'est renoncer à la flat tax pour le barème progressif. Quand est-ce gagnant selon votre tranche (TMI) ? Peut-on revenir sur son choix, et que faire si on a oublié de cocher ? Abattement de 40 %, CSG déductible et pièges, expliqués simplement.";
+  "Faut-il cocher la case 2OP ? La règle selon votre TMI, et un simulateur gratuit qui chiffre les deux régimes sur vos montants. Abattement de 40 %, CSG déductible, révocabilité de l'option et que faire en cas d'oubli.";
 const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34913";
 ---
 
@@ -27,6 +28,70 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
       </header>
 
       <Disclaimer noticeUrl={noticeUrl} formulaireLabel="2042 (case 2OP)" />
+
+      <section aria-labelledby="en-bref">
+        <h2 id="en-bref">La réponse en bref</h2>
+        <table class="decision">
+          <caption>
+            Faut-il cocher la case 2OP, selon votre tranche marginale
+            d'imposition (TMI) ?
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Votre TMI</th>
+              <th scope="col">Cocher 2OP ?</th>
+              <th scope="col">Pourquoi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">0 % (non imposable)</th>
+              <td class="oui">Oui</td>
+              <td>
+                Au barème, l'impôt sur le revenu de votre capital est nul, alors
+                que le PFU prélève 12,8 %.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">11 %</th>
+              <td class="oui">Le plus souvent oui</td>
+              <td>
+                11 % est déjà sous les 12,8 % du PFU, et l'abattement de 40 % et
+                la CSG déductible creusent encore l'écart.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">30 %, 41 % ou 45 %</th>
+              <td class="non">Non</td>
+              <td>
+                Votre taux marginal dépasse largement les 12,8 % du PFU, même
+                après abattement : la flat tax redevient moins chère.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          Deux réserves avant de vous fier à cette règle : l'option est
+          <strong> globale</strong> (elle emporte tous vos revenus du capital,
+          pas seulement vos dividendes), et l'abattement de 40 % ne vaut
+          <strong> que pour les dividendes éligibles</strong> — sans eux, le
+          barème devient défavorable plus tôt. D'où l'intérêt de chiffrer votre
+          cas exact ci-dessous.
+        </p>
+      </section>
+
+      <section aria-labelledby="simulateur">
+        <h2 id="simulateur">Simuler votre cas : PFU ou barème ?</h2>
+        <p>
+          Renseignez vos montants : le simulateur chiffre les deux régimes et
+          vous dit lequel coûte le moins cher, et de combien. Il gère
+          l'abattement de 40 %, la CSG déductible et les taux du bon millésime.
+          Le calcul est <strong>100 % local</strong> — aucune donnée ne quitte
+          votre navigateur.
+        </p>
+      </section>
+
+      <ComparateurPfuBareme client:load entete={false} />
 
       <section aria-labelledby="defaut">
         <h2 id="defaut">Le choix par défaut : la flat tax (PFU)</h2>
@@ -229,7 +294,7 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
           Dans les deux cas, le bon réflexe est le même : chiffrer l'écart
           <strong>avant</strong> de déclarer, pas en découvrant son avis. C'est
           l'affaire de quelques secondes avec le
-          <a href="/pfu-ou-bareme/">comparateur PFU / barème</a>.
+          <a href="#simulateur">simulateur ci-dessus</a>.
         </p>
         <p class="note">
           Conseil d'État, 8ᵉ et 3ᵉ chambres réunies, 5 avril 2024, n° 490411 :
@@ -256,14 +321,16 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
       </section>
 
       <section aria-labelledby="outil">
-        <h2 id="outil">Comparer votre cas précis</h2>
+        <h2 id="outil">Et si vos revenus du capital sont importants ?</h2>
         <p>
-          Notre <a href="/pfu-ou-bareme/">comparateur PFU / barème gratuit</a>
-          chiffre les deux régimes à partir de votre TMI (ou de votre revenu et vos
-          parts, pour gérer le franchissement de tranche), avec abattement de 40 %,
-          CSG déductible et taux du bon millésime — et vous dit lequel coûte le
-          moins cher, et de combien. Il est <strong>100 % côté navigateur</strong>
-          et open source — aucune donnée n'est envoyée.
+          Raisonner à TMI donnée suppose que vos revenus du capital ne vous font
+          pas <strong>changer de tranche</strong>. S'ils sont assez élevés pour
+          cela, votre « vraie » TMI sur ce capital n'est plus celle de votre
+          salaire. Basculez alors le
+          <a href="#simulateur">simulateur ci-dessus</a> en
+          <strong> mode précis</strong> : à partir de votre revenu imposable et
+          de votre nombre de parts, il calcule le barème réel et gère le
+          franchissement de tranche.
         </p>
       </section>
 
@@ -320,6 +387,81 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
       background: #f6f6f4;
       padding: 0.75rem 1rem;
       border-radius: 6px;
+    }
+    .decision {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    .decision caption {
+      text-align: left;
+      font-size: 0.92rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    .decision th,
+    .decision td {
+      border: 1px solid #e2e2e2;
+      padding: 0.6rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .decision thead th {
+      background: #f6f6f4;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #555;
+    }
+    .decision tbody th {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .decision .oui,
+    .decision .non {
+      font-weight: 600;
+    }
+    .decision .oui {
+      color: #15803d;
+    }
+    .decision .non {
+      color: #b91c1c;
+    }
+    /* Sous 32 rem, trois colonnes ne tiennent pas. Plutôt qu'un défilement
+       horizontal qui masquerait la colonne « Pourquoi », chaque ligne devient une
+       carte : tout le contenu reste lisible sans interaction. */
+    @media (max-width: 32rem) {
+      .decision,
+      .decision caption,
+      .decision tbody,
+      .decision tr,
+      .decision th,
+      .decision td {
+        display: block;
+      }
+      .decision thead {
+        display: none;
+      }
+      .decision tr {
+        border: 1px solid #e2e2e2;
+        border-radius: 6px;
+        padding: 0.75rem 0.9rem;
+        margin-bottom: 0.75rem;
+      }
+      .decision th,
+      .decision td {
+        border: none;
+        padding: 0.1rem 0;
+      }
+      .decision tbody th {
+        font-size: 1.05rem;
+        white-space: normal;
+      }
+      .decision .oui,
+      .decision .non {
+        margin-bottom: 0.35rem;
+      }
     }
     a {
       color: #1d4ed8;

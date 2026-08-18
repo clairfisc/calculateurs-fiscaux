@@ -2,10 +2,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ComparateurPfuBareme from "../components/ComparateurPfuBareme.tsx";
 
-const title =
-  "PFU ou barème : comparateur flat tax vs case 2OP (2026) — gratuit";
+// Positionnement : cette page vise le vocabulaire générique du régime (PFU, flat
+// tax, barème progressif). La requête « case 2OP » et ses variantes sont traitées
+// par /faut-il-cocher-2op/, qui porte la question décisionnelle et le même
+// simulateur — les deux pages se cannibalisaient sur ce mot-clé.
+const title = "Comparateur PFU (flat tax) ou barème progressif 2026 — gratuit";
 const description =
-  "Comparez gratuitement le PFU (flat tax 30 % / 31,4 % en 2026) et l'option pour le barème progressif (case 2OP) sur vos dividendes, intérêts et plus-values. Abattement 40 %, CSG déductible. Calcul 100 % local, open source, sans compte ni tracker.";
+  "Comparez gratuitement le PFU (flat tax : 30 %, 31,4 % en 2026) et le barème progressif sur vos dividendes, intérêts et plus-values de titres. Abattement de 40 %, CSG déductible, franchissement de tranche. Calcul 100 % local, open source, sans compte ni tracker.";
 const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
 ---
 
@@ -17,38 +20,32 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
       <!-- Contenu / SEO -->
       <section class="mx-auto w-full max-w-4xl px-4 pb-10">
         <article class="prose prose-slate max-w-none text-sm leading-relaxed text-slate-700">
+          {/*
+            Page volontairement brève : elle délègue son canonical au guide
+            /faut-il-cocher-2op/ (cf. src/lib/seo-canonical.ts), qui traite la même
+            décision en profondeur. Y réexpliquer l'abattement, la CSG déductible ou
+            la révocabilité ne ferait que dupliquer, en moins bien. On garde ici
+            l'outil et le strict nécessaire pour s'en servir.
+          */}
           <h2 class="text-base font-semibold text-slate-900">PFU ou barème : comment choisir ?</h2>
           <p>
             Vos revenus du capital (dividendes, intérêts, plus-values de cession de titres) sont
             imposés par défaut au <strong>prélèvement forfaitaire unique (PFU)</strong>, aussi
             appelé <em>flat tax</em> : <strong>12,8 % d'impôt sur le revenu + prélèvements
-            sociaux</strong>. La CSG sur les revenus du capital passe de 9,2 % à 10,6 % (LFSS 2026),
-            portant les prélèvements sociaux de 17,2 % à <strong>18,6 %</strong> et le PFU de 30 % à
-            <strong>31,4 %</strong>. Attention : cette hausse frappe les <strong>dividendes et
-            intérêts versés à partir de 2026</strong>, mais s'applique <strong>dès 2025 aux
-            plus-values mobilières</strong> (rétroactivité pour les revenus du patrimoine) — une
-            plus-value réalisée en 2025 est donc déjà taxée à 31,4 %.
+            sociaux</strong>, soit <strong>30 %</strong> au total, porté à <strong>31,4 %</strong>
+            par la hausse de CSG de la LFSS 2026. Vous pouvez à la place opter pour le
+            <strong>barème progressif</strong> : c'est intéressant quand votre tranche marginale
+            (TMI) est faible. Le comparateur ci-dessus chiffre les deux régimes sur vos montants.
           </p>
           <p>
-            Vous pouvez à la place opter pour le <strong>barème progressif</strong> en cochant la
-            <strong>case 2OP</strong>. Ce choix devient intéressant quand votre tranche marginale
-            (TMI) est faible : il ouvre l'<strong>abattement de 40 % sur les dividendes éligibles</strong>
-            et la <strong>déduction d'une fraction de CSG (6,8 %)</strong>, calculée sur les revenus
-            figurant en
-            <a class="text-blue-700 underline" href="/case-2bh-2cg/">case 2BH</a>. En contrepartie,
-            l'impôt est calculé à votre taux marginal, ce qui est défavorable au-delà d'une certaine TMI.
-          </p>
-          <p>
-            Règle générale : à <strong>TMI 0 % ou 11 %</strong>, le barème est souvent gagnant ; à
-            partir de <strong>30 %</strong>, le PFU reprend l'avantage. Le comparateur ci-dessus
-            chiffre votre cas précis. L'option 2OP est <strong>globale</strong> (tous vos revenus du
-            capital) et, pour les revenus 2026, devient <strong>révocable</strong>.
-          </p>
-          <p>
-            Pour aller plus loin :
+            <strong>Vous vous demandez s'il faut cocher la case 2OP ?</strong> C'est exactement la
+            même décision, prise sous l'angle de la déclaration. Notre guide
             <a class="text-blue-700 underline" href="/faut-il-cocher-2op/"
-              >faut-il cocher la case 2OP ? (guide complet)</a
-            >.
+              >faut-il cocher la case 2OP ?</a
+            > y répond en détail — règle selon la TMI, abattement de 40 %, CSG déductible
+            (<a class="text-blue-700 underline" href="/case-2bh-2cg/">case 2BH</a>), révocabilité de
+            l'option depuis la loi de finances pour 2026 et que faire en cas d'oubli — avec ce même
+            simulateur intégré.
           </p>
         </article>
 

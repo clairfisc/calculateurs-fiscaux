@@ -47,7 +47,9 @@ export const CALCULATEURS: LienOutil[] = [
   {
     href: "/pfu-ou-bareme/",
     court: "PFU ou barème",
-    long: "PFU ou barème (case 2OP)",
+    // Le mot-clé « case 2OP » est volontairement porté par /faut-il-cocher-2op/
+    // seul, pour que les deux pages cessent de se cannibaliser dessus.
+    long: "PFU (flat tax) ou barème progressif",
     resume:
       "Comparez la flat tax (30 % / 31,4 % en 2026) et l'option barème progressif : abattement 40 %, CSG déductible.",
   },

@@ -167,7 +167,16 @@ function Verdict({ resultat }: { resultat: ComparaisonResult }) {
   );
 }
 
-export default function ComparateurPfuBareme() {
+interface Props {
+  /**
+   * Affiche l'en-tête propre au comparateur (titre + accroche). À passer à `false`
+   * quand l'îlot est intégré dans une page qui porte déjà son propre titre : le
+   * `<h1>` interne créerait sinon un second `<h1>` concurrent sur la page hôte.
+   */
+  entete?: boolean;
+}
+
+export default function ComparateurPfuBareme({ entete = true }: Props) {
   const [millesime, setMillesime] = useState<Millesime>(2025);
   const [tmiBp, setTmiBp] = useState<number>(3000);
   const [dividendes, setDividendes] = useState("");
@@ -214,14 +223,16 @@ export default function ComparateurPfuBareme() {
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4">
-      <header>
-        <h1 className="text-2xl font-bold text-slate-900">PFU ou barème : quel choix pour vos revenus du capital ?</h1>
-        <p className="mt-1 text-sm text-slate-600">
-          Comparez le prélèvement forfaitaire unique (flat tax) et l'option pour le barème
-          progressif (case 2OP). Calcul effectué localement dans votre navigateur (aucune donnée
-          collectée).
-        </p>
-      </header>
+      {entete && (
+        <header>
+          <h1 className="text-2xl font-bold text-slate-900">PFU ou barème : quel choix pour vos revenus du capital ?</h1>
+          <p className="mt-1 text-sm text-slate-600">
+            Comparez le prélèvement forfaitaire unique (flat tax) et l'option pour le barème
+            progressif (case 2OP). Calcul effectué localement dans votre navigateur (aucune donnée
+            collectée).
+          </p>
+        </header>
+      )}
 
       {/* Saisie */}
       <section className="flex flex-col gap-4">
