@@ -1,0 +1,154 @@
+---
+/**
+ * Données structurées JSON-LD (schema.org), émises dans le <head> de chaque page.
+ *
+ * Objectif : donner à Google les signaux qu'il sait afficher ou pondérer sur du
+ * contenu fiscal (YMYL) — éditeur identifiable, date de révision, fil d'Ariane.
+ *
+ * À noter : le type `FAQPage` n'est volontairement pas utilisé. Google a restreint
+ * ses rich results FAQ aux sites gouvernementaux et de santé faisant autorité
+ * (août 2023) ; le baliser ici n'apporterait aucun affichage.
+ *
+ * Le type de l'entité principale est déduit de `site-nav.ts` (source unique de la
+ * taxonomie du site) : un outil interactif est une `WebApplication`, un guide
+ * éditorial un `Article`, le reste une `WebPage`.
+ */
+import { CALCULATEURS, SIMULATEUR, GUIDES } from "../lib/site-nav";
+import { datesPour } from "../lib/page-dates";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogImageUrl: string;
+  pathname: string;
+}
+
+const { title, description, canonical, ogImageUrl, pathname } = Astro.props;
+
+const origine = new URL("/", Astro.site).href.replace(/\/$/, "");
+const chemin = pathname.endsWith("/") ? pathname : `${pathname}/`;
+const dates = datesPour(chemin);
+
+const entreeNav = [...CALCULATEURS, ...SIMULATEUR, ...GUIDES].find(
+  (l) => l.href === chemin,
+);
+const estOutil = [...CALCULATEURS, ...SIMULATEUR].some((l) => l.href === chemin);
+const estGuide = GUIDES.some((l) => l.href === chemin);
+const estAccueil = chemin === "/";
+
+/**
+ * Libellé du fil d'Ariane : Google l'affiche tel quel dans la SERP, où le titre
+ * SEO complet (« … selon votre TMI (2026) ») serait tronqué. On préfère donc le
+ * libellé court de la navigation quand la page en a un.
+ */
+const libelleFilAriane = entreeNav?.court ?? title;
+
+const idOrganisation = `${origine}/#organisation`;
+const idSite = `${origine}/#site`;
+const idPage = `${canonical}#page`;
+
+const organisation = {
+  "@type": "Organization",
+  "@id": idOrganisation,
+  name: "Clairfisc",
+  url: `${origine}/`,
+  description:
+    "Calculateurs fiscaux gratuits et open source, dont le calcul s'exécute intégralement dans le navigateur.",
+  logo: {
+    "@type": "ImageObject",
+    url: new URL("/favicon.svg", Astro.site).href,
+  },
+};
+
+const siteWeb = {
+  "@type": "WebSite",
+  "@id": idSite,
+  url: `${origine}/`,
+  name: "Clairfisc",
+  inLanguage: "fr-FR",
+  publisher: { "@id": idOrganisation },
+};
+
+/** Champs de date, omis plutôt qu'inventés si la page n'est pas répertoriée. */
+const champsDates = dates
+  ? { datePublished: dates.publiee, dateModified: dates.modifiee }
+  : {};
+
+const communs = {
+  "@id": idPage,
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: "fr-FR",
+  isPartOf: { "@id": idSite },
+  publisher: { "@id": idOrganisation },
+  ...champsDates,
+};
+
+let entitePrincipale: Record<string, unknown>;
+if (estOutil) {
+  entitePrincipale = {
+    ...communs,
+    "@type": "WebApplication",
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Tout navigateur web",
+    browserRequirements: "JavaScript requis",
+    isAccessibleForFree: true,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+  };
+} else if (estGuide) {
+  entitePrincipale = {
+    ...communs,
+    "@type": "Article",
+    headline: title,
+    image: ogImageUrl,
+    author: { "@id": idOrganisation },
+    mainEntityOfPage: canonical,
+  };
+} else {
+  entitePrincipale = { ...communs, "@type": "WebPage" };
+}
+
+/**
+ * Fil d'Ariane à deux niveaux (Accueil → page). Le site n'a pas de pages de
+ * catégorie, donc pas de niveau intermédiaire : un maillon sans URL réelle serait
+ * invalide. Omis sur l'accueil, où un fil à un seul élément n'a pas de sens.
+ */
+const filAriane = estAccueil
+  ? null
+  : {
+      "@type": "BreadcrumbList",
+      "@id": `${canonical}#fil-ariane`,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Accueil",
+          item: `${origine}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: libelleFilAriane,
+          item: canonical,
+        },
+      ],
+    };
+
+const graphe = {
+  "@context": "https://schema.org",
+  "@graph": [
+    organisation,
+    siteWeb,
+    entitePrincipale,
+    ...(filAriane ? [filAriane] : []),
+  ],
+};
+
+// `<` est échappé pour qu'un titre contenant « </script> » ne puisse pas clore
+// la balise prématurément.
+const jsonLd = JSON.stringify(graphe).replace(/</g, "\\u003c");
+---
+
+<script type="application/ld+json" is:inline set:html={jsonLd} />

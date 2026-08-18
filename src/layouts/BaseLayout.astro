@@ -2,6 +2,9 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import SchemaOrg from "../components/SchemaOrg.astro";
+import { datesPour, formaterDateFr } from "../lib/page-dates";
+import { cheminCanonique, delegueSonCanonical } from "../lib/seo-canonical";
 
 interface Props {
   /** Balise <title> et titres Open Graph / Twitter. */
@@ -17,8 +20,16 @@ interface Props {
 const { title, description, ogType = "website", ogImage = "/og-default.png" } =
   Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Certaines pages délèguent leur canonical à une autre URL (cf. src/lib/seo-canonical.ts) :
+// `canonical` et `og:url` pointent alors vers la cible, et la page n'émet pas de
+// données structurées puisqu'elle n'a pas vocation à être indexée.
+const canonical = new URL(cheminCanonique(Astro.url.pathname), Astro.site).href;
+const canonicalDelegue = delegueSonCanonical(Astro.url.pathname);
 const ogImageUrl = new URL(ogImage, Astro.site).href;
+
+// Dates éditoriales de la page courante (cf. src/lib/page-dates.ts). Absentes pour
+// une page non répertoriée : on n'affiche alors rien plutôt qu'une date inventée.
+const dates = datesPour(Astro.url.pathname);
 ---
 
 <!doctype html>
@@ -45,11 +56,41 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
+    {
+      !canonicalDelegue && (
+        <SchemaOrg
+          title={title}
+          description={description}
+          canonical={canonical}
+          ogImageUrl={ogImageUrl}
+          pathname={Astro.url.pathname}
+        />
+      )
+    }
+
     <slot name="head" />
   </head>
   <body class="flex min-h-screen flex-col bg-slate-50 text-slate-900">
     <Header />
-    <div class="flex-1"><slot /></div>
+    <div class="flex-1">
+      <slot />
+      {
+        dates && (
+          <div class="mx-auto w-full max-w-5xl px-4">
+            <p class="border-t border-slate-200 pt-4 pb-8 text-xs text-slate-500">
+              Mis à jour le{" "}
+              <time datetime={dates.modifiee}>{formaterDateFr(dates.modifiee)}</time>
+              {dates.publiee !== dates.modifiee && (
+                <>
+                  {" · publié le "}
+                  <time datetime={dates.publiee}>{formaterDateFr(dates.publiee)}</time>
+                </>
+              )}
+            </p>
+          </div>
+        )
+      }
+    </div>
     <Footer />
   </body>
 </html>
