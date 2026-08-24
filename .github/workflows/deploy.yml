@@ -67,10 +67,25 @@ jobs:
               if [ -d "$path" ]; then
                 echo "put -r $name"
               else
-                # rm d'abord : le SFTP OVH échoue à écraser un fichier existant
-                # (index.html par défaut, ou redéploiement). Le '-' ignore l'absence.
+                # Bascule en deux temps. Un `rm` suivi d'un `put` laisserait le
+                # fichier ABSENT pendant toute la durée du transfert — et sans
+                # .htaccess, Apache reprend DirectorySlash On : le mod_dir d'OVH
+                # injecte alors un « :443 » dans la redirection de slash final
+                # (le motif que 5e3c967 avait justement supprimé). Googlebot
+                # tombant dans cette fenêtre voit une redirection vers une URL
+                # malformée et la classe en « Erreur liée à des redirections » —
+                # constaté sur /le-projet, exploré le 18/08/2026.
+                #
+                # Ici le fichier en place n'est retiré qu'une fois le nouveau
+                # intégralement transféré : la fenêtre tombe à un aller-retour.
+                # Le rm reste nécessaire car le SFTP OVH échoue à écraser un
+                # fichier existant. Le '-' ignore une absence ; le `rename`, lui,
+                # n'en porte pas : s'il échouait, le fichier resterait sous son
+                # nom temporaire et le déploiement doit s'arrêter bruyamment.
+                echo "-rm $name.deploy-tmp"
+                echo "put $name $name.deploy-tmp"
                 echo "-rm $name"
-                echo "put $name"
+                echo "rename $name.deploy-tmp $name"
               fi
             done
             echo "bye"
