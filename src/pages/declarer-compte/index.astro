@@ -1,0 +1,147 @@
+---
+/**
+ * Hub des fiches « déclarer son compte {établissement} ».
+ *
+ * Deux raisons d'exister, au-delà du confort de navigation :
+ *  - `/declarer-compte/` était un répertoire sans index. Combiné à `DirectorySlash Off`
+ *    et `Options -Indexes` (cf. public/.htaccess), `/declarer-compte` redirigeait en 301
+ *    vers `/declarer-compte/` qui répondait 403 — une redirection aboutissant sur une
+ *    erreur, remontée par la Search Console en « Erreur liée à des redirections ».
+ *    Google trouve cette URL en tronquant `/declarer-compte/{id}/`, sans aucun lien.
+ *  - Les 12 fiches ne recevaient qu'UN lien interne chacune (depuis le calculateur
+ *    3916) alors qu'elles classent déjà en positions 10-15. Ce hub les double.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { ETABLISSEMENTS, evalueCompte } from "../../lib/comptes-3916";
+
+const title =
+  "Déclarer son compte étranger aux impôts : fiches par établissement (3916)";
+const description =
+  "Trade Republic, Revolut, N26, Binance, Coinbase, PayPal, Wise, DEGIRO… Pour chaque établissement : faut-il déclarer le compte, sur quel formulaire (3916 ou 3916-bis) et pourquoi. Gratuit, 100 % local.";
+
+/** Regroupement par nature de compte : c'est ainsi que l'utilisateur cherche. */
+const GROUPES = [
+  {
+    cle: "titres",
+    titre: "Courtiers et comptes-titres",
+    accroche:
+      "Un compte-titres ouvert chez un courtier établi hors de France relève du formulaire 3916.",
+    types: ["titres_cto", "pea"],
+  },
+  {
+    cle: "banques",
+    titre: "Néobanques et comptes de paiement",
+    accroche:
+      "Néobanques et services de paiement étrangers : à déclarer, sauf exemption étroite pour certains comptes de monnaie électronique adossés à un compte français.",
+    types: ["neobanque", "banque", "paiement_emoney"],
+  },
+  {
+    cle: "crypto",
+    titre: "Plateformes d'actifs numériques",
+    accroche:
+      "Un compte ouvert chez un PSAN étranger relève du 3916-bis, et se déclare même sans la moindre cession.",
+    types: ["exchange_crypto", "wallet_auto_heberge"],
+  },
+] as const;
+
+/** Fiche prête à afficher : verdict calculé par le moteur, pas ressaisi à la main. */
+const fiches = ETABLISSEMENTS.map((etab) => {
+  const r = evalueCompte({ type: etab.typeParDefaut, etablissementId: etab.id });
+  return {
+    etab,
+    formulaire: r.formulaire,
+    verdict: r.verdict,
+    libelleVerdict:
+      r.verdict === "a_declarer"
+        ? "En principe à déclarer"
+        : r.verdict === "exonere"
+          ? "Potentiellement dispensé"
+          : "À vérifier",
+  };
+});
+
+const groupes = GROUPES.map((g) => ({
+  ...g,
+  fiches: fiches
+    .filter((f) => (g.types as readonly string[]).includes(f.etab.typeParDefaut))
+    .sort((a, b) => a.etab.designation.localeCompare(b.etab.designation, "fr")),
+})).filter((g) => g.fiches.length > 0);
+---
+
+<BaseLayout title={title} description={description} ogType="article">
+  <main class="mx-auto w-full max-w-3xl px-4 py-8">
+    <article class="flex flex-col gap-6 text-slate-700">
+      <header>
+        <h1 class="text-2xl font-bold text-slate-900">
+          Déclarer son compte étranger aux impôts
+        </h1>
+        <p class="mt-2 leading-relaxed">
+          Détenir un compte hors de France oblige à le <strong>déclarer chaque
+          année</strong>, que vous l'utilisiez ou non : l'obligation porte sur
+          l'<strong>existence</strong> du compte, pas sur son activité. Un compte
+          vide ou dormant reste déclarable, et l'oubli est sanctionné d'une amende
+          forfaitaire par compte et par an.
+        </p>
+        <p class="mt-2 leading-relaxed">
+          Ci-dessous, une fiche par établissement : le verdict, le formulaire
+          concerné (<strong>3916</strong> ou <strong>3916-bis</strong>) et le motif
+          sourcé. Pour traiter tous vos comptes d'un coup, passez par la
+          <a class="text-blue-700 underline" href="/comptes-etrangers-3916/"
+            >checklist 3916 / 3916-bis</a
+          >.
+        </p>
+      </header>
+
+      {
+        groupes.map((g) => (
+          <section aria-labelledby={`g-${g.cle}`}>
+            <h2 id={`g-${g.cle}`} class="text-lg font-semibold text-slate-900">
+              {g.titre}
+            </h2>
+            <p class="mt-1 text-sm text-slate-600">{g.accroche}</p>
+            <ul class="mt-3 divide-y divide-slate-200 rounded-md border border-slate-200">
+              {g.fiches.map((f) => (
+                <li class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 px-3 py-2.5">
+                  <a
+                    class="font-medium text-blue-700 underline"
+                    href={`/declarer-compte/${f.etab.id}/`}
+                  >
+                    {f.etab.designation}
+                  </a>
+                  <span class="text-sm text-slate-600">
+                    {f.libelleVerdict} · formulaire {f.formulaire}
+                    {f.etab.pays ? ` · ${f.etab.pays}` : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+
+      <section aria-labelledby="absent">
+        <h2 id="absent" class="text-lg font-semibold text-slate-900">
+          Votre établissement n'est pas dans la liste ?
+        </h2>
+        <p class="mt-1 leading-relaxed">
+          La règle ne dépend pas de la marque mais du <strong>type de compte</strong>
+          et du <strong>pays d'établissement</strong>. La
+          <a class="text-blue-700 underline" href="/comptes-etrangers-3916/"
+            >checklist 3916</a
+          > traite n'importe quel établissement à partir de ces deux éléments, et produit
+          la fiche à recopier sur votre déclaration.
+        </p>
+      </section>
+
+      <aside
+        class="rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed"
+      >
+        <strong>Aide informative, pas un conseil fiscal</strong> — les verdicts
+        ci-dessus valent pour le <em>type de compte le plus courant</em> chez chaque
+        établissement. Un même acteur peut proposer plusieurs produits : vérifiez le
+        vôtre sur votre relevé, et en cas de doute auprès de votre centre des
+        finances publiques.
+      </aside>
+    </article>
+  </main>
+</BaseLayout>

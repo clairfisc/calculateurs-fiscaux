@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
 
+# Répertoire injecté par l'hébergeur OVH, servi hors de www/ : il renvoie un
+# listing Apache brut (« Index of /__ovh_icons ») en 200. Le « Options -Indexes »
+# de public/.htaccess ne l'atteint pas — la preuve étant que /__ovh_icons sans
+# slash répond 404 quand la version avec slash répond 200. L'exclure ici est le
+# seul moyen fiable d'éviter que ce contenu parasite entre dans l'index.
+Disallow: /__ovh_icons/
+
 Sitemap: https://clairfisc.fr/sitemap-index.xml

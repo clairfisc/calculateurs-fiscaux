@@ -47,6 +47,10 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   "/reporter-ses-moins-values-bourse/": { publiee: "2026-06-29", modifiee: "2026-06-29" },
   "/case-2bh-2cg/": { publiee: "2026-08-18", modifiee: "2026-08-18" },
 
+  // Hub des fiches établissement. Entrée explicite nécessaire : la règle par
+  // préfixe ci-dessous ne couvre que les fiches filles, pas l'index lui-même.
+  "/declarer-compte/": { publiee: "2026-08-24", modifiee: "2026-08-24" },
+
   // Divers
   "/le-projet/": { publiee: "2026-07-01", modifiee: "2026-07-01" },
 };
