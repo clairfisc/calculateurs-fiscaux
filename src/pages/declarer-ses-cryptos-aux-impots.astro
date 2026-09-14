@@ -1,6 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Disclaimer from "../components/content/Disclaimer.astro";
+import { ETABLISSEMENTS } from "../lib/comptes-3916";
+
+const exchangesCites = ["binance", "kraken", "coinbase"]
+  .map((id) => ETABLISSEMENTS.find((e) => e.id === id))
+  .filter((e) => e !== undefined);
 
 const title =
   "Faut-il déclarer ses cryptos aux impôts ? Le guide 2086 (revenus 2025)";
@@ -54,6 +59,9 @@ const noticeUrl =
           Ce guide porte sur le <strong>2086</strong> (les gains). Pour la liste
           des comptes à déclarer plateforme par plateforme, voir notre
           <a href="/comptes-etrangers-3916/">checklist 3916 / 3916-bis</a>.
+          Un compte chez {exchangesCites.map((e, i) => (
+            <>{i > 0 && (i === exchangesCites.length - 1 ? " ou " : ", ")}<a href={`/declarer-compte/${e!.id}/`}>{e!.designation}</a></>
+          ))} ? Voir la marche à suivre pour déclarer ce compte.
         </p>
       </section>
 

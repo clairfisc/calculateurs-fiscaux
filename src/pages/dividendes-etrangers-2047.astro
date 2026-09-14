@@ -2,6 +2,11 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Calculateur from "../components/Calculateur.tsx";
 import Disclaimer from "../components/content/Disclaimer.astro";
+import { ETABLISSEMENTS } from "../lib/comptes-3916";
+
+const courtiersCites = ["degiro", "ibkr", "trade-republic"]
+  .map((id) => ETABLISSEMENTS.find((e) => e.id === id))
+  .filter((e) => e !== undefined);
 
 const title =
   "Calculateur gratuit du crédit d'impôt sur dividendes étrangers (2047, 8VL, 8PL)";
@@ -31,6 +36,13 @@ const description =
               >Cases 8PL / 8VL 2026 et l'erreur « ligne 8VL sans code 8PL »</a
             >
           </li>
+          {courtiersCites.map((e) => (
+            <li>
+              <a class="underline" href={`/declarer-compte/${e!.id}/`}
+                >Déclarer son compte {e!.designation} aux impôts</a
+              >
+            </li>
+          ))}
         </ul>
       </nav>
     </section>

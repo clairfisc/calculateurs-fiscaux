@@ -2,6 +2,11 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CalculateurCessions from "../components/cessions-2074/CalculateurCessions.tsx";
 import Disclaimer from "../components/content/Disclaimer.astro";
+import { ETABLISSEMENTS } from "../lib/comptes-3916";
+
+const courtiersCites = ["degiro", "ibkr", "etoro", "trade-republic"]
+  .map((id) => ETABLISSEMENTS.find((e) => e.id === id))
+  .filter((e) => e !== undefined);
 
 const title =
   "Calculateur gratuit de plus-value de cession (compte-titres étranger, 2074-CMV, cases 3VG/3VH)";
@@ -83,6 +88,13 @@ const ficheCmvUrl =
                 >Guide : crédit d'impôt, cases 2047, 8VL et 8PL</a
               >
             </li>
+            {courtiersCites.map((e) => (
+              <li>
+                <a class="underline" href={`/declarer-compte/${e!.id}/`}
+                  >Déclarer son compte-titres {e!.designation} aux impôts</a
+                >
+              </li>
+            ))}
           </ul>
         </nav>
       </section>

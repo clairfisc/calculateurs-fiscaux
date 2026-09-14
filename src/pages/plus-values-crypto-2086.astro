@@ -2,6 +2,11 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Calculateur2086 from "../components/crypto-2086/Calculateur2086.tsx";
 import Disclaimer from "../components/content/Disclaimer.astro";
+import { ETABLISSEMENTS } from "../lib/comptes-3916";
+
+const exchangesCites = ["binance", "kraken", "coinbase"]
+  .map((id) => ETABLISSEMENTS.find((e) => e.id === id))
+  .filter((e) => e !== undefined);
 
 const title =
   "Calculateur gratuit de plus-values crypto (formulaire 2086, 150 VH bis)";
@@ -63,6 +68,12 @@ const noticeUrl =
             <a class="text-blue-700 underline" href="/declarer-ses-cryptos-aux-impots/"
               >faut-il déclarer ses cryptos ? (guide complet)</a
             >.
+          </p>
+          <p class="mt-3">
+            Un compte sur un exchange étranger se déclare à part, sur le formulaire 3916-bis :
+            {exchangesCites.map((e, i) => (
+              <>{i > 0 && (i === exchangesCites.length - 1 ? " ou " : ", ")}<a class="text-blue-700 underline" href={`/declarer-compte/${e!.id}/`}>{e!.designation}</a></>
+            ))}.
           </p>
         </article>
       </section>
