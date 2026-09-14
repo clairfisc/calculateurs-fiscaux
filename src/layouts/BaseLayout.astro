@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SchemaOrg from "../components/SchemaOrg.astro";
+import AvisUtile from "../components/AvisUtile.astro";
 import { datesPour, formaterDateFr } from "../lib/page-dates";
 import { cheminCanonique, delegueSonCanonical } from "../lib/seo-canonical";
 
@@ -15,10 +16,19 @@ interface Props {
   ogType?: "website" | "article";
   /** Image de partage (chemin absolu depuis la racine). */
   ogImage?: string;
+  /** Encart « Cette page vous a-t-elle été utile ? » en pied de contenu (défaut : affiché).
+   *  À désactiver sur les pages qui n'ont pas de sens à s'auto-évaluer (le formulaire de
+   *  signalement lui-même et sa page de confirmation). */
+  avis?: boolean;
 }
 
-const { title, description, ogType = "website", ogImage = "/og-default.png" } =
-  Astro.props;
+const {
+  title,
+  description,
+  ogType = "website",
+  ogImage = "/og-default.png",
+  avis = true,
+} = Astro.props;
 
 // Certaines pages délèguent leur canonical à une autre URL (cf. src/lib/seo-canonical.ts) :
 // `canonical` et `og:url` pointent alors vers la cible, et la page n'émet pas de
@@ -74,6 +84,7 @@ const dates = datesPour(Astro.url.pathname);
     <Header />
     <div class="flex-1">
       <slot />
+      {avis && <AvisUtile />}
       {
         dates && (
           <div class="mx-auto w-full max-w-5xl px-4">

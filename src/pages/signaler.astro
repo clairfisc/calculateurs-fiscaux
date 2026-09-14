@@ -1,0 +1,121 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Signaler une erreur ou poser une question — Clairfisc";
+const description =
+  "Une case erronée, un taux à corriger, un bug ? Signalez-le, ou posez une question sur le fonctionnement des outils Clairfisc.";
+const issuesUrl = "https://github.com/clairfisc/calculateurs-fiscaux/issues";
+
+const classeChamp =
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
+const classeLabel = "block text-sm font-medium text-slate-700";
+---
+
+<BaseLayout title={title} description={description} avis={false}>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="mx-auto w-full max-w-2xl px-4 py-10">
+    <h1 class="text-2xl font-bold text-slate-900">Signaler une erreur ou poser une question</h1>
+
+    <p class="mt-4 rounded-md border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
+      Nous répondons sur le <strong>contenu et le fonctionnement des outils</strong> — une case
+      erronée, un taux à corriger, un bug, une incompréhension sur un calcul. Nous ne pouvons pas
+      donner de <strong>conseil fiscal personnalisé</strong> sur votre situation&nbsp;: pour un
+      cas personnel, rapprochez-vous d'un professionnel du droit ou du chiffre.
+    </p>
+
+    <form method="POST" action="/api/signalement.php" class="mt-6 space-y-4">
+      <div>
+        <label for="sujet" class={classeLabel}>Sujet</label>
+        <select id="sujet" name="sujet" required class={classeChamp + " mt-1"}>
+          <option value="erreur" selected>Signaler une erreur</option>
+          <option value="question">Poser une question</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="message" class={classeLabel}>Message</label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          maxlength="5000"
+          rows="6"
+          class={classeChamp + " mt-1"}
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="email" class={classeLabel}>Email (optionnel)</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          autocomplete="email"
+          class={classeChamp + " mt-1"}
+        />
+        <p class="mt-1 text-xs text-slate-400">Pour recevoir une réponse.</p>
+      </div>
+
+      <input type="hidden" name="page" id="champ-page" value="" />
+
+      {/* Honeypot anti-spam : masqué hors écran, jamais par display:none (les bots
+          ignorent souvent cette règle), et retiré du parcours clavier/lecteur d'écran. */}
+      <div class="champ-piege" aria-hidden="true">
+        <label for="site_web">Site web</label>
+        <input type="text" id="site_web" name="site_web" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button
+        type="submit"
+        class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Envoyer
+      </button>
+    </form>
+
+    <p class="mt-8 text-xs leading-relaxed text-slate-500">
+      <strong>Ce que devient votre message&nbsp;:</strong> il est envoyé par email à l'éditeur du
+      site. L'adresse email que vous laissez n'est utilisée que pour vous répondre, jamais
+      partagée ni réutilisée à d'autres fins. Les messages sont supprimés une fois traités. Pour
+      exercer vos droits (accès, suppression), passez par ce même formulaire.
+    </p>
+
+    <p class="mt-4 text-xs text-slate-500">
+      Plus à l'aise avec GitHub&nbsp;? Ouvrez une
+      <a class="text-blue-700 hover:underline" rel="noopener" target="_blank" href={issuesUrl}
+        >issue sur le dépôt</a
+      >.
+    </p>
+  </main>
+
+  <script>
+    const champPage = document.getElementById("champ-page");
+    if (champPage instanceof HTMLInputElement) {
+      const parametre = new URLSearchParams(location.search).get("page");
+      if (parametre) {
+        champPage.value = parametre;
+      } else if (document.referrer) {
+        try {
+          const referrer = new URL(document.referrer);
+          if (referrer.origin === location.origin) {
+            champPage.value = referrer.pathname;
+          }
+        } catch {
+          // Referrer invalide ou inaccessible : on laisse le champ vide.
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .champ-piege {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+  </style>
+</BaseLayout>

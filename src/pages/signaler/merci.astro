@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Message envoyé — Clairfisc";
+const description = "Votre signalement a bien été envoyé.";
+---
+
+<BaseLayout title={title} description={description} avis={false}>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="mx-auto w-full max-w-2xl px-4 py-10">
+    <h1 class="text-2xl font-bold text-slate-900">Merci !</h1>
+    <p class="mt-4 text-sm text-slate-600">
+      Votre message a bien été envoyé. Si vous avez laissé une adresse email, vous recevrez une
+      réponse dès qu'il aura été traité — sinon, il sera lu mais sans retour possible de notre
+      part.
+    </p>
+    <p class="mt-6 text-sm">
+      <a class="text-blue-700 hover:underline" href="/">← Retour à l'accueil</a>
+    </p>
+  </main>
+</BaseLayout>

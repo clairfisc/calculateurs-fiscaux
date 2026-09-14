@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 import { datesPour } from './src/lib/page-dates.ts';
-import { delegueSonCanonical } from './src/lib/seo-canonical.ts';
+import { delegueSonCanonical, estHorsSitemap } from './src/lib/seo-canonical.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,7 +25,12 @@ export default defineConfig({
     sitemap({
       // Une page qui délègue son canonical à une autre URL n'a rien à faire dans le
       // sitemap : ce serait demander à Google d'indexer ce qu'on lui dit d'ignorer.
-      filter: (page) => !delegueSonCanonical(new URL(page).pathname),
+      // Idem pour les pages listées dans PAGES_HORS_SITEMAP (formulaire de contact,
+      // confirmation) : elles portent un noindex et n'ont pas vocation à être trouvées.
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        return !delegueSonCanonical(pathname) && !estHorsSitemap(pathname);
+      },
 
       // `<lastmod>` adossé aux dates éditoriales (src/lib/page-dates.ts), et non à
       // la date de build : republier le site ne doit pas signaler à Google que

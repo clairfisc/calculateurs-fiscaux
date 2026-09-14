@@ -23,6 +23,20 @@ export const CANONIQUES_DELEGUEES: Record<string, string> = {
   "/pfu-ou-bareme/": "/faut-il-cocher-2op/",
 };
 
+/**
+ * Pages utilitaires sans intérêt de recherche, à exclure du sitemap.
+ *
+ * Différent de `CANONIQUES_DELEGUEES` : il ne s'agit pas ici de cannibalisation
+ * entre deux pages qui répondent à la même intention, mais de pages qui n'ont
+ * simplement rien à faire dans un index (formulaire de contact, confirmation
+ * d'envoi). Ces pages portent par ailleurs un `<meta name="robots" content="noindex">`
+ * posé directement sur la page (slot `head` de BaseLayout) — l'exclusion du
+ * sitemap n'en est que la conséquence cohérente côté découverte.
+ *
+ * Chemins à slash final (cf. `trailingSlash: 'always'`).
+ */
+export const PAGES_HORS_SITEMAP: string[] = ["/signaler/", "/signaler/merci/"];
+
 /** Normalise vers la forme canonique à slash final. */
 function normaliser(pathname: string): string {
   return pathname.endsWith("/") ? pathname : `${pathname}/`;
@@ -40,4 +54,10 @@ export function cheminCanonique(pathname: string): string {
 export function delegueSonCanonical(pathname: string): boolean {
   const chemin = normaliser(pathname);
   return chemin in CANONIQUES_DELEGUEES;
+}
+
+/** Vrai si la page est explicitement exclue du sitemap (cf. `PAGES_HORS_SITEMAP`). */
+export function estHorsSitemap(pathname: string): boolean {
+  const chemin = normaliser(pathname);
+  return PAGES_HORS_SITEMAP.includes(chemin);
 }

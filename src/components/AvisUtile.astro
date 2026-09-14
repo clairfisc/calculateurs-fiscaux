@@ -1,0 +1,103 @@
+---
+/**
+ * AvisUtile.astro — encart de feedback en pied de contenu : « Cette page vous
+ * a-t-elle été utile ? ». Inséré par défaut sur toutes les pages via
+ * BaseLayout (prop d'échappement `avis={false}`, cf. src/layouts/BaseLayout.astro).
+ *
+ * Comportement (vanilla JS, zéro framework, zéro dépendance) :
+ *  - Au clic sur 👍/👎, envoie un POST à /api/avis.php (`page` = location.pathname,
+ *    `avis` = "utile" | "pas-utile"), puis affiche un message de remerciement —
+ *    y compris si la requête échoue : on n'affiche jamais d'erreur pour ce geste
+ *    accessoire, et on ne bloque pas l'UI en attendant la réponse réseau.
+ *  - Anti-redouble : la réponse est mémorisée dans `localStorage` sous la clé
+ *    `avis:<pathname>`. Si elle est déjà présente au chargement, l'état remercié
+ *    s'affiche directement, sans repasser par les boutons.
+ *  - Transparence : le site promet « zéro tracker ». Une ligne sous les boutons
+ *    précise ce qui est envoyé — rien d'autre que la page et la réponse, et
+ *    uniquement si l'internaute clique.
+ */
+---
+
+<div class="mx-auto w-full max-w-5xl px-4">
+  <div id="avis-utile" class="my-8 rounded-lg border border-slate-200 bg-white px-4 py-4">
+    <div data-avis-question class="flex flex-wrap items-center gap-3">
+      <p class="text-sm font-medium text-slate-700">Cette page vous a-t-elle été utile ?</p>
+      <div class="flex gap-2">
+        <button
+          type="button"
+          data-avis="utile"
+          class="rounded-full border border-slate-300 px-3 py-1 text-sm text-slate-700 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700"
+        >
+          👍 Oui
+        </button>
+        <button
+          type="button"
+          data-avis="pas-utile"
+          class="rounded-full border border-slate-300 px-3 py-1 text-sm text-slate-700 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700"
+        >
+          👎 Non
+        </button>
+      </div>
+    </div>
+    <p data-avis-merci hidden class="text-sm font-medium text-slate-700">
+      Merci pour votre retour !
+    </p>
+    <p class="mt-2 text-xs text-slate-400">
+      N'envoie que la page consultée et votre réponse — rien d'autre, et uniquement si vous
+      cliquez.
+    </p>
+    <p class="mt-1 text-xs text-slate-500">
+      <a href="/signaler/" class="text-blue-700 hover:underline">
+        Signaler une erreur ou poser une question →
+      </a>
+    </p>
+  </div>
+</div>
+
+<script>
+  const encart = document.getElementById("avis-utile");
+
+  if (encart) {
+    const cle = `avis:${location.pathname}`;
+    const question = encart.querySelector("[data-avis-question]");
+    const merci = encart.querySelector("[data-avis-merci]");
+
+    const afficherMerci = () => {
+      question?.setAttribute("hidden", "");
+      merci?.removeAttribute("hidden");
+    };
+
+    let dejaRepondu = false;
+    try {
+      dejaRepondu = Boolean(localStorage.getItem(cle));
+    } catch {
+      // Stockage indisponible (navigation privée stricte...) : on retombe sur les boutons.
+    }
+
+    if (dejaRepondu) {
+      afficherMerci();
+    } else {
+      encart.querySelectorAll("[data-avis]").forEach((bouton) => {
+        bouton.addEventListener("click", () => {
+          const avis = bouton.getAttribute("data-avis") ?? "";
+          const corps = new URLSearchParams({ page: location.pathname, avis });
+
+          // Best-effort : ni le succès ni l'échec ne changent l'expérience utilisateur.
+          fetch("/api/avis.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: corps,
+          }).catch(() => {});
+
+          try {
+            localStorage.setItem(cle, avis);
+          } catch {
+            // Rien à faire : au pire, le message réapparaîtra à la prochaine visite.
+          }
+
+          afficherMerci();
+        });
+      });
+    }
+  }
+</script>

@@ -106,3 +106,22 @@ La prod de `clairfisc.fr` tourne sur l'**hébergement web OVH mutualisé**
   par défaut dans l'espace client.
 - **`clairfisc.com` → `clairfisc.fr`** : redirection 301 au niveau **domaine**
   dans le panel OVH (ne consomme pas le slot « 1 site »).
+
+## 5. Dispositif de feedback (avis utile + signalement)
+
+Les seules parties **non statiques** du site : deux scripts PHP servis par
+l'hébergement OVH mutualisé, hors du périmètre Astro.
+
+- **Endpoints** : `/api/avis.php` (encart « cette page vous a-t-elle été
+  utile ? », voir [`src/components/AvisUtile.astro`](src/components/AvisUtile.astro))
+  et `/api/signalement.php` (formulaire [`/signaler/`](src/pages/signaler.astro)).
+  Déployés directement sous `/api/` sur le serveur OVH — **pas buildés par
+  Astro** ni versionnés dans ce dépôt public (dépôt de stratégie/exploitation
+  séparé, cf. mémoire du projet).
+- **Données** : les avis et signalements agrégés sont écrits dans
+  `<home>/clairfisc-donnees/`, **hors du webroot** (`www/`) donc jamais
+  exposés publiquement ni jamais poussés dans un dépôt Git.
+- **Emails** : `signalement.php` envoie depuis `ne-pas-repondre@clairfisc.fr`
+  (expéditeur, pas de boîte surveillée) vers `signalement@clairfisc.fr`, qui
+  redirige vers une boîte personnelle — pas de nouvelle boîte à surveiller
+  côté hébergement.
