@@ -115,9 +115,9 @@ l'hébergement OVH mutualisé, hors du périmètre Astro.
 - **Endpoints** : `/api/avis.php` (encart « cette page vous a-t-elle été
   utile ? », voir [`src/components/AvisUtile.astro`](src/components/AvisUtile.astro))
   et `/api/signalement.php` (formulaire [`/signaler/`](src/pages/signaler.astro)).
-  Déployés directement sous `/api/` sur le serveur OVH — **pas buildés par
-  Astro** ni versionnés dans ce dépôt public (dépôt de stratégie/exploitation
-  séparé, cf. mémoire du projet).
+  Sources versionnées dans [`public/api/`](public/api/) : Astro les copie telles
+  quelles dans `dist/api/` et elles se déploient avec le reste du site. Seuls
+  restent hors dépôt les **données** et le **jeton** (voir ci-dessous).
 - **Données** : les avis et signalements agrégés sont écrits dans
   `<home>/clairfisc-donnees/`, **hors du webroot** (`www/`) donc jamais
   exposés publiquement ni jamais poussés dans un dépôt Git.
@@ -125,3 +125,17 @@ l'hébergement OVH mutualisé, hors du périmètre Astro.
   (expéditeur, pas de boîte surveillée) vers `signalement@clairfisc.fr`, qui
   redirige vers une boîte personnelle — pas de nouvelle boîte à surveiller
   côté hébergement.
+- **Consultation des stats** (`/api/stats.php`) : page privée qui agrège les
+  avis « utile / pas utile » de `clairfisc-donnees/avis.csv`, réservée à
+  l'éditeur via un jeton secret. Provisionnement (une fois, en dehors de tout
+  déploiement Astro) :
+  1. Générer le jeton : `openssl rand -hex 32`.
+  2. Le déposer par SFTP dans `clairfisc-donnees/jeton-stats.txt` — à la
+     racine de l'hébergement, **hors de `www/`**, comme le reste du dossier
+     de données. Un simple copier-coller du contenu suffit (pas de retour à
+     la ligne requis, le fichier est trimmé à la lecture).
+  3. Consulter ensuite `https://clairfisc.fr/api/stats.php?jeton=<valeur>`
+     (ou en-tête `X-Jeton` pour un usage scripté).
+
+  Le jeton ne doit **jamais** entrer dans ce dépôt (ni en clair, ni en
+  historique) : il ne vit que sur le serveur, dans `clairfisc-donnees/`.
