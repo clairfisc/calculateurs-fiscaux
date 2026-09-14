@@ -30,7 +30,7 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   "/dividendes-etrangers-2047/": { publiee: "2026-06-29", modifiee: "2026-06-29" },
   "/plus-values-cession-titres-etrangers/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
   "/plus-values-crypto-2086/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
-  "/comptes-etrangers-3916/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
+  "/comptes-etrangers-3916/": { publiee: "2026-06-26", modifiee: "2026-09-14" },
   "/pfu-ou-bareme/": { publiee: "2026-06-26", modifiee: "2026-08-18" },
 
   // Simulateur d'arbitrage
@@ -42,7 +42,7 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   // Guides
   "/guide-credit-impot-dividendes-etrangers/": { publiee: "2026-06-24", modifiee: "2026-06-29" },
   "/case-8pl-8vl-2026/": { publiee: "2026-06-24", modifiee: "2026-06-29" },
-  "/declarer-ses-cryptos-aux-impots/": { publiee: "2026-06-29", modifiee: "2026-06-29" },
+  "/declarer-ses-cryptos-aux-impots/": { publiee: "2026-06-29", modifiee: "2026-09-14" },
   "/faut-il-cocher-2op/": { publiee: "2026-06-29", modifiee: "2026-08-18" },
   "/reporter-ses-moins-values-bourse/": { publiee: "2026-06-29", modifiee: "2026-06-29" },
   "/case-2bh-2cg/": { publiee: "2026-08-18", modifiee: "2026-08-18" },
@@ -51,13 +51,19 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   // préfixe ci-dessous ne couvre que les fiches filles, pas l'index lui-même.
   "/declarer-compte/": { publiee: "2026-08-24", modifiee: "2026-08-24" },
 
+  // Fiches révisées individuellement (le match exact prime sur la règle par préfixe) :
+  // radiation AMF de Binance France (02/07/2026), agrément bancaire FR de Revolut (10/08/2026).
+  "/declarer-compte/binance/": { publiee: "2026-06-26", modifiee: "2026-09-14" },
+  "/declarer-compte/revolut/": { publiee: "2026-06-26", modifiee: "2026-09-14" },
+
   // Divers
   "/le-projet/": { publiee: "2026-07-01", modifiee: "2026-07-01" },
 };
 
 /**
  * Fiches « déclarer un compte » : générées depuis un même gabarit, elles partagent
- * la date du gabarit plutôt qu'une entrée par établissement.
+ * la date du gabarit plutôt qu'une entrée par établissement — sauf fiches révisées
+ * individuellement, listées en entrée exacte ci-dessus (le match exact prime).
  */
 const PREFIXE_DECLARER_COMPTE = "/declarer-compte/";
 const DATES_DECLARER_COMPTE: DatesPage = {

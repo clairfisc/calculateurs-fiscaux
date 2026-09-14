@@ -120,9 +120,13 @@ change […] constituent une composante des gains nets ou moins-values réalisé
 
 **Règle.** Depuis le **1ᵉʳ janvier 2018**, les plus-values de cession de valeurs mobilières sont
 imposées **de plein droit** (par défaut) au **PFU** : impôt sur le revenu au taux forfaitaire de
-**12,8 %** (+ prélèvements sociaux 17,2 % = 30 % au global), **sans abattement**.
+**12,8 %** + prélèvements sociaux, **sans abattement**. PS : 17,2 % jusqu'aux revenus 2024 ;
+**18,6 % dès l'imposition des revenus 2025** (LFSS 2026 = loi n° 2025-1403 du 30/12/2025,
+art. 12, JO 31/12/2025 ; CSG 9,2 → 10,6 % — les PV
+mobilières relèvent des revenus du **patrimoine**, CSS art. L136-6, hausse applicable dès 2025),
+soit **31,4 %** au global. Cf. `src/lib/pfu-bareme/rates.ts` (§2bis de SOURCES-PFU-BAREME.md).
 
-- Le module calcule l'**assiette** (résultat net, cases) — **pas l'impôt final** (12,8 % / 30 %
+- Le module calcule l'**assiette** (résultat net, cases) — **pas l'impôt final** (12,8 % + PS
   appliqués par l'administration), comme le module 2047 produit des cases et non l'impôt dû.
 - **Cases 2042 / 2042-C :**
   - **3VG** = **plus-value nette imposable** de l'année (après imputation des moins-values).

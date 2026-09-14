@@ -138,12 +138,12 @@ version 2019 « espèces ». Re-vérifier chaque millésime (règle « valider a
 | Établissement | Comptes déclarables | Auto-déplier ? | Conf. |
 |---|---|---|---|
 | **DEGIRO / flatexDEGIRO** | **2** : compte-titres (succursale NL, Amsterdam, 3916) + compte espèces **flatex** (Allemagne, IBAN DE, 3916) | **OUI (2)** | haute |
-| **Revolut** | courant EUR/Épargne (succursale FR, IBAN FR) **NON déclarable** ; titres/Flexible Cash Funds (Lituanie, 3916) + crypto (Chypre, 3916-bis) **si détenus** | non (note) | haute |
+| **Revolut** | courant EUR/Épargne (IBAN FR, tenu en France) **NON déclarable** ; titres/Flexible Cash Funds (Revolut Securities Europe UAB, Lituanie, 3916) + crypto (Revolut Digital Assets Europe Ltd, Chypre, 3916-bis) **si détenus** | non (note) | haute |
 | **eToro** | actions/CFD (3916) **et** crypto (3916-bis) = 2 comptes **si les deux** | non (note) | moy. |
 | **Trade Republic** | espèces (IBAN FR récent = non déclarable / IBAN DE = 3916) + titres (3916) + crypto (3916-bis, PSAN 029) | non (note) | moy. |
 | **N26** | 1 compte (IBAN **DE** → à déclarer ; « rumeur IBAN FR 2023 » **réfutée 0-3**) ; Espaces = même IBAN | non (note) | moy. |
 | **PayPal** | 1 compte ; **exemption e-money** (3 conditions) prime — « toujours déclarable car Luxembourg » **réfuté 0-3** | non | haute |
-| **Binance** | 1 compte 3916-bis ; **Binance France SAS (AMF) = compte FR non déclarable** sinon entité étrangère | non (note) | moy. |
+| **Binance** | 1 compte 3916-bis ; **Binance France SAS = compte FR non déclarable** sinon entité étrangère (radiée AMF 02/07/2026, cf. addendum) | non (note) | moy. |
 | **Coinbase / Kraken** | 1 compte 3916-bis (entité Luxembourg / Payward Irlande) | non | moy. |
 | **IBKR / bunq / Wise** | 1 compte par défaut ; sous-comptes (cash séparé, jars/IBAN devise) **non sourcés comme distincts** → note « à vérifier » | non (note) | basse |
 
@@ -152,3 +152,39 @@ Espaces (N26), vaults (Revolut), soldes multi-devises (Wise), sous-comptes (IBKR
 **Questions ouvertes** (reconfirmer par millésime) : IBAN exact Trade Republic/N26 ; entité Binance de
 l'utilisateur ; soldes multi-devises Wise (1 vs N). Sources : impots.gouv.fr/notice 3916, BOFiP, pages
 d'aide officielles (DEGIRO fiscalité, Revolut tax), guides FR (rotek, moneyvox, portfoliotracker).
+
+## 12. Addendum du 14/09/2026 — actualité Binance & Revolut (revue adversariale sourcée)
+
+- **Binance** : Binance France SAS **radiée du registre AMF le 02/07/2026** (« Automatic
+  caducity due to the end of the MiCA transition period », registre AMF des PSAN radiés,
+  E2022-037) ; Binance a annoncé l'arrêt de ses services sur crypto-actifs **dans l'UE**
+  au 01/07/2026 (Binance Square, post non daté sur l'arrêt UE ; retrait de la demande
+  d'agrément grecque annoncé le 24/06/2026 ; contexte : déclaration ESMA du 23/06/2026 ;
+  presse : Euronews 25/06/2026, CoinDesk 24/06/2026). L'arrêt est **européen** (fin de
+  transition MiCA), pas une décision française. Position officielle Binance : les fonds
+  restent « accessibles à tout moment » — **aucune date limite de retrait à affirmer**.
+  Vers quelle entité les comptes ex-Binance France SAS ont basculé : **non sourcé** → la
+  fiche renvoie aux CGU de l'utilisateur (question ouverte maintenue). Sans effet sur
+  l'obligation déclarative : un compte ayant existé en 2026 se déclare au printemps 2027
+  (année de détention), même clos ou transféré en cours d'année.
+  <https://www.amf-france.org/en/professionals/fintech/my-relations-amf/crypto-asset-service-provider-casp/list-dasps-delisted>
+- **Revolut** : **Revolut Bank S.A.** agréée établissement de crédit français (ACPR/BCE)
+  le **10/08/2026** ; transfert progressif des clients depuis **Revolut Bank UAB**
+  (agrément lituanien LB002119), dont la **succursale française** (SIREN 917 420 077,
+  CIB 28233) tient aujourd'hui les comptes courants FR ; préavis ~2 mois par client, sans
+  calendrier de fin publié. **Déclarativement neutre** : succursale française comme filiale
+  française ⇒ compte courant IBAN FR tenu en France ⇒ non déclarable, avant comme après
+  (règle §11). Dénominations exactes confirmées : Revolut Securities Europe **UAB** (LT) ;
+  Revolut Digital Assets Europe **Ltd** (CY, liste blanche PSCA AMF).
+  <https://www.revolut.com/news/revolut_receives_french_banking_licence/>
+  <https://www.amf-france.org/en/warnings/white-lists/daspcasp/revolut-digital-assets-europe-ltd>
+- **À NE PAS affirmer** (relevé lors de la vérification, sans source primaire — la
+  prochaine veille ne doit pas les réinjecter) : liquidation des positions sur marge
+  Binance au 01/10/2026 (secondaires uniquement) ; toute date limite de retrait Binance ;
+  retour de Binance via un agrément AMF (rumeur FT, rien au registre) ; qualification
+  déclarable de Revolut « Commodities » (or/argent, Revolut Ltd, Royaume-Uni) — à
+  instruire séparément avant tout ajout.
+- **Limite de vérification** : `revolut.com`, `help.revolut.com` et `regafi.fr`
+  inaccessibles en direct (403/404) — les faits Revolut hors AMF reposent sur extraction
+  moteur des pages officielles, pas sur lecture directe ; le CIB 28233 n'a pas pu être
+  confirmé au REGAFI.
