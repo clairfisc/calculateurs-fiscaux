@@ -1,7 +1,16 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Disclaimer from "../../components/content/Disclaimer.astro";
-import { ETABLISSEMENTS, evalueCompte, type Etablissement } from "../../lib/comptes-3916";
+import {
+  ETABLISSEMENTS,
+  evalueCompte,
+  libelleVerdict,
+  conduiteATenir,
+  CLASSE_VERDICT,
+  teneurHorsDeFrancePourType,
+  descriptionFiche,
+  type Etablissement,
+} from "../../lib/comptes-3916";
 
 /** Une page SEO par établissement (longue traîne « déclarer compte {X} impôts »). */
 export function getStaticPaths() {
@@ -17,23 +26,35 @@ interface Props {
 const { etab } = Astro.props as Props;
 
 // Verdict « par défaut » pour ce type d'établissement (réutilise le moteur → cohérence).
-const r = evalueCompte({ type: etab.typeParDefaut, etablissementId: etab.id });
+// Le lieu de tenue est repris de la base quand elle le sait de façon sourcée : sans lui,
+// une fiche DEGIRO perdrait l'information portée par ses gabarits et retomberait à tort
+// sur « selon votre situation ».
+const lieuConnu = teneurHorsDeFrancePourType(etab, etab.typeParDefaut);
+const r = evalueCompte({
+  type: etab.typeParDefaut,
+  etablissementId: etab.id,
+  teneurHorsDeFrance: lieuConnu,
+});
 const estCrypto = etab.formulaireParDefaut === "3916-bis";
-const verdictTexte =
-  r.verdict === "a_declarer"
-    ? `Oui, en principe à déclarer`
-    : r.verdict === "exonere"
-      ? `Potentiellement dispensé`
-      : `À vérifier`;
+// Libellés centralisés (`lib/comptes-3916/libelles.ts`) : ils sont partagés avec le hub et
+// la checklist, et doivent rester vrais pour CHAQUE fiche qui les emprunte. Le type de
+// compte est transmis pour distinguer, sur le chemin `paiement_emoney`, le cas où le
+// moteur n'a jamais établi le lieu de tenue (M5) : « conditions de dispense non remplies »
+// plutôt qu'une affirmation sur le lieu que le moteur n'a pas vérifiée.
+const verdictTexte = libelleVerdict(r.verdict, r.formulaire, etab.typeParDefaut);
+const conduite = conduiteATenir(r.verdict);
 
 // Nom d'usage pour title/H1/description (ex. « Trade Republic » plutôt que la raison
 // sociale complète) ; le corps de la fiche continue d'afficher `designation`.
 const nomAffiche = etab.nomCourt ?? etab.designation;
 
 const title = `Déclarer son compte ${nomAffiche} aux impôts (3916${estCrypto ? " / 3916-bis" : ""}) — 2026`;
-const description =
-  etab.descriptionSeo ??
-  `Faut-il déclarer votre compte ${nomAffiche} aux impôts ? ${verdictTexte}. Formulaire ${etab.formulaireParDefaut}, règles, amendes et fiche à recopier. Outil gratuit, 100 % local.`;
+// Meta description : `descriptionSeo` explicite si défini, sinon un gabarit court dérivé
+// du verdict par défaut (≤ 150 c. environ pour les noms les plus longs — l'ancien
+// gabarit dépassait 160 caractères sur 9 fiches / 12, revue du 19/09/2026, I5).
+// Fonction PARTAGÉE avec `etablissements.test.ts`, qui vérifie sa longueur sur les 12
+// fiches : un changement de gabarit ici doit faire échouer CE test, pas lui échapper.
+const description = descriptionFiche(etab, r);
 const lienOutil = "/comptes-etrangers-3916/";
 ---
 
@@ -45,12 +66,22 @@ const lienOutil = "/comptes-etrangers-3916/";
             Faut-il déclarer votre compte {nomAffiche} aux impôts&nbsp;?
           </h1>
           <p class="mt-1 text-sm text-slate-500">
-            {etab.pays ? `Établissement situé : ${etab.pays}. ` : ""}Formulaire {etab.formulaireParDefaut}
+            {/* Quand le lieu de tenue n'est pas le même pour tous les clients (`lieuConnu`
+                indéterminé), `pays` ne désigne que l'entité D'ORIGINE : l'afficher en
+                « Établissement situé » contredirait visuellement une fiche dont la réponse
+                différenciante est justement « ça dépend de votre succursale » (M2). */}
+            {etab.pays
+              ? lieuConnu === undefined
+                ? `Entité d'origine : ${etab.pays}. `
+                : `Établissement situé : ${etab.pays}. `
+              : ""}Formulaire {etab.formulaireParDefaut}
             {estCrypto ? " (comptes d'actifs numériques)" : ""}.
           </p>
         </header>
 
-        <p class="rounded-md border border-amber-300 bg-amber-100 px-3 py-2 text-amber-900">
+        {/* Couleur pilotée par le verdict : un encadré ambre « attention » sur une réponse
+            « hors champ » contredisait visuellement le texte qu'il portait. */}
+        <p class={`rounded-md border px-3 py-2 ${CLASSE_VERDICT[r.verdict]}`}>
           <strong>{verdictTexte}.</strong> {r.motif}
         </p>
 
@@ -100,9 +131,14 @@ const lienOutil = "/comptes-etrangers-3916/";
           </a>
         </div>
 
+        {/* Conduite à tenir : dire ce qu'il faut FAIRE, et à quel coût. L'ancienne phrase
+            « rapprochez-vous de la doctrine ou d'un professionnel » renvoyait le lecteur
+            vers une consultation payante là où l'asymétrie de sanction suffit à décider. */}
+        {conduite && <p class="rounded-md bg-slate-100 px-3 py-2 text-sm">{conduite}</p>}
+
         <p class="text-xs text-slate-500">
           Source du verdict&nbsp;: {r.source}. Outil d'aide informative, ne remplace pas la doctrine officielle ni
-          un conseil professionnel. {r.verdict === "a_verifier" ? "Ce cas n'est pas tranché : rapprochez-vous de la doctrine ou d'un professionnel." : ""}
+          un conseil professionnel.
         </p>
 
         <Disclaimer />

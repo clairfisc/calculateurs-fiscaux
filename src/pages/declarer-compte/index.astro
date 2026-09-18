@@ -12,7 +12,12 @@
  *    3916) alors qu'elles classent déjà en positions 10-15. Ce hub les double.
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { ETABLISSEMENTS, evalueCompte } from "../../lib/comptes-3916";
+import {
+  ETABLISSEMENTS,
+  evalueCompte,
+  libelleVerdictCourt,
+  teneurHorsDeFrancePourType,
+} from "../../lib/comptes-3916";
 
 const title =
   "Déclarer son compte étranger aux impôts : fiches par établissement (3916)";
@@ -25,38 +30,44 @@ const GROUPES = [
     cle: "titres",
     titre: "Courtiers et comptes-titres",
     accroche:
-      "Un compte-titres ouvert chez un courtier établi hors de France relève du formulaire 3916.",
+      "Un compte-titres — ou un PEA — relève du formulaire 3916 si l'établissement qui le tient est situé hors de France. L'enveloppe ne change rien : seul compte le lieu de tenue, et la succursale française d'un courtier européen tient un compte français.",
     types: ["titres_cto", "pea"],
   },
   {
     cle: "banques",
     titre: "Néobanques et comptes de paiement",
     accroche:
-      "Néobanques et services de paiement étrangers : à déclarer, sauf exemption étroite pour certains comptes de monnaie électronique adossés à un compte français.",
+      "Un compte de néobanque est déclarable s'il est tenu hors de France : une néobanque à succursale française (IBAN FR) tient, elle, un compte français. Une dispense existe par ailleurs pour les comptes servant à payer ses achats ou encaisser ses ventes de biens en ligne, adossés à un compte français.",
     types: ["neobanque", "banque", "paiement_emoney"],
   },
   {
     cle: "crypto",
     titre: "Plateformes d'actifs numériques",
     accroche:
-      "Un compte ouvert chez un PSAN étranger relève du 3916-bis, et se déclare même sans la moindre cession.",
+      "Un compte ouvert chez un PSAN-PSCA étranger relève du 3916-bis, et se déclare même sans la moindre cession. À l'inverse, un wallet auto-hébergé dont vous détenez seul les clés n'est ouvert auprès de personne : il est hors champ ; les NFT auto-conservés, eux, ne sont pas tranchés depuis la loi du 25/06/2026.",
     types: ["exchange_crypto", "wallet_auto_heberge"],
   },
 ] as const;
 
 /** Fiche prête à afficher : verdict calculé par le moteur, pas ressaisi à la main. */
 const fiches = ETABLISSEMENTS.map((etab) => {
-  const r = evalueCompte({ type: etab.typeParDefaut, etablissementId: etab.id });
+  const lieuConnu = teneurHorsDeFrancePourType(etab, etab.typeParDefaut);
+  const r = evalueCompte({
+    type: etab.typeParDefaut,
+    etablissementId: etab.id,
+    teneurHorsDeFrance: lieuConnu,
+  });
   return {
     etab,
     formulaire: r.formulaire,
     verdict: r.verdict,
-    libelleVerdict:
-      r.verdict === "a_declarer"
-        ? "En principe à déclarer"
-        : r.verdict === "exonere"
-          ? "Potentiellement dispensé"
-          : "À vérifier",
+    // Lieu de tenue indéterminé (dépend de la succursale du client) : `pays` ne désigne
+    // alors que l'entité d'origine, pas de badge à afficher sur le hub (M2) — il
+    // contredirait la réponse différenciante « ça dépend de votre IBAN/succursale ».
+    lieuConnu: lieuConnu !== undefined,
+    // Libellé centralisé (`lib/comptes-3916/libelles.ts`), partagé avec la fiche et la
+    // checklist — les trois surfaces avaient divergé.
+    libelleVerdict: libelleVerdictCourt(r.verdict, r.formulaire, etab.typeParDefaut),
   };
 });
 
@@ -108,9 +119,12 @@ const groupes = GROUPES.map((g) => ({
                   >
                     {f.etab.nomCourt ?? f.etab.designation}
                   </a>
+                  {/* `formulaire` est null quand il n'y a rien à déposer (hors champ,
+                      dispensé) : ne pas afficher « formulaire null ». */}
                   <span class="text-sm text-slate-600">
-                    {f.libelleVerdict} · formulaire {f.formulaire}
-                    {f.etab.pays ? ` · ${f.etab.pays}` : ""}
+                    {f.libelleVerdict}
+                    {f.formulaire ? ` · formulaire ${f.formulaire}` : ""}
+                    {f.etab.pays && f.lieuConnu ? ` · ${f.etab.pays}` : ""}
                   </span>
                 </li>
               ))}

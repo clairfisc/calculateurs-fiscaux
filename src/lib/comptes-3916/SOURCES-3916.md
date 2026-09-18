@@ -1,14 +1,25 @@
 # Sources & règles — module checklist 3916 / 3916-bis (comptes étrangers)
 
 > **Oracle de validation.** Établi le 2026-06-26 par recherche multi-sources +
-> vérification adversariale 3 votes (**25/25 affirmations confirmées, 0 réfutée**),
-> contre des sources **primaires** (Légifrance/CGI, BOFiP, formulaires & FAQ
-> impots.gouv). Millésime **déclaration des revenus 2025 / 2026**.
+> vérification adversariale 3 votes (**25/25 affirmations confirmées, 0 réfutée**
+> **à cette date** — la révision du 18/09/2026, ci-dessous, a depuis **réfuté 3**
+> de ces affirmations : IBAN FR N26 « infirmé », compte-titres Trade Republic
+> « à déclarer » sans nuance, attribution au seul critère « lieu d'établissement du
+> teneur » (lecture raisonnée) d'une portée que seul le BOFiP §180 fonde réellement
+> (« une déclaration par compte » — révision du 19/09/2026, la correction du 18/09/2026
+> avait à tort écarté ce paragraphe en bloc) — et **tranché 4** questions alors laissées
+> ouvertes), contre des sources
+> **primaires** (Légifrance/CGI, BOFiP, formulaires & FAQ impots.gouv). Millésime
+> **déclaration des revenus 2025 / 2026**.
 >
-> Ce module est un **moteur de règles juridiques** (verdict par compte :
-> **à déclarer / exonéré / à vérifier**), pas un calcul. Il dérive de cet oracle.
-> ⚠️ Les **cas ambigus (§9)** doivent être rendus « à vérifier + source », **jamais
-> tranchés à tort** (= crédibilité).
+> Ce module est un **moteur de règles juridiques** (verdict par compte, révisé le
+> 18/09/2026 en **cinq états** : **à déclarer / hors champ / dispensé / info
+> manquante / non tranché** — remplaçant l'ancien triptyque à déclarer / exonéré /
+> à vérifier), pas un calcul. Il dérive de cet oracle.
+> ⚠️ Les **cas non tranchés (§9)** doivent être rendus « non tranché + conduite à
+> tenir », **jamais tranchés à tort** (= crédibilité) — mais un cas que les textes
+> tranchent ne doit pas non plus rester en suspens (cf. révision du 18/09/2026,
+> qui a corrigé deux excès de prudence sur le PEA et le wallet auto-hébergé).
 
 ## 1. Sources officielles (à citer)
 
@@ -38,9 +49,23 @@ clôturé ou utilisé à l'étranger, pendant tout ou partie de l'année n. »
 
 ## 3. Personnes concernées
 
-Résidents fiscaux FR (personnes physiques, associations, sociétés non commerciales). Au-delà du
-**titulaire** : **co-titulaire**, **bénéficiaire / ayant droit économique**, et **détenteur d'une
-procuration** (dès qu'il l'utilise, pour lui-même ou un résident). *(Art. 344 A III ; BOFiP §50.)*
+Résidents fiscaux FR (personnes physiques, associations, sociétés non commerciales).
+Au-delà du **titulaire**, l'art. 344 A, III distingue deux notions qu'il ne faut pas
+confondre :
+- compte **détenu** — « *Un compte est réputé être détenu par l'une des personnes
+  visées au premier alinéa dès lors que celle-ci en est titulaire, co-titulaire,
+  bénéficiaire économique ou ayant droit économique.* » (BOI-CF-CPF-30-20 §120, 3ᵉ al.) ;
+- compte **utilisé** — suppose **au moins une opération de crédit ou de débit** dans la
+  période, que la personne soit titulaire ou qu'elle ait agi **par procuration**, pour
+  elle-même ou au profit d'un résident.
+
+Une procuration jamais utilisée ne crée donc pas, à elle seule, un compte « utilisé ».
+**Jurisprudence** : CE, 8ᵉ et 3ᵉ ch., **8 mars 2023, n° 463267** — entre dans le champ
+tout compte utilisé à l'étranger « quel qu'en soit le titulaire, y compris si ce
+titulaire est une société commerciale ».
+**RM Mizzon** (QE n° 06868, JO Sénat 31/08/2023, p. 5186) : détenir une participation
+dans une société étrangère ou en être le dirigeant ne fait pas, **à lui seul**, entrer
+dans le champ.
 
 ## 4. Comptes bancaires & titres (3916) — définition large
 
@@ -65,15 +90,33 @@ principaux PSAN par **code** (aide, liste non exhaustive) :
 ⚠️ Le code **029 Trade Republic = volet PSAN/crypto** (3916-bis) — **ne préjuge PAS** du
 traitement d'un **compte-titres / PEA** actions-ETF chez TR (§9).
 
-## 6. Exemption monnaie électronique (e-money, type PayPal) — 3 conditions CUMULATIVES
+## 6. Dispense des comptes de paiement / encaissement en ligne — 3 conditions CUMULATIVES
 
-1. le compte sert **uniquement** à réaliser **en ligne des paiements d'achats ou des
-   encaissements afférents à des ventes de biens** *(« biens », pas « biens et services »)* ;
+1. le compte a pour objet de réaliser **en ligne des paiements d'achats OU des
+   encaissements afférents à des ventes de biens** *(le « ou » est porteur — un compte
+   servant seulement à payer ses achats remplit la condition ; « biens », pas « biens et
+   services »)* ;
 2. il est **adossé à un autre compte ouvert en France** ;
-3. la **somme des encaissements annuels** crédités (afférents à ces ventes) **≤ 10 000 €**
-   *(seuil apprécié globalement sur tous les comptes de même nature du titulaire)*.
+3. la **somme des encaissements annuels** crédités (afférents à ces ventes) **≤ 10 000 €**,
+   seuil apprécié « *en faisant la somme de tous les encaissements effectués sur
+   l'ensemble des comptes détenus par le même titulaire et ayant pour objet de réaliser
+   en ligne des paiements d'achats ou des encaissements afférents à des ventes de
+   biens* » — **global, pas compte par compte**.
 
-**Si une seule condition manque → à déclarer.** *(BOFiP §85 ; FAQ PayPal impots.gouv.)*
+**Si une seule condition manque → à déclarer** ; ne couvre **pas** les prestations de
+**services** (déclarable dès le premier euro encaissé). *(BOFiP BOI-CF-CPF-30-20 §85 ;
+FAQ PayPal impots.gouv.)*
+
+Le BOFiP §85 ne dit **jamais** « monnaie électronique » : il vise « les comptes détenus à
+l'étranger dans des **établissements financiers** ». La dispense est fondée sur
+l'**usage** du compte, pas sur le statut du prestataire — elle est donc ouverte aux
+comptes de néobanque qui remplissent les trois conditions (cf. addendum du 18/09/2026).
+
+**Ancrage : purement doctrinal.** Cherché et **absent** des art. 344 A, 344 B, 344 C et
+344 G decies de l'annexe III au CGI (vérifié le 18/09/2026). Étant publiée, la dispense
+est **opposable** à l'administration sur le fondement du **LPF art. L. 80 A** — ce qui
+vaut mieux qu'une tolérance : c'est une garantie. *(Question ouverte du §9 sur l'ancrage
+réglementaire de l'exemption e-money : FERMÉE par cette vérification.)*
 
 ## 7. Sanctions
 
@@ -99,20 +142,30 @@ traitement d'un **compte-titres / PEA** actions-ETF chez TR (§9).
 | 9 | **Compte-titres ordinaire (CTO)** chez courtier étranger | **à déclarer** *(def. large 344 A I)* — afficher la nuance TR/PEA | §4 + §9 |
 | 10 | **Assurance-vie luxembourgeoise** | **à déclarer — régime DISTINCT** (art. 1649 AA, sanction 1766), **pas** le barème 3916 bancaire | §4, §9 |
 
-## 9. Cas « à vérifier » (NE PAS trancher) & questions ouvertes
+## 9. Cas non tranchés (NE PAS trancher à tort) & questions ouvertes
 
-- **PEA chez courtier étranger (Trade Republic)** : aucune source primaire ne tranche le sort d'un
-  PEA « enveloppe FR » tenu par un établissement étranger → **« à vérifier » + renvoi doctrine**.
-- **CTO non-crypto chez courtier étranger** : la def. large suggère « à déclarer », mais aucun claim
-  explicite ; **ne pas confondre** avec le code PSAN 029 (crypto). Afficher à déclarer + note.
-- **Néobanques UE** : principe général « tout compte hors de France, même UE/SEPA = à déclarer » ;
-  afficher « à déclarer sauf exemption e-money » + renvoi aux 3 conditions. Non vérifié au cas par cas.
+**Tranchés le 18/09/2026 (retirés de cette liste)** : PEA chez courtier étranger · CTO
+non-crypto chez courtier étranger · wallet auto-hébergé · ancrage réglementaire de la
+dispense e-money. Le discriminant retenu pour les trois premiers est le lieu
+d'établissement du teneur de compte (`teneurHorsDeFrance`, cf. §11) ; le quatrième est
+fermé au §6.
+
+- **NFT en auto-détention (nouveau au 01/07/2026)** : le second membre de l'art. 1649
+  bis C vise les « crypto-actifs uniques et non fongibles […] détenus ou utilisés à
+  l'étranger », **sans condition de dépositaire tiers** — et l'art. 344 G decies, I ne
+  définit que les « comptes ». Ce que « à l'étranger » signifie pour un NFT auto-conservé
+  n'est dit ni par les textes, ni par la doctrine, ni par la jurisprudence.
+  → **non tranché** ; conduite à tenir : déclarer par précaution.
+- **Portée de l'amende du 1736 X** : « 750 € **par portefeuille ou par crypto-actif
+  unique et non fongible** non déclarés » — « par NFT » ou « par portefeuille » n'est
+  tranché par aucune source. Ne pas chiffrer.
+- **Critère « succursale française ⇒ compte français »** : voir §11, c'est une lecture
+  raisonnée et non une citation.
+- **Non instruits** (ne pas présenter comme résolus) : soldes multi-devises Wise ·
+  sous-comptes IBKR · entité de destination des comptes ex-Binance France SAS ·
+  Revolut Commodities (or/argent, Revolut Ltd, Royaume-Uni).
 - **Assurance-vie luxembourgeoise** : obligation **distincte** (1649 AA / sanction 1766) — à traiter
   hors du régime « compte bancaire 3916 ».
-- **Wallet auto-hébergé** : lecture standard = non déclarable (pas de tiers teneur), **non confirmée
-  par source primaire ici** → « à vérifier ».
-- *Ancrage réglementaire précis de l'exemption e-money (décret/article exact)* : non isolé — BOFiP §85
-  + FAQ font foi pour le module ; à compléter si besoin.
 
 ## 10. Champs de la fiche par compte (à recopier sur impots.gouv)
 
@@ -128,30 +181,67 @@ sur impots.gouv, **non stockée**.)*
 art. 344 A I, utiliser la version « valeurs mobilières, titres ou fonds » (décret 2020-118), pas la
 version 2019 « espèces ». Re-vérifier chaque millésime (règle « valider avant de déployer »).*
 
-## 11. Structures multi-comptes par établissement (validé 29/06/2026)
+## 11. Structures multi-comptes par établissement (validé 29/06/2026, révisé 18/09/2026)
 
-> Recherche multi-sources + vérif adversariale (104 agents). **Règle fondatrice (BOFiP
-> BOI-CF-CPF-30-20 §180) : une déclaration PAR COMPTE distinct** (numéro/IBAN propre) ;
-> la devise seule ne crée pas un compte. Critère de déclarabilité = **établissement teneur
-> à l'étranger** ; un IBAN FR de succursale française ⇒ compte français (non déclarable).
+> Recherche multi-sources + vérif adversariale (104 agents). Le BOFiP est **muet** sur la
+> succursale (vérifié dans tout le BOI-CF-CPF-30-20 le 18/09/2026). En revanche, le
+> BOFiP §180 fonde bien la règle « une déclaration par compte » : « Il doit être
+> procédé à une déclaration par compte ouvert, détenu, utilisé ou clos à l'étranger. » (Révision du
+> 19/09/2026 : la correction du 18/09/2026 était elle-même allée trop loin en écartant
+> ce paragraphe en bloc — seul le critère ci-dessous n'en relève pas.) **Seul le critère
+> « établissement teneur situé hors de France » est une lecture raisonnée, pas une
+> citation** : il se déduit de la lettre de l'art. 1649 A (« à l'étranger »), de l'art.
+> 344 B (la déclaration porte sur « la désignation et l'adresse de la personne
+> dépositaire ou gestionnaire auprès de laquelle le compte est ouvert ») et du cerfa
+> 3916, qui demande le **pays** de l'organisme gestionnaire.
+> Contre-argument à connaître : une succursale n'a pas de personnalité morale propre.
+> Aucune décision CE/CAA identifiée ne tranche. Une déclaration **par compte** distinct
+> (numéro/IBAN propre) reste la règle ; la devise seule ne crée pas un compte.
 
 | Établissement | Comptes déclarables | Auto-déplier ? | Conf. |
 |---|---|---|---|
 | **DEGIRO / flatexDEGIRO** | **2** : compte-titres (succursale NL, Amsterdam, 3916) + compte espèces **flatex** (Allemagne, IBAN DE, 3916) | **OUI (2)** | haute |
 | **Revolut** | courant EUR/Épargne (IBAN FR, tenu en France) **NON déclarable** ; titres/Flexible Cash Funds (Revolut Securities Europe UAB, Lituanie, 3916) + crypto (Revolut Digital Assets Europe Ltd, Chypre, 3916-bis) **si détenus** | non (note) | haute |
 | **eToro** | actions/CFD (3916) **et** crypto (3916-bis) = 2 comptes **si les deux** | non (note) | moy. |
-| **Trade Republic** | espèces (IBAN FR récent = non déclarable / IBAN DE = 3916) + titres (3916) + crypto (3916-bis, PSAN 029) | non (note) | moy. |
-| **N26** | 1 compte (IBAN **DE** → à déclarer ; « rumeur IBAN FR 2023 » **réfutée 0-3**) ; Espaces = même IBAN | non (note) | moy. |
-| **PayPal** | 1 compte ; **exemption e-money** (3 conditions) prime — « toujours déclarable car Luxembourg » **réfuté 0-3** | non | haute |
+| **Trade Republic** | espèces + titres + **PEA** : succursale française (depuis le 09/01/2025) → **NON déclarables** ; crypto tenu à Berlin (3916-bis, PSAN 029) → **à déclarer** ; clients encore servis entièrement depuis l'Allemagne (IBAN DE) → à déclarer au 3916 | non (note) | haute |
+| **N26** | IBAN **FR** (succursale France, REGAFI 72460) → **NON déclarable** ; IBAN **DE** (Berlin) → **à déclarer**, y compris l'année de la migration ; Espaces = même IBAN (sauf comptes ouverts hors France/Italie/Espagne) | non (note) | haute |
+| **PayPal** | 1 compte ; **dispense** BOFiP §85 (3 conditions) prime — « toujours déclarable car Luxembourg » **réfuté 0-3** | non | haute |
 | **Binance** | 1 compte 3916-bis ; **Binance France SAS = compte FR non déclarable** sinon entité étrangère (radiée AMF 02/07/2026, cf. addendum) | non (note) | moy. |
 | **Coinbase / Kraken** | 1 compte 3916-bis (entité Luxembourg / Payward Irlande) | non | moy. |
-| **IBKR / bunq / Wise** | 1 compte par défaut ; sous-comptes (cash séparé, jars/IBAN devise) **non sourcés comme distincts** → note « à vérifier » | non (note) | basse |
+| **IBKR / bunq / Wise** | 1 compte par défaut ; sous-comptes (cash séparé, jars/IBAN devise) **non sourcés comme distincts** → question ouverte (§9) | non (note) | basse |
 
 **Sous-comptes NON auto-dépliés** (non fermement sourcés comme distincts) : devises AutoFX (DEGIRO),
 Espaces (N26), vaults (Revolut), soldes multi-devises (Wise), sous-comptes (IBKR/Binance).
-**Questions ouvertes** (reconfirmer par millésime) : IBAN exact Trade Republic/N26 ; entité Binance de
-l'utilisateur ; soldes multi-devises Wise (1 vs N). Sources : impots.gouv.fr/notice 3916, BOFiP, pages
-d'aide officielles (DEGIRO fiscalité, Revolut tax), guides FR (rotek, moneyvox, portfoliotracker).
+**Questions ouvertes** (reconfirmer par millésime) : entité Binance de l'utilisateur ; soldes
+multi-devises Wise (1 vs N). Sources : impots.gouv.fr/notice 3916, BOFiP, pages d'aide officielles
+(DEGIRO fiscalité, Revolut tax), guides FR (rotek, moneyvox, portfoliotracker).
+
+**Précisions sourcées du 18/09/2026** (REGAFI = registre des agents financiers, ACPR) :
+
+> **N26** : IBAN **FR confirmé** — communiqué N26 du 05/07/2023, IBAN français attribué
+> aux nouveaux clients **depuis juin 2023**, clients existants migrés **sur invitation**
+> par groupes (achèvement **non sourcé** : garder les deux branches). Teneur du compte FR :
+> **N26 Bank SE, Succursale France**, 17-21 rue Saint-Fiacre, 75002 Paris — REGAFI
+> **72460**, CIB 20433 (enregistré le 15/03/2018), SIREN **840 460 943**. Entité DE :
+> N26 Bank SE, Voltairestraße 8, 10179 Berlin (REGAFI 66029). Espaces à IBAN dédié :
+> réservés aux comptes premium ouverts en Europe **hors France, Italie, Espagne** → pour un
+> compte ouvert en France, un seul compte. *(Les mentions légales n26.com affichent « code
+> REGAFI 20433 », qui est en réalité le CIB : ne pas recopier cette erreur.)*
+
+> **Trade Republic** : succursale française ouverte le **09/01/2025** — « Trade Republic
+> Bank GmbH, Succursale France », REGAFI **741192**, CIB 31233 (21/11/2024), SIREN
+> **900 796 855**, c/o Regus, 75 bd Haussmann, 75008 Paris. Espèces (IBAN FR), **titres**
+> et **PEA** tenus par la succursale ⇒ **non déclarables**. Crypto tenu **à Berlin** en
+> libre prestation de services (MiCA BaFin, liste blanche AMF, depuis le **28/04/2025**)
+> ⇒ **3916-bis**, PSAN 029. Certains clients restent servis **entièrement** depuis
+> l'Allemagne (mentions légales) ⇒ garder la branche IBAN DE. Adresse de l'entité parente
+> tranchée sur REGAFI : **Brunnenstr. 19-21, 10119 Berlin** (et non Köpenicker Straße,
+> non confirmée au registre).
+
+> Source d'entité réutilisable : `regafi.fr/api/explore/v2.1/catalog/datasets/prd-banque-entites/records`
+> (API ODS publique). Donne dénomination, type (succursale passeport / LPS), CIB, SIREN,
+> adresse et date d'enregistrement. À préférer au site regafi.fr (403) pour toute
+> vérification d'entité.
 
 ## 12. Addendum du 14/09/2026 — actualité Binance & Revolut (revue adversariale sourcée)
 
@@ -188,3 +278,54 @@ d'aide officielles (DEGIRO fiscalité, Revolut tax), guides FR (rotek, moneyvox,
   inaccessibles en direct (403/404) — les faits Revolut hors AMF reposent sur extraction
   moteur des pages officielles, pas sur lecture directe ; le CIB 28233 n'a pas pu être
   confirmé au REGAFI.
+
+## 13. Addendum du 18/09/2026 — loi n° 2026-534 du 25 juin 2026 (crypto-actifs)
+
+**Réécriture du champ déclaratif crypto**, en vigueur au **1ᵉʳ juillet 2026** :
+
+- **CGI art. 1649 bis C** (loi n° 2026-534 du 25/06/2026, art. 91) : « *les références
+  des portefeuilles de crypto-actifs soumis au règlement (UE) 2023/1114 […] ouverts,
+  détenus, utilisés ou clos **auprès d'entreprises, personnes morales, institutions ou
+  organismes établis à l'étranger** ainsi que celles des crypto-actifs uniques et non
+  fongibles, au sens du 3 de l'article 2 du même règlement, **détenus ou utilisés à
+  l'étranger*** ». « Actifs numériques » → « crypto-actifs » (MiCA) ; **NFT ajoutés**.
+- **CGI ann. III art. 344 G decies, I** : « *Les comptes à déclarer […] sont ceux
+  **ouverts auprès de toute personne de droit privé ou public qui reçoit habituellement
+  en dépôt des crypto-actifs** mentionnés à l'article 150 VH bis* ». Cette définition
+  positive du champ — celle qui met l'auto-détention hors champ, pas un *a contrario* —
+  date du **décret n° 2019-656 du 27/06/2019, art. 2** (critère du dépôt auprès d'un
+  tiers, alors formulé pour les « actifs numériques »). Le **décret n° 2026-562 du
+  29/06/2026**, art. 5, ne fait que l'**harmoniser** au vocabulaire MiCA
+  (« crypto-actifs ») : il ne change pas le critère du dépositaire tiers, il ne faut pas
+  lui attribuer seul la définition d'origine (M4, revue du 19/09/2026).
+- **CGI art. 1736, X** : « 750 € **par portefeuille ou par crypto-actif unique et non
+  fongible** non déclarés ou 125 € par omission », plafond 10 000 €/déclaration ;
+  doublés (1 500 €/250 €) si valeur vénale > 50 000 € à un moment de l'année.
+- **CGI art. 150 VH ter** (créé) : NFT imposés selon le régime du bien sous-jacent —
+  applicable aux cessions **à compter du 01/01/2026**.
+- **CGI art. 1729-0 A** : majoration de **80 %** étendue aux crypto-actifs qui auraient
+  dû être déclarés au 1649 bis C, l'amende du 1736 X jouant comme **plancher**.
+- **LPF art. L. 181-0 A** (art. 90) : reprise **10 ans** étendue aux droits
+  d'enregistrement et à l'IFI assis sur des avoirs crypto non déclarés à l'étranger.
+
+**La doctrine n'a pas suivi** : `BOI-RPPM-PVBMC-30-30` reste au **23/04/2024** (et vise
+encore l'art. L. 54-10-1 CMF), `BOI-CF-INF-20-10-50` au 26/05/2021,
+`BOI-CF-CPF-30-20` au 26/05/2021. Aucune consultation publique BOFiP en cours sur le
+sujet (vérifié le 18/09/2026). Toute affirmation sur le nouveau périmètre doit donc
+s'appuyer sur **le texte**, en le disant.
+
+**À NE PAS affirmer** — relevé lors de la vérification, sans fondement dans le texte en
+vigueur : l'**amende proportionnelle de 5 % du solde créditeur** au-delà de 50 000 €
+(elle revient dans de nombreuses sources tierces ; le IV-2 de l'art. 1736, version en
+vigueur au 01/07/2026, ne comporte **que** 1 500 € et 10 000 €).
+
+**Source d'entité Trade Republic** : mentions légales officielles lues via le payload
+Nuxt `https://traderepublic.com/en-fr/imprint/_payload.json` (la page HTML étant rendue
+côté client, ni WebFetch ni curl n'en extraient le texte) — **consulté le 18/09/2026**.
+Verbatim retenu : « *The exercise of safekeeping and administration of financial
+instruments on behalf of customers with a Custody Account at the Branch France, the
+deposit-taking with a French IBAN account, the execution of orders on behalf of Customers
+(principal brokerage) as well as the offer of the Plan d'Epargne des Actions (PEA) are
+carried out by Trade Republic Bank GmbH through its French branch* » ; « *There are also
+customers for whom Trade Republic Bank GmbH provides all of the services on a
+cross-border basis.* » ; « *The custody of crypto-assets is also performed in Berlin.* »

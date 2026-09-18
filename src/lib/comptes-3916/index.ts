@@ -5,3 +5,4 @@
 export * from "./types";
 export * from "./regles";
 export * from "./etablissements";
+export * from "./libelles";

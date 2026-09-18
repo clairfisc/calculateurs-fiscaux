@@ -30,13 +30,13 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   "/dividendes-etrangers-2047/": { publiee: "2026-06-29", modifiee: "2026-06-29" },
   "/plus-values-cession-titres-etrangers/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
   "/plus-values-crypto-2086/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
-  "/comptes-etrangers-3916/": { publiee: "2026-06-26", modifiee: "2026-09-14" },
+  "/comptes-etrangers-3916/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
   "/pfu-ou-bareme/": { publiee: "2026-06-26", modifiee: "2026-08-18" },
 
   // Simulateur d'arbitrage
   "/purger-ses-moins-values/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
   "/quand-convertir-ses-cryptos/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
-  "/pea-ou-compte-titres/": { publiee: "2026-06-30", modifiee: "2026-07-01" },
+  "/pea-ou-compte-titres/": { publiee: "2026-06-30", modifiee: "2026-09-18" },
   "/donner-ou-vendre-des-actions/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
 
   // Guides
@@ -49,15 +49,20 @@ export const DATES_PAGES: Record<string, DatesPage> = {
 
   // Hub des fiches établissement. Entrée explicite nécessaire : la règle par
   // préfixe ci-dessous ne couvre que les fiches filles, pas l'index lui-même.
-  "/declarer-compte/": { publiee: "2026-08-24", modifiee: "2026-08-24" },
+  "/declarer-compte/": { publiee: "2026-08-24", modifiee: "2026-09-18" },
 
   // Fiches révisées individuellement (le match exact prime sur la règle par préfixe) :
   // radiation AMF de Binance France (02/07/2026), agrément bancaire FR de Revolut (10/08/2026) +
-  // sections IBAN FR ajoutées (18/09/2026, changement de fond). Trade Republic et N26 n'ont eu
-  // qu'un ajustement cosmétique de title/description : pas d'entrée dédiée, la règle par préfixe
-  // (DATES_DECLARER_COMPTE) s'applique.
-  "/declarer-compte/binance/": { publiee: "2026-06-26", modifiee: "2026-09-14" },
+  // sections IBAN FR ajoutées (18/09/2026, changement de fond). Trade Republic et N26 ont, elles,
+  // reçu une correction de fond le 18/09/2026 (moteur 5 états + deux affirmations factuelles
+  // fausses corrigées) ; PayPal et Wise ont vu leur note réécrite (dispense ouverte aux
+  // néobanques, seuil apprécié globalement) : les quatre sortent donc de la règle par préfixe.
+  "/declarer-compte/binance/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
   "/declarer-compte/revolut/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
+  "/declarer-compte/trade-republic/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
+  "/declarer-compte/n26/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
+  "/declarer-compte/paypal/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
+  "/declarer-compte/wise/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
 
   // Divers
   "/le-projet/": { publiee: "2026-07-01", modifiee: "2026-07-01" },
@@ -71,7 +76,7 @@ export const DATES_PAGES: Record<string, DatesPage> = {
 const PREFIXE_DECLARER_COMPTE = "/declarer-compte/";
 const DATES_DECLARER_COMPTE: DatesPage = {
   publiee: "2026-06-26",
-  modifiee: "2026-06-29",
+  modifiee: "2026-09-18",
 };
 
 /** Normalise vers la forme canonique à slash final. */

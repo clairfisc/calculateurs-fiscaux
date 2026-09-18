@@ -99,9 +99,14 @@ export const GARDE_FOUS_PEA_CTO: readonly string[] = [
   "Le PEA a un plafond de versements de 150 000 € (225 000 € cumulé avec un PEA-PME). C'est un " +
     "plafond de versements, pas de valorisation : le plan peut dépasser ce montant par capitalisation. " +
     "Ce simulateur ne vérifie pas ce plafond.",
-  "Un retrait du PEA avant 5 ans entraîne en principe la clôture du plan et l'imposition du gain net " +
-    "réalisé depuis l'ouverture (impôt sur le revenu au PFU ou au barème, plus prélèvements sociaux). " +
-    "Un retrait après 5 ans est exonéré d'impôt sur le revenu, mais les prélèvements sociaux restent dus.",
+  "Un retrait du PEA avant 5 ans entraîne la clôture du plan et l'imposition du gain net réalisé " +
+    "depuis l'ouverture (impôt sur le revenu au PFU ou au barème, plus prélèvements sociaux). " +
+    "Quatre exceptions légales font échapper le retrait à la clôture (C. mon. fin. art. L221-32) : " +
+    "licenciement, invalidité (art. L. 341-4, 2° ou 3°, du code de la sécurité sociale) ou mise à la " +
+    "retraite anticipée ; financement d'une création ou reprise d'entreprise dans les trois mois ; " +
+    "retrait de titres visés à l'article 163 bis H du CGI ; liquidation judiciaire de la société " +
+    "émettrice. Ce simulateur ne modélise pas ces cas. Un retrait après 5 ans est exonéré d'impôt sur " +
+    "le revenu, mais les prélèvements sociaux restent dus.",
   "Pour un PEA ouvert avant 2018, une partie des prélèvements sociaux peut relever de « taux " +
     "historiques » par couches : ce cas n'est pas modélisé ici (à vérifier auprès de votre " +
     "intermédiaire), le simulateur applique un taux unique au jour du retrait.",
