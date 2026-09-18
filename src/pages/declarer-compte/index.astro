@@ -106,7 +106,7 @@ const groupes = GROUPES.map((g) => ({
                     class="font-medium text-blue-700 underline"
                     href={`/declarer-compte/${f.etab.id}/`}
                   >
-                    {f.etab.designation}
+                    {f.etab.nomCourt ?? f.etab.designation}
                   </a>
                   <span class="text-sm text-slate-600">
                     {f.libelleVerdict} · formulaire {f.formulaire}

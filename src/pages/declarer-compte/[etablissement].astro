@@ -26,8 +26,14 @@ const verdictTexte =
       ? `Potentiellement dispensé`
       : `À vérifier`;
 
-const title = `Déclarer son compte ${etab.designation} aux impôts (3916${estCrypto ? " / 3916-bis" : ""}) — 2026`;
-const description = `Faut-il déclarer votre compte ${etab.designation} aux impôts ? ${verdictTexte}. Formulaire ${etab.formulaireParDefaut}, règles, amendes et fiche à recopier. Outil gratuit, 100 % local.`;
+// Nom d'usage pour title/H1/description (ex. « Trade Republic » plutôt que la raison
+// sociale complète) ; le corps de la fiche continue d'afficher `designation`.
+const nomAffiche = etab.nomCourt ?? etab.designation;
+
+const title = `Déclarer son compte ${nomAffiche} aux impôts (3916${estCrypto ? " / 3916-bis" : ""}) — 2026`;
+const description =
+  etab.descriptionSeo ??
+  `Faut-il déclarer votre compte ${nomAffiche} aux impôts ? ${verdictTexte}. Formulaire ${etab.formulaireParDefaut}, règles, amendes et fiche à recopier. Outil gratuit, 100 % local.`;
 const lienOutil = "/comptes-etrangers-3916/";
 ---
 
@@ -36,7 +42,7 @@ const lienOutil = "/comptes-etrangers-3916/";
       <article class="flex flex-col gap-4 text-slate-700">
         <header>
           <h1 class="text-2xl font-bold text-slate-900">
-            Faut-il déclarer votre compte {etab.designation} aux impôts&nbsp;?
+            Faut-il déclarer votre compte {nomAffiche} aux impôts&nbsp;?
           </h1>
           <p class="mt-1 text-sm text-slate-500">
             {etab.pays ? `Établissement situé : ${etab.pays}. ` : ""}Formulaire {etab.formulaireParDefaut}
@@ -47,6 +53,13 @@ const lienOutil = "/comptes-etrangers-3916/";
         <p class="rounded-md border border-amber-300 bg-amber-100 px-3 py-2 text-amber-900">
           <strong>{verdictTexte}.</strong> {r.motif}
         </p>
+
+        {etab.sections?.map((section) => (
+          <>
+            <h2 class="mt-2 text-lg font-semibold text-slate-900">{section.titre}</h2>
+            <p>{section.corps}</p>
+          </>
+        ))}
 
         {etab.note && <p class="rounded-md bg-slate-100 px-3 py-2 text-sm italic">{etab.note}</p>}
 

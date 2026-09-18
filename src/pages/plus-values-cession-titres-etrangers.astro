@@ -91,7 +91,7 @@ const ficheCmvUrl =
             {courtiersCites.map((e) => (
               <li>
                 <a class="underline" href={`/declarer-compte/${e!.id}/`}
-                  >Déclarer son compte-titres {e!.designation} aux impôts</a
+                  >Déclarer son compte-titres {e!.nomCourt ?? e!.designation} aux impôts</a
                 >
               </li>
             ))}

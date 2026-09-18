@@ -27,6 +27,12 @@ export interface GabaritCompte {
 export interface Etablissement {
   readonly id: string;
   readonly designation: string;
+  /**
+   * Nom d'usage pour le title/H1/meta description (ex. « Trade Republic » plutôt que
+   * « Trade Republic Bank GmbH »). Absent = fallback sur `designation` — la raison
+   * sociale reste affichée telle quelle dans le corps de la fiche (adresse, PSAN…).
+   */
+  readonly nomCourt?: string;
   readonly pays?: string;
   readonly url?: string;
   /** Type de compte par défaut (l'utilisateur peut le surcharger : certains acteurs sont multi-produits). */
@@ -46,6 +52,18 @@ export interface Etablissement {
   readonly adresse: string | null;
   /** Avertissement à afficher (cas ambigu / multi-produits). */
   readonly note?: string;
+  /**
+   * Meta description sur mesure (SEO). Absent = fallback sur la description générée
+   * depuis `verdictTexte`/`designation` (cf. [etablissement].astro) — à réserver aux
+   * fiches où la réponse générique manque le vrai différenciant (ex. IBAN FR vs DE).
+   */
+  readonly descriptionSeo?: string;
+  /**
+   * Sections détaillées (H2 + paragraphe), affichées entre l'encadré verdict et
+   * « Le principe ». Réservé aux fiches où la réponse à la requête est enfouie dans
+   * `note` et mérite d'être mise en avant (ex. Revolut, question IBAN français).
+   */
+  readonly sections?: readonly { titre: string; corps: string }[];
 }
 
 export const ETABLISSEMENTS: readonly Etablissement[] = [
@@ -71,6 +89,7 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
   {
     id: "trade-republic",
     designation: "Trade Republic Bank GmbH",
+    nomCourt: "Trade Republic",
     pays: "DE",
     url: "https://traderepublic.com",
     typeParDefaut: "titres_cto",
@@ -81,11 +100,59 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     note:
       "Code PSAN 029 = volet crypto (3916-bis). IBAN : compte espèces à IBAN français (FR, clients récents) = compte français NON déclarable ; IBAN allemand (DE, historique) = à déclarer. " +
       "Le compte-titres reste à déclarer (3916) ; le sort d'un éventuel PEA « enveloppe FR » chez ce teneur étranger n'est PAS tranché → « à vérifier ».",
+    descriptionSeo:
+      "IBAN français (compte espèces récent) : non déclarable. IBAN allemand (historique) : à déclarer. " +
+      "Le compte-titres ordinaire, lui, se déclare au 3916.",
   },
 
   // ── Néobanques / banques étrangères (3916) ──
-  { id: "revolut", designation: "Revolut", pays: "LT", url: "https://www.revolut.com", typeParDefaut: "neobanque", typesCompatibles: ["neobanque", "paiement_emoney", "titres_cto", "exchange_crypto"], formulaireParDefaut: "3916", adresse: "Revolut Bank UAB, Konstitucijos ave. 21B, 08130 Vilnius, Lituanie", note: "Le compte courant EUR / Épargne (Revolut France, succursale FR, IBAN FR) n'est PAS à déclarer. Sont à déclarer, si vous les détenez : le compte titres / Flexible Cash Funds (Revolut Securities Europe UAB, Lituanie → 3916) et le compte crypto (Revolut Digital Assets Europe Ltd, Chypre → 3916-bis), comptes distincts. Un IBAN lituanien (LT) historique reste, lui, déclarable, y compris au titre de l'année de sa clôture. Depuis l'agrément bancaire français délivré le 10 août 2026 à Revolut Bank S.A., les clients français sont transférés progressivement depuis Revolut Bank UAB, chacun prévenu environ deux mois à l'avance : sans effet sur le 3916, car le compte courant à IBAN FR est tenu en France avant comme après. Vérifiez l'entité qui détient chacun de vos comptes dans l'application ou sur votre relevé." },
-  { id: "n26", designation: "N26 Bank SE", pays: "DE", url: "https://n26.com", typeParDefaut: "neobanque", formulaireParDefaut: "3916", adresse: "Voltairestraße 8, 10179 Berlin, Allemagne", note: "IBAN allemand (DE) → compte à déclarer (la rumeur d'un IBAN français depuis 2023 est infirmée). Les « Espaces » partagent l'IBAN principal → un seul compte (sauf IBAN propre, à vérifier). Ex-N26 Bank AG (forme changée en 2025)." },
+  {
+    id: "revolut",
+    designation: "Revolut",
+    pays: "LT",
+    url: "https://www.revolut.com",
+    typeParDefaut: "neobanque",
+    typesCompatibles: ["neobanque", "paiement_emoney", "titres_cto", "exchange_crypto"],
+    formulaireParDefaut: "3916",
+    adresse: "Revolut Bank UAB, Konstitucijos ave. 21B, 08130 Vilnius, Lituanie",
+    // Réponse à la requête « compte Revolut IBAN français, faut-il déclarer » mise en
+    // avant en sections (cf. [etablissement].astro) plutôt qu'enfouie dans `note`.
+    sections: [
+      {
+        titre: "Quels comptes Revolut sont à déclarer ?",
+        corps:
+          "Le verdict ci-dessus vaut pour un compte tenu hors de France. Le compte courant EUR / Épargne (Revolut France, succursale FR, IBAN FR) est, lui, tenu en France : il n'est PAS à déclarer. " +
+          "Depuis l'agrément bancaire français délivré le 10 août 2026 à Revolut Bank S.A., les clients français sont transférés progressivement depuis Revolut Bank UAB, chacun prévenu environ deux mois à l'avance : sans effet sur le 3916, le compte courant à IBAN FR étant tenu en France avant comme après.",
+      },
+      {
+        titre: "Ce qui reste à déclarer chez Revolut",
+        corps:
+          "Si vous les détenez, deux autres comptes sont à déclarer, distincts du compte courant : le compte titres / Flexible Cash Funds (Revolut Securities Europe UAB, Lituanie → 3916) et le compte crypto (Revolut Digital Assets Europe Ltd, Chypre → 3916-bis).",
+      },
+      {
+        titre: "Un ancien IBAN lituanien ?",
+        corps: "Un IBAN lituanien (LT) historique reste, lui, déclarable, y compris au titre de l'année de sa clôture.",
+      },
+    ],
+    note: "Vérifiez l'entité qui détient chacun de vos comptes dans l'application ou sur votre relevé.",
+    descriptionSeo:
+      "Compte Revolut à IBAN FR (succursale française) : non déclarable. À déclarer : compte titres (3916), " +
+      "compte crypto (3916-bis), ancien IBAN lituanien.",
+  },
+  {
+    id: "n26",
+    designation: "N26 Bank SE",
+    nomCourt: "N26",
+    pays: "DE",
+    url: "https://n26.com",
+    typeParDefaut: "neobanque",
+    formulaireParDefaut: "3916",
+    adresse: "Voltairestraße 8, 10179 Berlin, Allemagne",
+    note: "IBAN allemand (DE) → compte à déclarer (la rumeur d'un IBAN français depuis 2023 est infirmée). Les « Espaces » partagent l'IBAN principal → un seul compte (sauf IBAN propre, à vérifier). Ex-N26 Bank AG (forme changée en 2025).",
+    descriptionSeo:
+      "Compte N26 à IBAN allemand (DE) : à déclarer au 3916, même vide. La rumeur d'un IBAN français depuis 2023 est infirmée. " +
+      "Outil gratuit, 100 % local.",
+  },
   { id: "bunq", designation: "bunq B.V.", pays: "NL", url: "https://www.bunq.com", typeParDefaut: "neobanque", formulaireParDefaut: "3916", adresse: "Naritaweg 131-133, 1043 BS Amsterdam, Pays-Bas" },
   { id: "wise", designation: "Wise Europe SA", pays: "BE", url: "https://wise.com", typeParDefaut: "neobanque", typesCompatibles: ["neobanque", "paiement_emoney"], formulaireParDefaut: "3916", adresse: "Rue du Trône 100, 1050 Bruxelles, Belgique", note: "Établissement de monnaie électronique — l'exemption e-money peut s'appliquer si les 3 conditions sont remplies." },
 

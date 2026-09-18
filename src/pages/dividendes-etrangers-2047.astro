@@ -39,7 +39,7 @@ const description =
           {courtiersCites.map((e) => (
             <li>
               <a class="underline" href={`/declarer-compte/${e!.id}/`}
-                >Déclarer son compte {e!.designation} aux impôts</a
+                >Déclarer son compte {e!.nomCourt ?? e!.designation} aux impôts</a
               >
             </li>
           ))}

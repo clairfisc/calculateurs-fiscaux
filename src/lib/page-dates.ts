@@ -52,9 +52,12 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   "/declarer-compte/": { publiee: "2026-08-24", modifiee: "2026-08-24" },
 
   // Fiches révisées individuellement (le match exact prime sur la règle par préfixe) :
-  // radiation AMF de Binance France (02/07/2026), agrément bancaire FR de Revolut (10/08/2026).
+  // radiation AMF de Binance France (02/07/2026), agrément bancaire FR de Revolut (10/08/2026) +
+  // sections IBAN FR ajoutées (18/09/2026, changement de fond). Trade Republic et N26 n'ont eu
+  // qu'un ajustement cosmétique de title/description : pas d'entrée dédiée, la règle par préfixe
+  // (DATES_DECLARER_COMPTE) s'applique.
   "/declarer-compte/binance/": { publiee: "2026-06-26", modifiee: "2026-09-14" },
-  "/declarer-compte/revolut/": { publiee: "2026-06-26", modifiee: "2026-09-14" },
+  "/declarer-compte/revolut/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
 
   // Divers
   "/le-projet/": { publiee: "2026-07-01", modifiee: "2026-07-01" },
