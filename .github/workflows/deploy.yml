@@ -57,6 +57,34 @@ jobs:
           SFTP_KNOWN_HOSTS: ${{ secrets.SFTP_KNOWN_HOSTS }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass openssh-client
+          # Vérification de l'identité du serveur : stricte si SFTP_KNOWN_HOSTS
+          # est défini (ferme la fenêtre MITM qui pourrait intercepter le mot de
+          # passe), sinon repli non vérifié + warning (migration non bloquante).
+          if [ -n "$SFTP_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$SFTP_KNOWN_HOSTS" > known_hosts
+            HOST_OPTS="-oStrictHostKeyChecking=yes -oUserKnownHostsFile=known_hosts"
+          else
+            echo "::warning::SFTP_KNOWN_HOSTS non défini — identité du serveur non vérifiée (MITM possible). Voir DEPLOY.md §3."
+            HOST_OPTS="-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null"
+          fi
+          # La bascule rm+rename (84cd075) laisse encore le .htaccess absent le
+          # temps d'un aller-retour SFTP — fenêtre où le mod_dir d'OVH émet ses
+          # redirections « :443 ». Googlebot y est retombé le 14/09/2026 (quatre
+          # déploiements ce jour-là, réexploration de /le-projet le jour même :
+          # les crawls suivent le lastmod du sitemap, donc se concentrent les
+          # jours de déploiement). Or le fichier ne change presque jamais : on
+          # récupère la copie distante et, si elle est identique au local, on
+          # saute son remplacement — plus aucune fenêtre sur les déploiements
+          # qui ne le modifient pas. Le `-get` tolère l'absence distante
+          # (premier déploiement) : cmp échoue alors et le fichier est
+          # téléversé normalement.
+          printf '%s\n' "-get www/.htaccess remote-htaccess" "bye" > sftp-prefetch
+          sshpass -e sftp -oBatchMode=no $HOST_OPTS -oConnectTimeout=20 -P 22 -b sftp-prefetch "$FTP_USER@$FTP_SERVER"
+          HTACCESS_INCHANGE=0
+          if cmp -s dist/.htaccess remote-htaccess 2>/dev/null; then
+            HTACCESS_INCHANGE=1
+            echo "::notice::.htaccess identique à la copie distante — remplacement sauté (aucune fenêtre sans .htaccess)."
+          fi
           {
             echo "-mkdir www"
             echo "cd www"
@@ -64,6 +92,9 @@ jobs:
             for path in dist/* dist/.htaccess; do
               [ -e "$path" ] || continue
               name=$(basename "$path")
+              if [ "$name" = ".htaccess" ] && [ "$HTACCESS_INCHANGE" = 1 ]; then
+                continue
+              fi
               if [ -d "$path" ]; then
                 echo "put -r $name"
               else
@@ -91,16 +122,6 @@ jobs:
             echo "bye"
           } > sftp-batch
           echo "----- batch sftp -----"; cat sftp-batch; echo "----------------------"
-          # Vérification de l'identité du serveur : stricte si SFTP_KNOWN_HOSTS
-          # est défini (ferme la fenêtre MITM qui pourrait intercepter le mot de
-          # passe), sinon repli non vérifié + warning (migration non bloquante).
-          if [ -n "$SFTP_KNOWN_HOSTS" ]; then
-            printf '%s\n' "$SFTP_KNOWN_HOSTS" > known_hosts
-            HOST_OPTS="-oStrictHostKeyChecking=yes -oUserKnownHostsFile=known_hosts"
-          else
-            echo "::warning::SFTP_KNOWN_HOSTS non défini — identité du serveur non vérifiée (MITM possible). Voir DEPLOY.md §3."
-            HOST_OPTS="-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null"
-          fi
           sshpass -e sftp \
             -oBatchMode=no \
             $HOST_OPTS \
