@@ -1,6 +1,13 @@
-import type { Declaration2047, ResultatLigne } from "../lib/tax-engine";
+import type { Declaration2047, ResultatLigne, Case2042 } from "../lib/tax-engine";
 import BoutonCopier from "./BoutonCopier";
 import { formateEurosEntiers } from "./fx";
+
+/** Libellés des cases 2042/2042C où sont reportés les revenus (cf. SOURCES-2047.md §5). */
+const LIBELLES_CASE_2042: Record<Case2042, string> = {
+  "2DC": "dividendes éligibles à l'abattement de 40 %",
+  "2TS": "autres revenus distribués",
+  "2TR": "intérêts et produits de placement à revenu fixe",
+};
 
 /**
  * Affichage des résultats case par case + agrégats 8VL / 8PL.
@@ -46,6 +53,15 @@ function CarteLigne({ resultat, libelle, numero }: { resultat: ResultatLigne; li
         <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800">
           Excédent non récupérable côté FR ({formateEurosEntiers(resultat.excedentNonRecuperableEur)}),
           à réclamer à l'État source.
+        </p>
+      )}
+
+      {resultat.ligne206Eur > 0 && resultat.ligne207Eur === 0 && (
+        <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800">
+          Ce pays n'ouvre pas droit à crédit pour ce type de revenu&nbsp;: le montant à
+          reporter n'inclut donc aucun crédit — si un impôt étranger a bien été prélevé,
+          faites confirmer le montant exact à reporter (le formulaire ne prévoit pas de
+          mécanique 203+207 pour la ligne 220).
         </p>
       )}
     </div>
@@ -99,14 +115,17 @@ export default function Resultats({ declaration, libellesLignes }: ResultatsProp
 
       {/* Report sur la déclaration 2042 (cases 2DC / 2TS / 2TR) */}
       <div className="rounded-xl border border-slate-200 bg-white p-4">
-        <p className="mb-2 text-sm font-semibold text-slate-900">Report sur la 2042</p>
+        <p className="text-sm font-semibold text-slate-900">Report sur la 2042</p>
+        <p className="mb-2 text-xs text-slate-500">
+          Montants bruts, crédit d'impôt inclus (ligne 208 du 2047 = 203 + 207)
+        </p>
         <div className="flex flex-col gap-2">
-          {(Object.entries(declaration.report2042) as [string, number][])
+          {(Object.entries(declaration.report2042) as [Case2042, number][])
             .filter(([, montant]) => montant > 0)
             .map(([caseId, montant]) => (
               <div key={caseId} className="flex items-center justify-between gap-2">
                 <span className="text-sm text-slate-700">
-                  Case <span className="font-mono font-semibold">{caseId}</span>
+                  <span className="font-mono font-semibold">{caseId}</span> — {LIBELLES_CASE_2042[caseId]}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-sm text-slate-900">{formateEurosEntiers(montant)}</span>

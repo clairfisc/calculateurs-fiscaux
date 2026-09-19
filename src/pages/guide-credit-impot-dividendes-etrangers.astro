@@ -103,16 +103,30 @@ const description =
           <p>
             Une fois la ligne 207 calculée pour chaque revenu, vous
             <strong>additionnez tous les crédits retenus</strong> et reportez ce
-            total dans la case <strong>8VL</strong> de la 2042&nbsp;C («&nbsp;Crédit
-            d'impôt égal au prélèvement forfaitaire déjà versé&nbsp;»). C'est
-            cette case qui réduit concrètement votre impôt français.
+            total dans la case <strong>8VL</strong> de la 2042&nbsp;C (cadre 8
+            « DIVERS », rubrique « Revenus de source étrangère ouvrant droit à
+            un crédit d'impôt égal à l'impôt étranger » — 8VL = « impôt payé à
+            l'étranger sur ces revenus », 8PL = « revenus nets étrangers »).
+            C'est <strong>8VL qui réduit concrètement votre impôt français</strong>.
           </p>
           <p class="note">
-            À noter&nbsp;: si vous optez pour le <strong>barème progressif</strong>
-            (<a href="/faut-il-cocher-2op/">case 2OP</a>) plutôt que pour le
-            prélèvement forfaitaire unique, le crédit peut transiter par une
-            autre case (2AB). Le présent guide décrit le parcours par défaut
-            (flat tax).
+            À noter&nbsp;: le critère qui détermine la case n'est pas l'option
+            pour le <strong>barème progressif</strong>
+            (<a href="/faut-il-cocher-2op/">case 2OP</a>), mais la
+            localisation de l'<strong>établissement payeur</strong>. Si votre
+            banque française prélève et vous délivre un IFU prérempli, le
+            crédit peut apparaître en case <strong>2AB</strong> (non
+            restituable) sans passer par le 2047. Chez un <strong>courtier
+            étranger</strong>, le chemin est toujours 2047 → 8VL, que 2OP soit
+            cochée ou non&nbsp;: 8VL passe par le 2047 et est plafonné à
+            l'impôt français calculé sur ces revenus. Un éventuel excédent
+            n'est <strong>restitué ni pour 2AB ni pour 8VL</strong> (Brochure
+            IR 2026 p.&nbsp;367 : «&nbsp;si le crédit d'impôt est supérieur à
+            l'impôt dû, l'excédent n'est pas restituable&nbsp;» ; p.&nbsp;325 :
+            «&nbsp;l'excédent n'est pas restitué&nbsp;» ; notice 2047-NOT :
+            «&nbsp;en cas d'excédent, il n'est procédé à aucun
+            remboursement&nbsp;» — seule la case <strong>2CK</strong> l'est,
+            Brochure p.&nbsp;126).
           </p>
         </section>
 
@@ -145,11 +159,12 @@ const description =
             >.
           </p>
           <p class="note">
-            Point d'attention honnête&nbsp;: la <strong>nature exacte</strong> du
-            montant à porter en 8PL (net après retenue, brut avant retenue, ou
-            net après abattement de 40&nbsp;% en cas de barème) prête encore à
-            confusion en 2026, et la DGFiP ne l'a pas pleinement documentée.
-            Reportez-vous à la
+            Point d'attention honnête&nbsp;: le libellé officiel de 8PL
+            (2042&nbsp;C, cadre 8) est bien «&nbsp;<strong>revenus nets
+            étrangers</strong>&nbsp;», mais son articulation précise — net de
+            quoi, exactement (la seule retenue étrangère, ou aussi
+            l'abattement de 40&nbsp;% en cas d'option barème) — n'est pas
+            pleinement documentée par la DGFiP en 2026. Reportez-vous à la
             <a
               href="https://www.impots.gouv.fr/sites/default/files/formulaires/2047/2026/2047_5490.pdf"
               rel="noopener"
@@ -162,27 +177,158 @@ const description =
           <h2 id="routage-2042">Où va le revenu lui-même sur la 2042 ?</h2>
           <p>
             Le crédit d'impôt (8VL/8PL) ne dispense pas de déclarer le
-            <strong>revenu</strong>. Selon sa nature&nbsp;:
+            <strong>revenu</strong>. Le formulaire 2047 donne lui-même le
+            routage&nbsp;: cadre 2, total en ligne&nbsp;221, ventilé en&nbsp;:
           </p>
           <ul>
             <li>
-              <strong>Dividendes</strong> encaissés via un courtier étranger
-              sans prélèvement français&nbsp;: en principe case
-              <strong>2TS</strong> (autres revenus distribués / revenus à
-              déclarer), la case <strong>2DC</strong> visant les dividendes
-              ouvrant droit à l'abattement de 40&nbsp;% (option barème). Le bon
-              routage dépend de votre situation.
+              <strong>222</strong> «&nbsp;dont dividendes éligibles à
+              l'abattement de 40&nbsp;% uniquement en cas d'option pour
+              l'imposition au barème&nbsp;» → case <strong>2DC</strong>
             </li>
             <li>
-              <strong>ETF capitalisants irlandais ou luxembourgeois</strong>&nbsp;:
-              attention, ce ne sont pas des dividendes — leurs distributions ou
-              revenus suivent leurs propres règles.
+              <strong>223</strong> «&nbsp;dont autres revenus distribués&nbsp;»
+              → case <strong>2TS</strong>
+            </li>
+            <li>
+              <strong>224</strong> «&nbsp;dont dividendes imposables des titres
+              non cotés détenus dans le PEA ou le PEA-PME&nbsp;» → case
+              <strong>2FU</strong> — sans non-coté en PEA, cette case ne vous
+              concerne pas.
             </li>
           </ul>
+          <p>
+            Le seul critère est l'<strong>éligibilité à l'abattement de
+            40&nbsp;%</strong>. Le prélèvement français n'entre pas dans ce
+            tri&nbsp;: il se déclare à part, en case <strong>2CK</strong>.
+          </p>
+
+          <h3 id="conditions-abattement">
+            Les trois conditions de l'abattement de 40&nbsp;%
+          </h3>
+          <p>Cumulatives (CGI art. 158, 3-2° ; BOI-RPPM-RCM-20-10-30-10 § 70-100, 260)&nbsp;:</p>
+          <ul>
+            <li>
+              la société est passible de l'<strong>IS</strong> ou d'un impôt
+              équivalent — un impôt foncier ou sur le capital ne compte pas ;
+            </li>
+            <li>
+              son siège est dans l'<strong>Union européenne</strong> ou dans
+              un <strong>État conventionné</strong> avec la France avec une
+              clause d'assistance administrative ;
+            </li>
+            <li>
+              la distribution a été <strong>décidée régulièrement</strong>
+              (en règle générale, un dividende voté en assemblée).
+            </li>
+          </ul>
+
+          <h3 id="cas-frequents">Les cas fréquents, case par case</h3>
+          <table class="routage">
+            <thead>
+              <tr>
+                <th scope="col">Situation</th>
+                <th scope="col">Case</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Action d'une société de l'UE, en direct</td>
+                <td><strong>2DC</strong></td>
+              </tr>
+              <tr>
+                <td>
+                  Action US / CA / CH / UK / JP en direct (pays conventionné,
+                  société soumise à l'impôt sur les bénéfices)
+                </td>
+                <td><strong>2DC</strong></td>
+              </tr>
+              <tr>
+                <td>Société d'un pays sans convention avec la France</td>
+                <td><strong>2TS</strong></td>
+              </tr>
+              <tr>
+                <td>
+                  ETF / fonds distribuant, y compris UCITS irlandais ou
+                  luxembourgeois
+                </td>
+                <td><strong>2TS</strong> (sauf exception « couponnage », voir plus bas)</td>
+              </tr>
+              <tr>
+                <td>SIIC / SPPICAV françaises</td>
+                <td><strong>2TS</strong></td>
+              </tr>
+              <tr>
+                <td>REIT américain ou foncière cotée étrangère</td>
+                <td><strong>2TS</strong> — lecture d'usage, voir la réserve ci-dessous</td>
+              </tr>
+              <tr>
+                <td>Jetons de présence</td>
+                <td><strong>2TS</strong></td>
+              </tr>
+              <tr>
+                <td>Intérêts et obligations</td>
+                <td><strong>2TR</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 id="etf-fonds">Le vrai piège&nbsp;: les ETF et fonds distribuants</h3>
+          <p>
+            Un <strong>ETF capitalisant</strong> ne distribue rien&nbsp;:
+            aucune case du cadre 2 n'est concernée — seules les
+            <strong>ventes</strong> sont imposables (et le formulaire
+            <strong>3916</strong> reste dû si le courtier est étranger).
+          </p>
+          <p>
+            Un <strong>ETF distribuant</strong> verse, lui, un revenu du
+            <strong>fonds</strong>, pas d'Apple ou de Total&nbsp;: la première
+            des trois conditions (société passible de l'IS) tombe (CGI
+            158-3-3° b, qui vise les « sociétés d'investissement de même
+            nature établies hors de France »). Une exception existe (CGI
+            158-3-4°), à <strong>deux conditions cumulatives</strong>&nbsp;:
+            fonds établi dans l'<strong>UE/EEE</strong>
+            (BOI-RPPM-RCM-20-10-30-10 § 520 — un fonds américain est exclu en
+            totalité) et <strong>couponnage</strong> attesté par l'émetteur
+            (BOI-RPPM-RCM-20-10-30-10 § 560, « à la condition expresse »). En pratique&nbsp;: sans
+            couponnage indiqué sur l'imprimé fiscal, le routage réaliste est
+            <strong>2TS en totalité</strong>&nbsp;; si l'imprimé indique une
+            part « éligible à l'abattement de 40&nbsp;% », seule cette
+            part va en <strong>2DC</strong>.
+          </p>
           <p class="note">
-            Le routage 2042 dépend de détails (type d'instrument, option
-            d'imposition, retenues déjà opérées). Vérifiez systématiquement avec
-            la notice.
+            Réserve REIT&nbsp;: le CGI exclut nommément les SIIC et SPPICAV
+            <strong>françaises</strong> de l'abattement de 40&nbsp;%, pas
+            leurs équivalents étrangers. Router un REIT américain ou une
+            foncière cotée étrangère en 2TS relève de l'usage et de la
+            logique de cette exclusion — aucun texte officiel ne le dit noir
+            sur blanc&nbsp;: si l'enjeu est significatif, faites-le valider.
+          </p>
+
+          <h3 id="quel-montant">Quel montant, exactement&nbsp;?</h3>
+          <p>
+            Jamais le <strong>net encaissé</strong> dès lors qu'un impôt
+            étranger ouvrant droit à crédit a été retenu (sans crédit, le
+            brut est égal au net). La notice 2047 est
+            explicite&nbsp;: «&nbsp;reportez obligatoirement le revenu brut
+            sans déduction de l'impôt étranger&nbsp;». La Brochure pratique
+            IR 2026 (p.&nbsp;126) précise&nbsp;: «&nbsp;montant brut, majoré
+            du crédit d'impôt conventionnel&nbsp;». L'arithmétique du
+            formulaire le confirme&nbsp;: <strong>ligne 208 = ligne 203 (net)
+            + ligne 207 (crédit)</strong>.
+          </p>
+          <p class="note">
+            Réserve honnête&nbsp;: quand l'étranger sur-prélève au-delà du
+            taux conventionnel (Allemagne 26,375&nbsp;%, Suisse 35&nbsp;%), la
+            notice et le formulaire ne sont pas alignés sur le montant exact
+            à reporter — la DGFiP ne tranche pas ce cas dans sa documentation
+            publique. Faites-vous confirmer le montant.
+          </p>
+          <p class="note">
+            Sans option pour le barème (case 2OP), 2DC et 2TS sont taxées au
+            même taux de 12,8&nbsp;%&nbsp;: le tri ne change rien à l'impôt
+            dû. Il ne devient chiffré qu'avec l'option pour le barème — mais
+            mieux vaut l'avoir juste dès le départ.
           </p>
         </section>
 
@@ -201,8 +347,14 @@ const description =
             <li>Ligne 207 = min(176, 176) = <strong>176&nbsp;€</strong></li>
           </ul>
           <p>
-            Vous reportez <strong>176&nbsp;€ en 8VL</strong> (le crédit) et la
-            base nette correspondante en <strong>8PL</strong>.
+            Vous reportez <strong>176&nbsp;€ en 8VL</strong> (le crédit), la
+            base en <strong>8PL</strong>, et surtout <strong>1&nbsp;176&nbsp;€
+            en case 2DC</strong> (ligne 208 du 2047 = 1&nbsp;000&nbsp;€ net +
+            176&nbsp;€ de crédit, soit le brut). Apple étant une société
+            américaine soumise à l'impôt fédéral sur les bénéfices et les
+            États-Unis étant conventionnés avec clause d'assistance, ce
+            dividende est bien éligible à l'abattement de 40&nbsp;% — donc
+            <strong>2DC</strong>, pas 2TS.
           </p>
         </section>
 
@@ -277,6 +429,22 @@ const description =
         background: #f6f6f4;
         padding: 0.75rem 1rem;
         border-radius: 6px;
+      }
+      table.routage {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.92rem;
+      }
+      table.routage th,
+      table.routage td {
+        border: 1px solid #e2e2e2;
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+      }
+      table.routage th {
+        background: #f6f6f4;
+        font-weight: 600;
       }
       a {
         color: #1d4ed8;

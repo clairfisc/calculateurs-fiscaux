@@ -177,7 +177,14 @@ export default function LigneFormulaire({
               checked={ligne.eligibleAbattement40 ?? true}
               onChange={(e) => onChange(ligne.id, { eligibleAbattement40: e.target.checked })}
             />
-            Éligible à l'abattement de 40 % (UE/convention)
+            <span>
+              Dividende éligible à l'abattement de 40 % (société soumise à l'IS ou
+              équivalent, siège UE ou pays conventionné, dividende voté en AG)
+              <span className="mt-0.5 block text-xs font-normal text-slate-400">
+                Décochez pour un ETF/fonds, une foncière cotée (SIIC, SPPICAV, REIT) ou un
+                jeton de présence.
+              </span>
+            </span>
           </label>
         )}
       </div>

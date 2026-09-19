@@ -122,12 +122,23 @@ Taux **intérêts** (ligne 234), même mécanique, renseignés quand la notice l
 
 ## 5. Routage 2042 (report des revenus du cadre 2 du 2047 vers la 2042 / 2042C)
 
-Après calcul du crédit sur le 2047, le **montant net** de chaque revenu doit être reporté
-dans la case du 2042 / 2042C correspondant à sa nature. La notice 2047-NOT rev. 2025 donne
-le routage de manière littérale, sous le titre **« N'oubliez pas de reporter le montant de
-ces revenus sur votre déclaration no 2042 »**.
+Après calcul du crédit sur le 2047, le **montant BRUT** de chaque revenu (net encaissé +
+crédit retenu, voir §5.3) doit être reporté dans la case du 2042 / 2042C correspondant à sa
+nature. La notice 2047-NOT rev. 2025 donne le routage de manière littérale, sous le titre
+**« N'oubliez pas de reporter le montant de ces revenus sur votre déclaration no 2042 »**.
 
-### 5.1 Source — citations littérales (notice 2047-NOT rev. 2025, 2047_5490.pdf)
+### 5.1 Source — citations littérales
+
+Le **formulaire 2047 lui-même** (cadre 2, lignes 221 à 224) est la source la plus directe :
+le total du cadre 2 (ligne 221) est ventilé en ligne 222 (« dont dividendes éligibles à
+l'abattement de 40 % uniquement en cas d'option pour l'imposition au barème » — le formulaire
+lui-même ne dit pas « progressif », c'est la notice qui ajoute ce qualificatif, cf. citation
+notice ci-dessous — → 2DC), ligne 223 (« dont autres revenus distribués » → 2TS) et ligne 224 (« dont
+dividendes imposables des titres non cotés détenus dans le PEA ou le PEA-PME » → 2FU, hors
+périmètre du moteur). Cela fonde en dur, sur le texte même du formulaire, la présomption
+« par défaut 2DC » pour une action détenue en direct dans un pays UE/convention.
+
+La notice 2047-NOT rev. 2025 (2047_5490.pdf) précise ensuite, ligne par ligne :
 
 > « – **ligne 2DC** les revenus d'actions et parts de sociétés ayant leur siège dans un État
 > de l'Union européenne ou dans un État ou territoire ayant conclu avec la France une
@@ -176,12 +187,19 @@ sociétés UE/à convention).
   unique), pas seulement du pays d'émission. Le moteur ne devine pas : à défaut d'indicateur,
   il route en 2DC (par défaut raisonnable pour un **titre vif** UE/convention) et laisse l'appelant
   forcer 2TS via `eligibleAbattement40: false` plutôt que d'inventer une règle de détection.
-- 🔎 **Présomption à INVERSER pour les ETF/fonds (recherche juin 2026).** Un OPC (SICAV/FCP/ETF,
-  y compris UCITS) ne transmet l'abattement 40 % **que** s'il pratique le **couponnage**
-  (ventilation des distributions par nature/origine), et **seulement** sur la fraction « dividendes
-  éligibles » indiquée par l'**IFU** — **pas** déductible du pays. Donc pour une ligne « ETF/fonds »,
-  le défaut prudent côté appelant est `eligibleAbattement40: false` (→ 2TS), sauf IFU attestant la
-  part éligible. Source : **BOI-RPPM-RCM-20-10-30-10** et **BOI-RPPM-RCM-40-30**.
+- ✅ **Règle sourcée (recherche sept. 2026, plus une hypothèse) : un ETF/fonds distribuant est
+  présumé NON éligible.** Un OPC (SICAV/FCP/ETF, y compris UCITS établi dans l'UE/EEE) ne
+  transmet l'abattement 40 % **que** s'il pratique le **couponnage** (ventilation des
+  distributions par nature/origine, BOI-RPPM-RCM-20-10-30-10 § 560 « à la condition expresse »),
+  et **seulement** sur la fraction « dividendes éligibles » indiquée par l'**IFU**. Le mécanisme
+  de transparence lui-même est borné à l'**UE/EEE** (BOI-RPPM-RCM-20-10-30-10 § 520) : un fonds établi hors UE/EEE (ex.
+  ETF américain) est exclu **en totalité**, couponnage ou non. Sources : CGI 158-3-3° b et
+  158-3-4° ; **BOI-RPPM-RCM-20-10-30-10**.
+  → Le moteur n'a pas de notion de « type de ligne » (ETF vs titre vif) distincte du pays et de
+  `eligibleAbattement40` : il n'existe donc pas de défaut par type de ligne à inverser côté
+  calcul. La charge de cette règle est portée par l'**UI** — la case à cocher de
+  `LigneFormulaire.tsx` est explicitement libellée pour inviter à la décocher pour « un
+  ETF/fonds, une foncière cotée (SIIC, SPPICAV, REIT) ou un jeton de présence ».
 - 📋 **Exclusions de l'abattement 40 % → ne JAMAIS router en 2DC** (CGI art. 158-3-2° ; BOFiP
   **BOI-RPPM-RCM-20-10-30-10**) : sociétés/organismes **exonérés d'IS** (SICAV, OPC exonérés) ;
   **SIIC / SPPICAV-OPCI** (fraction de bénéfices exonérés — foncières cotées) ; **sociétés de
@@ -192,9 +210,45 @@ sociétés UE/à convention).
 - ☑️ **Rappel (lien avec §6.3)** : l'abattement 40 % ne joue **que sous barème** (2OP cochée). Au
   PFU, aucune réduction — la distinction 2DC/2TS reste utile pour le report mais n'ouvre pas
   d'abattement.
-- Le report 2042 porte sur le **montant net** (déduction faite de l'impôt étranger), et il a
-  lieu **même si la ligne n'ouvre pas droit à crédit** (forfait `c/` ou retenue nulle) : le
-  revenu reste imposable en France. La condition `ouvreDroitCredit` ne concerne que 8VL/8PL.
+- Le report 2042 porte sur le **montant BRUT**, pas le net, et il a lieu **même si la ligne
+  n'ouvre pas droit à crédit** (forfait `c/` ou retenue nulle) : le revenu reste imposable en
+  France. La condition `ouvreDroitCredit` ne concerne que 8VL/8PL.
+
+### 5.3 Le montant reporté est le BRUT, pas le net (correction — sept. 2026)
+
+⚠️ Le moteur reportait auparavant le **net encaissé** (ligne.netEncaisseCents) sur les cases
+2DC/2TS/2TR. **C'est faux.** Trois sources convergent sur le brut :
+
+- **Notice 2047-NOT 2026**, « Modalités déclaratives » : « reportez obligatoirement le revenu
+  **brut sans déduction de l'impôt étranger** ».
+- **Brochure pratique IR 2026**, p. 126 : « montant **brut**, majoré du crédit d'impôt
+  conventionnel ».
+- **Arithmétique du formulaire 2047** : ligne **208** (« Revenus crédit d'impôt inclus total
+  lignes 203 + 207 ») = ligne 203 (net) + ligne 207 (crédit **retenu**, pas le 205 théorique).
+
+Le moteur (`calculeDeclaration`, `compute.ts`) reporte donc désormais `netEncaisseCents` (203)
+**+ `ligne207Eur`** (207, le crédit effectivement retenu après plafonnement) sur la case
+2042 concernée — pas `ligne205Eur` (205, le crédit théorique avant plafonnement).
+
+❓ **Divergence non tranchée (surprélèvement étranger)** : quand la retenue étrangère dépasse
+le taux conventionnel (Allemagne 26,375 %, Suisse 35 %), la notice (« brut sans déduction de
+l'impôt étranger », qui suggère de reconstituer le vrai brut économique) et l'arithmétique du
+formulaire (208 = 203 + 207, où 207 est plafonné au taux conventionnel, donc inférieur à la
+retenue réelle) ne donnent pas le même montant. Le moteur applique la règle arithmétique du
+formulaire (203 + 207) faute de trancher entre les deux lectures — **volontairement non
+arbitré** (recherche sourcée sept. 2026).
+
+⚠️ **Cas résiduel non résolu par la correction net→brut (revue adversariale sept. 2026)** :
+pour un pays à forfait notice nul (Irlande, ou intérêts DE/CH/GB/CH marqués `c/`) mais où un
+impôt étranger a néanmoins été réellement prélevé (`impotEtrangerCents > 0`), `ligne207Eur`
+vaut 0 (`ouvreDroitCredit` faux, cf. §3) — le brut reporté (203 + 207) retombe alors
+mécaniquement au **net**, ce qui contredit en apparence « jamais le net encaissé ». **Aucune
+mécanique n'est inventée côté moteur** pour ce cas : le formulaire 2047 ne prévoit pas de
+variante « 203 + 206 » pour la ligne 220, et rien ne permet d'affirmer que le vrai brut
+économique doive être reconstitué autrement. Le moteur reste sur 203 + 207 (= net ici) et
+l'UI (`Resultats.tsx`) affiche une réserve dès que `ligne206Eur > 0` et `ligne207Eur === 0`,
+invitant l'utilisateur à faire confirmer le montant exact plutôt que de lui laisser croire que
+le montant affiché intègre déjà l'impôt étranger réellement supporté.
 
 ## 6. Cases 8VL / 8PL et caveats datés (re-validation 2026-06-25)
 

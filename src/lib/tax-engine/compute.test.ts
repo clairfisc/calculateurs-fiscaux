@@ -129,26 +129,57 @@ describe("routage 2042 (post-2047) — notice 2047-NOT rev. 2025, cf. SOURCES §
     expect(r.case2042).toBe("2TS");
   });
 
-  it("agrégat report2042 : dividende 2DC + intérêt 2TR + ETF 2TS ventilés par case", () => {
+  // Le report 2042 porte sur le montant BRUT (net encaissé + crédit RETENU, ligne 207 —
+  // pas le 205 théorique), équivalent à la ligne 208 du 2047 (203 + 207). cf. compute.ts
+  // `calculeDeclaration` et SOURCES-2047.md §5. Oracles recalculés à la main :
+  //   US dividende  : net 85,  crédit 205=min→ 85×17,6%=14,96→15 ; 206=15 ; 207=min(15,15)=15  → brut 85+15  = 100
+  //   US intérêt    : net 200, 205 = 200×17,6%=35,2→35 ; 206=35 ; 207=min(35,35)=35            → brut 200+35 = 235
+  //   ETF (US) 2TS  : net 50,  205 = 50×17,6%=8,8→9  ; 206=9  ; 207=min(9,9)=9                 → brut 50+9   = 59
+  it("agrégat report2042 : dividende 2DC + intérêt 2TR + ETF 2TS ventilés par case (montants BRUTS)", () => {
     const decl = calculeDeclaration([
-      // dividende éligible → 2DC (net 85)
+      // dividende éligible → 2DC (net 85, crédit retenu 15 → brut 100)
       { pays: ETATS_UNIS, type: "dividende", netEncaisseCents: eur(85), impotEtrangerCents: eur(15) },
-      // intérêt → 2TR (net 200)
+      // intérêt → 2TR (net 200, crédit retenu 35 → brut 235)
       { pays: ETATS_UNIS, type: "interet", netEncaisseCents: eur(200), impotEtrangerCents: eur(35) },
-      // ETF distribuant non éligible → 2TS (net 50)
+      // ETF distribuant non éligible → 2TS (net 50, crédit retenu 9 → brut 59)
       { pays: ETATS_UNIS, type: "dividende", netEncaisseCents: eur(50), impotEtrangerCents: eur(9), eligibleAbattement40: false },
     ]);
-    expect(decl.report2042).toEqual({ "2DC": 85, "2TS": 50, "2TR": 200 });
+    expect(decl.report2042).toEqual({ "2DC": 100, "2TS": 59, "2TR": 235 });
   });
 
   it("report2042 inclut les revenus n'ouvrant PAS droit à crédit (revenu imposable même sans crédit)", () => {
-    // IRLANDE div. = c/ (forfait 0) → aucun crédit, mais le dividende reste imposable → reporté en 2DC.
+    // IRLANDE div. = c/ (forfait 0) → 205 = 206 = 207 = 0 → aucun crédit, mais le dividende
+    // reste imposable → reporté en 2DC. Brut = net + crédit RETENU = 120 + 0 = 120 : ce cas
+    // ne bouge pas avec la correction net→brut (le crédit retenu étant nul, brut == net ici).
     const decl = calculeDeclaration([
       { pays: IRLANDE, type: "dividende", netEncaisseCents: eur(120), impotEtrangerCents: 0 },
     ]);
     expect(decl.case8vlEur).toBe(0); // n'ouvre pas droit à crédit
     expect(decl.case8plEur).toBe(0);
     expect(decl.report2042).toEqual({ "2DC": 120, "2TS": 0, "2TR": 0 }); // mais bien reporté
+  });
+
+  // Verrou anti-régression (revue adversariale) : chaque test ci-dessous tue une mutation
+  // distincte — le cas US (207=206≠205) discrimine 205, le cas DE (207=205≠206) discrimine 206.
+  // LES DEUX SONT NÉCESSAIRES : aucun ne couvre l'autre mutation seul. Le brut doit utiliser
+  // 207 (crédit RETENU, plafonné), jamais 205 (crédit théorique) ni 206 (retenue étrangère brute).
+  it("US intérêt : 205=18, 206=15, 207=15 (retenue réelle < forfait) → 2TR = net 100 + 207 = 115 (pas 118 = net+205)", () => {
+    // 205 = 100 × 17,6 % = 17,6 → arrondi 18 ; 206 = arrondi(15) = 15 ; 207 = min(18, 15) = 15.
+    const decl = calculeDeclaration([
+      { pays: ETATS_UNIS, type: "interet", netEncaisseCents: eur(100), impotEtrangerCents: eur(15) },
+    ]);
+    expect(decl.lignes[0]).toMatchObject({ ligne205Eur: 18, ligne206Eur: 15, ligne207Eur: 15 });
+    expect(decl.report2042).toEqual({ "2DC": 0, "2TS": 0, "2TR": 115 });
+  });
+
+  it("DE dividende : 205=130, 206=264, 207=130 (retenue réelle > convention) → 2DC = net 736 + 207 = 866 (pas 1000 = net+206)", () => {
+    // net 736,25 → arrondi 736 ; 205 = 736,25 × 17,6 % = 129,58 → arrondi 130 ;
+    // 206 = arrondi(263,75) = 264 ; 207 = min(130, 264) = 130 (plafond conventionnel).
+    const decl = calculeDeclaration([
+      { pays: ALLEMAGNE, type: "dividende", netEncaisseCents: eur(736.25), impotEtrangerCents: eur(263.75) },
+    ]);
+    expect(decl.lignes[0]).toMatchObject({ ligne205Eur: 130, ligne206Eur: 264, ligne207Eur: 130 });
+    expect(decl.report2042).toEqual({ "2DC": 866, "2TS": 0, "2TR": 0 });
   });
 });
 

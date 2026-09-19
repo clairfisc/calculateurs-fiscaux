@@ -33,6 +33,13 @@ résiduelles, §6).
 - **Entreprendre.Service-Public — « Évolution du taux du Prélèvement Forfaitaire Unique (PFU) »**
   (actualité A18796) : PFU porté à **31,4 %** au 1ᵉʳ janvier 2026, composition 12,8 % IR +
   18,6 % PS. <https://entreprendre.service-public.gouv.fr/actualites/A18796>
+- **Loi n° 2025-1403 du 30/12/2025 (LFSS 2026), art. 12** — source primaire de la hausse de CSG
+  capital (⚠️ le numéro « 2025-1043 » qui circule est une coquille de note Légifrance ; le bon
+  numéro est **2025-1403**).
+  <https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000053226452>
+- **CSS art. L. 136-8, I-2° et IV** (version en vigueur au 27/06/2026) — taux de CSG sur les
+  revenus du patrimoine et de placement (10,6 %) et liste des exceptions maintenues à 9,2 %.
+  <https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000053278668>
 - **BOFiP BOI-RPPM-RCM-20-10-30-10** — conditions d'éligibilité à l'**abattement de 40 %** des
   revenus distribués (réservé au barème, case 2OP).
   <https://bofip.impots.gouv.fr/bofip/2218-PGP.html>
@@ -91,8 +98,11 @@ La date d'effet de la hausse CSG **dépend de la catégorie de prélèvements so
 `PARAMETRES`). Pour 2025 : placement 17,2 %, patrimoine 18,6 %. Pour 2026 : tout à 18,6 %.
 
 > ⚠️ Hors périmètre du module mais à connaître : revenus fonciers, plus-values **immobilières**,
-> assurance-vie, livrets réglementés, PEL/CEL **restent à CSG 9,2 %** (PS 17,2 %) — non concernés
-> par la hausse. Le module ne traite que RCM + plus-values **mobilières** de droit commun.
+> assurance-vie, CEL/PEL et **PEP** **restent à CSG 9,2 %** (PS 17,2 %) — non concernés par la
+> hausse (CSS art. L. 136-8, IV). Les **livrets réglementés** (Livret A, LDDS, LEP, Livret Jeune,
+> PEAC) ne sont PAS dans ce cas : ils sont **exonérés de prélèvements sociaux** (0 %), avant
+> comme après la hausse — à ne pas confondre avec un maintien à 17,2 %. Le module ne traite que
+> RCM + plus-values **mobilières** de droit commun.
 
 > Sources : <https://cms.law/fr/fra/news-information/revenus-du-patrimoine-et-revenus-de-placement-attention-a-la-hausse-de-la-csg> ·
 > <https://www.actu-juridique.fr/fiscalite/fiscal-finances/la-csg-en-hausse-sur-les-revenus-du-capital/> ·

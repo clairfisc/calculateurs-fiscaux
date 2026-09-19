@@ -21,8 +21,9 @@ function tauxNoticeBp(ligne: Ligne): number {
 }
 
 /**
- * Détermine la case du 2042 / 2042C où reporter le montant net de la ligne (routage post-2047,
- * notice 2047-NOT rev. 2025 ; cf. SOURCES-2047.md §5).
+ * Détermine la case du 2042 / 2042C où reporter le montant BRUT de la ligne (routage post-2047,
+ * notice 2047-NOT rev. 2025 ; cf. SOURCES-2047.md §5). Le montant reporté (calculeDeclaration)
+ * est le brut (net + crédit retenu), pas le net — cette fonction ne fait que choisir la case.
  *
  *   intérêt                              → 2TR  (« intérêts et autres produits de placement à revenu fixe »)
  *   dividende éligible abattement 40 %   → 2DC  (« revenus d'actions et parts de sociétés ayant leur siège
@@ -90,8 +91,14 @@ export function calculeDeclaration(lignes: readonly Ligne[]): Declaration2047 {
   const resultats = lignes.map(calculeLigne);
   let case8vlEur = 0;
   let case8plEur = 0;
-  // Routage 2042 : le montant net est reporté quelle que soit l'ouverture du crédit
-  // (le revenu reste imposable même sans crédit). cf. SOURCES-2047.md §5.
+  // Routage 2042 (2DC/2TS/2TR) : on reporte le BRUT, pas le net, quelle que soit
+  // l'ouverture du crédit (le revenu reste imposable même sans crédit).
+  // Ligne 208 du 2047 : « Revenus crédit d'impôt inclus total lignes 203 + 207 ».
+  // La notice 2047-NOT 2026 (« Modalités déclaratives ») exige de reporter « le
+  // revenu brut sans déduction de l'impôt étranger » ; Brochure IR 2026 p.126 :
+  // « montant brut, majoré du crédit d'impôt conventionnel ». Brut = net encaissé
+  // (203) + crédit RETENU (207, pas le 205 théorique — c'est ce qui est effectivement
+  // ajouté au net sur la ligne 208). cf. SOURCES-2047.md §5.
   const report2042: Record<Case2042, number> = { "2DC": 0, "2TS": 0, "2TR": 0 };
   lignes.forEach((ligne, i) => {
     const r = resultats[i]!;
@@ -99,7 +106,7 @@ export function calculeDeclaration(lignes: readonly Ligne[]): Declaration2047 {
       case8vlEur += r.ligne207Eur;
       case8plEur += arrondiEuro(ligne.netEncaisseCents);
     }
-    report2042[r.case2042] += arrondiEuro(ligne.netEncaisseCents);
+    report2042[r.case2042] += arrondiEuro(ligne.netEncaisseCents) + r.ligne207Eur;
   });
   return { lignes: resultats, case8vlEur, case8plEur, report2042 };
 }

@@ -94,9 +94,12 @@ export interface ResultatLigne {
   /** La ligne ouvre-t-elle droit à crédit (forfait > 0) ? */
   readonly ouvreDroitCredit: boolean;
   /**
-   * Case du 2042 / 2042C où reporter le montant net de cette ligne (routage post-2047).
-   * Dividende éligible abattement 40 % → `2DC` ; dividende non éligible (autres revenus
-   * distribués, ETF distribuants) → `2TS` ; intérêt → `2TR`. cf. SOURCES-2047.md §5.
+   * Case du 2042 / 2042C où reporter le montant BRUT de cette ligne (routage post-2047,
+   * cf. `Declaration2047.report2042` pour le montant lui-même — net encaissé + crédit
+   * retenu, équivalent ligne 208 du 2047 ; la notice 2047-NOT exige de reporter « le
+   * revenu brut sans déduction de l'impôt étranger »). Dividende éligible abattement
+   * 40 % → `2DC` ; dividende non éligible (autres revenus distribués, ETF distribuants)
+   * → `2TS` ; intérêt → `2TR`. cf. SOURCES-2047.md §5.
    */
   readonly case2042: Case2042;
 }
@@ -110,8 +113,11 @@ export interface Declaration2047 {
   readonly case8plEur: number;
   /**
    * Routage 2042 : pour chaque case du 2042 / 2042C (`2DC`, `2TS`, `2TR`), somme en EUR
-   * des montants nets à y reporter (toutes lignes, qu'elles ouvrent droit à crédit ou non —
-   * le revenu reste imposable même sans crédit). cf. SOURCES-2047.md §5.
+   * des montants BRUTS à y reporter (net encaissé + crédit retenu, équivalent ligne 208
+   * du 2047), toutes lignes confondues, qu'elles ouvrent droit à crédit ou non — le revenu
+   * reste imposable même sans crédit. La notice 2047-NOT exige de reporter « le revenu
+   * brut sans déduction de l'impôt étranger » (Brochure IR 2026 p.126 : « montant brut,
+   * majoré du crédit d'impôt conventionnel »). cf. SOURCES-2047.md §5.
    *
    * Les clés absentes valent 0 ; on n'expose que les cases effectivement alimentées.
    */

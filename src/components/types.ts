@@ -24,8 +24,10 @@ export interface LigneSaisie {
   /** Impôt étranger réellement retenu, dans la devise saisie, sous forme de chaîne. */
   impotEtranger: string;
   /**
-   * Dividende éligible à l'abattement de 40 % (UE/convention) → routage 2DC ;
-   * sinon 2TS. Défaut `true`. Non pertinent pour les intérêts.
+   * Dividende éligible à l'abattement de 40 % — conditions cumulatives : société
+   * soumise à l'IS ou équivalent, siège UE ou pays conventionné, dividende voté en
+   * AG (cf. `LigneFormulaire.tsx`) → routage 2DC ; sinon 2TS. Défaut `true`. Non
+   * pertinent pour les intérêts.
    */
   eligibleAbattement40?: boolean;
 }

@@ -172,8 +172,14 @@ titres / 2074-CMV). Une MV nette annuelle est définitivement perdue.
 > « […] taux forfaitaire de 12,8 % ainsi qu'aux prélèvements sociaux […] au taux global de 17,2 %.
 > […] imposées à un taux global de **30 %**. » Option barème (cessions ≥ 01/01/2023), case 3CN.
 
-Le moteur **ne liquide pas l'impôt** : il produit l'assiette (PV/MV nette → 3AN/3BN). Le PFU 30 %
-est appliqué par l'administration.
+⚠️ Citation figée à la version BOFiP du 23/04/2024, antérieure à la LFSS 2026. Depuis la loi
+n° 2025-1403 du 30/12/2025, art. 12, la CSG capital passe de 9,2 % à 10,6 % (CSS art. L. 136-8,
+I, 2°) → PS 18,6 % et PFU 31,4 %. Les plus-values d'actifs numériques relèvent des revenus du
+patrimoine (CSS art. L. 136-6, I-e) : la hausse s'applique dès l'imposition des revenus 2025
+(art. 12, II, 1°). Cf. §2bis de SOURCES-PFU-BAREME.md.
+
+Le moteur **ne liquide pas l'impôt** : il produit l'assiette (PV/MV nette → 3AN/3BN). Le PFU
+(31,4 % depuis les revenus 2025 pour cette catégorie) est appliqué par l'administration.
 
 ## 8. Cas-types oracle (gelés en tests — `compute.test.ts`)
 

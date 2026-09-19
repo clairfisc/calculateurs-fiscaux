@@ -27,7 +27,7 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   "/": { publiee: "2026-06-24", modifiee: "2026-06-30" },
 
   // Calculateurs
-  "/dividendes-etrangers-2047/": { publiee: "2026-06-29", modifiee: "2026-06-29" },
+  "/dividendes-etrangers-2047/": { publiee: "2026-06-29", modifiee: "2026-09-19" },
   "/plus-values-cession-titres-etrangers/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
   "/plus-values-crypto-2086/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
   "/comptes-etrangers-3916/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
@@ -36,14 +36,14 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   // Simulateur d'arbitrage
   "/purger-ses-moins-values/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
   "/quand-convertir-ses-cryptos/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
-  "/pea-ou-compte-titres/": { publiee: "2026-06-30", modifiee: "2026-09-18" },
+  "/pea-ou-compte-titres/": { publiee: "2026-06-30", modifiee: "2026-09-19" },
   "/donner-ou-vendre-des-actions/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
 
   // Guides
-  "/guide-credit-impot-dividendes-etrangers/": { publiee: "2026-06-24", modifiee: "2026-06-29" },
+  "/guide-credit-impot-dividendes-etrangers/": { publiee: "2026-06-24", modifiee: "2026-09-19" },
   "/case-8pl-8vl-2026/": { publiee: "2026-06-24", modifiee: "2026-06-29" },
   "/declarer-ses-cryptos-aux-impots/": { publiee: "2026-06-29", modifiee: "2026-09-14" },
-  "/faut-il-cocher-2op/": { publiee: "2026-06-29", modifiee: "2026-08-18" },
+  "/faut-il-cocher-2op/": { publiee: "2026-06-29", modifiee: "2026-09-19" },
   "/reporter-ses-moins-values-bourse/": { publiee: "2026-06-29", modifiee: "2026-06-29" },
   "/case-2bh-2cg/": { publiee: "2026-08-18", modifiee: "2026-08-18" },
 
