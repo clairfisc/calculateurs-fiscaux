@@ -129,7 +129,10 @@ soit **31,4 %** au global. Cf. `src/lib/pfu-bareme/rates.ts` (§2bis de SOURCES-
 - Le module calcule l'**assiette** (résultat net, cases) — **pas l'impôt final** (12,8 % + PS
   appliqués par l'administration), comme le module 2047 produit des cases et non l'impôt dû.
 - **Cases 2042 / 2042-C :**
-  - **3VG** = **plus-value nette imposable** de l'année (après imputation des moins-values).
+  - **3VG** = **plus-value nette imposable** de l'année (après imputation des moins-values,
+    **AVANT** abattement pour durée de détention — cf. §5, correction du 19/09/2026).
+  - **3SG** = montant de l'**abattement pour durée de détention**, quand il s'applique (barème,
+    cf. §5). Ne joue que sur l'IR ; PS et RFR restent assis sur 3VG.
   - **3VH** = **moins-value de l'année non imputée** (la perte nette créée cette année,
     reportable 10 ans). cf. §6.
 - **Rôle des formulaires :** la fiche **2074-CMV** / le **2074** déterminent le résultat par
@@ -168,11 +171,30 @@ col. E nette → **3VG** ; « *Moins-values de l'année non imputées […] = ca
 - L'imputation des moins-values se fait **avant** abattement (§6, « montant brut sur montant
   brut »).
 
+> **Correction du 19/09/2026 (audit adversarial — bug confirmé par deux audits indépendants).**
+> La case déclarative de l'abattement est **3SG**, distincte de **3VG**. **3VG reste le montant
+> AVANT abattement** (la plus-value nette après imputation, non réduite de l'abattement) ; l'
+> abattement de droit commun se déclare séparément en **3SG**. L'ancienne implémentation
+> retournait dans `case3VG` le montant **après** abattement quand il était actif, et ne produisait
+> aucune case 3SG — ce qui sous-déclarait l'assiette des **prélèvements sociaux** et minorait le
+> **revenu fiscal de référence (RFR)**, qui restent l'un et l'autre assis sur le montant AVANT
+> abattement (l'abattement ne joue que sur l'IR). Corrigé dans `compute.ts` : `case3VG` = toujours
+> avant abattement ; `case3SG` = montant de l'abattement (non nul uniquement sous barème avec
+> abattement actif). cf. cas F/F′ ci-dessous (§8).
+>
+> **Source de la correction :** Brochure pratique **IR 2026** (déclaration des revenus 2025),
+> p. 141 : « *Si vous demandez l'application de l'abattement pour durée de détention de droit
+> commun, déclarez la plus-value avant abattement ligne 3VG et le montant de l'abattement ligne
+> 3SG de la 2042 C.* » ; p. 139 : « *Les abattements pour durée de détention […] ne sont
+> applicables ni pour l'imposition aux prélèvements sociaux […] ni pour le calcul du revenu
+> fiscal de référence* ».
+
 **Sources (vérifiées 3-0) :** fiche 2074-CMV + BOFiP **BOI-RPPM-PVBMI-20-20-20-10** : « *50 % […]
 détenus depuis au moins 2 ans et moins de 8 ans […] 65 % […] au moins 8 ans* » ; « *l'imposition
 selon le barème progressif permet l'application des abattements […] sur les titres acquis ou
 souscrits avant le 1er janvier 2018* » ; « *plus-values de cession de titres acquis […] après le
-1.1.2018 […] exclues du champ d'application des abattements* ».
+1.1.2018 […] exclues du champ d'application des abattements* » ; Brochure pratique IR 2026,
+p. 139 et p. 141 (case 3SG / 3VG, assiette PS et RFR — cf. encadré correction ci-dessus).
 
 > **Limite assumée (documentée) :** le module applique l'abattement **par cession** (taux fonction
 > de la durée de détention de la ligne). L'interaction fine **abattement × imputation de
@@ -318,14 +340,22 @@ non d'un calcul.
   (toujours reportable, **pas** en 3VH — point de correction clé).
 
 ### Cas F — Abattement durée de détention, titres pré-2018, **option barème 2OP** (secondaire)
+> **Corrigé le 19/09/2026 (audit adversarial).** Voir encadré §5 : 3VG reste le montant AVANT
+> abattement ; l'abattement se déclare en 3SG (Brochure pratique IR 2026, p. 139 et p. 141). L'ancienne
+> version de ce cas (3VG = 2 100 €) gelait le comportement fautif — corrigée ci-dessous.
 - Acquisition 2014-03-10 (avant 2018) ; cession 2025-06-02 : 100 titres, revient 4 000 €,
   cession nette 10 000 € → gain **brut 6 000,00 €**. Détention ≥ 8 ans → **abattement 65 %**.
-- **Sous PFU (défaut) : pas d'abattement → 3VG = 6 000 €.**
-- **Sous barème (2OP) : 6 000 × (1 − 0,65) = 2 100,00 € → 3VG = 2 100 €.**
+- **Sous PFU (défaut) : pas d'abattement → 3VG = 6 000 €, 3SG = 0 (absent).**
+- **Sous barème (2OP) : 3VG = 6 000 € (AVANT abattement) ; abattement = 6 000 × 0,65 = 3 900,00 €
+  → 3SG = 3 900 €.** (Net après abattement pour l'IR : 6 000 − 3 900 = 2 100 €, calculé par
+  l'administration — pas restitué en case, cf. §4.) Les PS et le RFR restent assis sur les
+  **6 000 €** de 3VG.
 
 ### Cas F′ — Variante tranche 50 % (≥ 2 et < 8 ans, pré-2018 + barème)
+> **Corrigé le 19/09/2026** — même règle que le cas F ci-dessus.
 - Acquisition 2017-12-15 ; cession 2025-06-02 → détention 7 ans (≥ 2 et < 8) → **abattement 50 %**.
-- Gain brut 6 000 € → barème : 6 000 × 0,50 = **3 000 €**. (PFU : 6 000 €.)
+- Gain brut 6 000 € → **3VG = 6 000 €** (PFU et barème identiques) ; sous barème, abattement =
+  6 000 × 0,50 = **3 000 € → 3SG = 3 000 €**.
 
 ---
 

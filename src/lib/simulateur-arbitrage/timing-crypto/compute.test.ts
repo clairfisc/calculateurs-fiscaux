@@ -132,7 +132,7 @@ describe("L3 timing-crypto — cas (d) : barème (case 3CN) et millésime 2026",
     expect(r2026.deltaImpotEtPsCents).toBe(0);
   });
 
-  it("régime barème (case 3CN) se propage dans les détails", () => {
+  it("régime barème (case 3CN) se propage dans les détails — API/tests uniquement, non exposé en UI (cf. audit : mode rapide tmiBp = taux fixe, delta structurellement nul)", () => {
     const rBareme = calculeTimingCrypto(
       input({
         montantTotalAConvertirCents: eur(100_000),

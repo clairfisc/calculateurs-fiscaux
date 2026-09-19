@@ -267,12 +267,20 @@ export function calculeDeclaration(input: Declaration2074Input): Declaration2074
     moinsValuesAnterieuresCents - moinsValuesAnterieuresImputeesEurCents;
 
   // --- Case 3VG ---
-  // Sous PFU (ou barème sans abattement), 3VG = plus-value nette après imputation (pas d'abattement).
-  // Sous barème AVEC abattement, on est nécessairement sans imputation (sinon on a levé plus haut) :
-  // 3VG = somme des plus-values après abattement.
-  const case3VG = arrondiEuro(
-    abattementActif ? plusValueApresAbattementEurCents : plusValueNetteBruteEurCents,
-  );
+  // 3VG = plus-value nette **AVANT** abattement pour durée de détention (après imputation des
+  // moins-values, qui se fait déjà brut sur brut, cf. §6). L'abattement ne se déclare qu'en 3SG
+  // (Brochure pratique IR 2026, p. 140) et ne joue que sur l'impôt sur le revenu : les prélèvements
+  // sociaux et le RFR restent assis sur le montant AVANT abattement (Brochure IR 2026, p. 139).
+  // Sous barème AVEC abattement, on est nécessairement sans imputation (sinon on a levé plus haut),
+  // donc plusValueNetteBruteEurCents == plusValueBruteAnneeEurCents dans ce cas.
+  const case3VG = arrondiEuro(plusValueNetteBruteEurCents);
+
+  // --- Case 3SG ---
+  // Montant de l'abattement de droit commun (durée de détention), non nul uniquement sous barème
+  // avec abattement actif (cf. §5, §8 cas F). 0 sinon (PFU, ou barème sans abattement).
+  const case3SG = abattementActif
+    ? arrondiEuro(plusValueNetteBruteEurCents - plusValueApresAbattementEurCents)
+    : 0;
 
   return {
     cessions,
@@ -281,6 +289,7 @@ export function calculeDeclaration(input: Declaration2074Input): Declaration2074
     moinsValueAnneeEurCents,
     moinsValuesAnterieuresImputeesEurCents,
     case3VG,
+    case3SG,
     case3VH: arrondiEuro(moinsValueAnneeReportableEurCents),
     moinsValueAnneeReportableEurCents,
     moinsValuesAnterieuresRestantesEurCents,

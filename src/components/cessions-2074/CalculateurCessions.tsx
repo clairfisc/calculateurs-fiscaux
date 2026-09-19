@@ -10,8 +10,9 @@ import ResultatsCessions from "./ResultatsCessions";
 /**
  * Calculateur 2074-CMV (plus/moins-values de cession, compte-titres ordinaire — courtier étranger,
  * PEA exclu) — îlot React autonome. Saisie manuelle des cessions (PMP via lots ou PMP direct,
- * change par opération), calcul via le moteur `cessions-2074`, restitution des cases 3VG/3VH +
- * imputation/report des moins-values. 100 % client-side : aucune donnée ne quitte le navigateur.
+ * change par opération), calcul via le moteur `cessions-2074`, restitution des cases 3VG/3VH
+ * (et 3SG sous barème avec abattement) + imputation/report des moins-values. 100 % client-side :
+ * aucune donnée ne quitte le navigateur.
  */
 
 let compteurCession = 0;

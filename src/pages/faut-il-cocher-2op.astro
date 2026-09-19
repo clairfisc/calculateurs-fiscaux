@@ -64,19 +64,22 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
               <th scope="row">30 %, 41 % ou 45 %</th>
               <td class="non">Non</td>
               <td>
-                Votre taux marginal dépasse largement les 12,8 % du PFU, même
-                après abattement : la flat tax redevient moins chère.
+                Votre taux marginal dépasse largement les 12,8 % du PFU : la
+                flat tax redevient moins chère — sauf exception pour des
+                <a href="#piege-titres-avant-2018">titres acquis avant 2018</a>.
               </td>
             </tr>
           </tbody>
         </table>
         <p class="note">
-          Deux réserves avant de vous fier à cette règle : l'option est
+          Trois réserves avant de vous fier à cette règle : l'option est
           <strong> globale</strong> (elle emporte tous vos revenus du capital,
-          pas seulement vos dividendes), et l'abattement de 40 % ne vaut
+          pas seulement vos dividendes), l'abattement de 40 % ne vaut
           <strong> que pour les dividendes éligibles</strong> — sans eux, le
-          barème devient défavorable plus tôt. D'où l'intérêt de chiffrer votre
-          cas exact ci-dessous.
+          barème devient défavorable plus tôt — et, <strong>pour les titres
+          acquis avant 2018</strong>, l'abattement de 65 % pour durée de
+          détention, réservé au barème, inverse la règle aux TMI 30, 41 et
+          45 %. D'où l'intérêt de chiffrer votre cas exact ci-dessous.
         </p>
       </section>
 
@@ -187,10 +190,15 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
             cocher !). À 11 %, l'abattement et la CSG déductible suffisent encore
             généralement à battre les 12,8 % du PFU.
           </dd>
-          <dt>TMI 30 % et au-delà → le PFU reprend l'avantage</dt>
+          <dt>TMI 30 % et au-delà → le PFU reprend l'avantage (hors titres anciens)</dt>
           <dd>
             30 % (ou 41 %, 45 %) appliqués au capital dépassent les 12,8 % du PFU,
-            même après abattement : la flat tax redevient le moins-disant.
+            même après abattement de 40 % sur les dividendes : la flat tax
+            redevient le moins-disant. Exception : pour des <strong>plus-values
+            sur titres acquis avant le 1ᵉʳ janvier 2018</strong>, un autre
+            abattement s'applique, réservé au barème et refusé au PFU — voir le
+            <a href="#piege-titres-avant-2018">piège dédié</a> ci-dessous, qui
+            inverse la règle pour ces titres.
           </dd>
         </dl>
         <p class="note">
@@ -206,10 +214,28 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
         <h2 id="pieges">Les pièges à connaître avant de cocher</h2>
         <ul>
           <li>
-            <strong>L'option est globale.</strong> 2OP s'applique à
-            <strong> tous</strong> les revenus du capital du foyer pour l'année —
-            impossible de choisir le barème sur vos dividendes et le PFU sur vos
-            plus-values. Le bon calcul se fait sur le <strong>total</strong>.
+            <strong>L'option est globale — mais pas illimitée.</strong> 2OP
+            s'applique à <strong>tous</strong> les revenus du capital du foyer
+            entrant dans son champ pour l'année — impossible de choisir le
+            barème sur vos dividendes et le PFU sur vos plus-values. Le bon
+            calcul se fait sur le <strong>total</strong>. Elle emporte aussi
+            les produits d'assurance-vie et de capitalisation attachés aux
+            primes versées depuis le <strong>27 septembre 2017</strong> (CGI,
+            art. 200 A, 1-B-2° ; BOI-RPPM-RCM-20-15) : leur taux forfaitaire normal, 7,5 % pour un
+            contrat de plus de 8 ans (encours net de primes ≤ 150&nbsp;000&nbsp;€,
+            tous contrats confondus), passe
+            alors à votre TMI — un foyer à TMI 11 % qui coche 2OP fait ainsi
+            grimper ces gains de 7,5 % à 11 % (≈ 10,25 % effectif après CSG
+            déductible), au-delà des abattements annuels
+            de 4 600&nbsp;€ / 9 200&nbsp;€. Les produits de primes versées
+            <strong> jusqu'au 26 septembre 2017</strong> sont hors champ de
+            2OP. À l'inverse, elle <strong>ne</strong> fait <strong>pas</strong>
+            basculer vos plus-values de <strong>cession de crypto-actifs</strong>
+            au barème : celles-ci relèvent de leur propre option (case 3CN, CGI
+            art. 200 C), indépendante de 2OP. Quant aux <strong>revenus
+            fonciers</strong>, ils sont déjà au barème progressif de plein
+            droit dans tous les cas — 2OP ne les « emporte » pas, elle ne
+            change rien pour eux.
           </li>
           <li>
             <strong>L'abattement de 40 % ne couvre pas tout.</strong> Intérêts,
@@ -229,35 +255,63 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
             capital n'est pas celle de votre salaire — un bon comparateur le prend
             en compte (mode précis : revenu + parts).
           </li>
+          <li id="piege-titres-avant-2018">
+            <strong>Titres acquis avant 2018 : la règle des TMI élevées
+            s'inverse.</strong> Pour ces titres, un abattement pour durée de
+            détention (CGI, art. 150-0 D, 1 ter ; BOI-RPPM-PVBMI-20-20-10)
+            réduit l'assiette imposable à
+            l'IR au barème — <strong>50 %</strong> entre 2 et 8 ans de détention,
+            <strong> 65 %</strong> au-delà — alors que le PFU n'en bénéficie
+            <strong> jamais</strong>. Une fois l'abattement de 65 % appliqué, le
+            coût réel à l'impôt sur le revenu tombe à <strong>8,46 %</strong>
+            pour une TMI de 30 %, <strong>11,56 %</strong> pour 41 % et
+            <strong> 12,69 %</strong> pour 45 % — les trois sous les 12,8 % du
+            PFU. Le barème redevient alors gagnant, y compris aux TMI les plus
+            hautes. Simulez ce cas avec le champ « Dont titres acquis avant 2018 »
+            du <a href="#simulateur">simulateur ci-dessus</a>.
+          </li>
         </ul>
       </section>
 
       <section aria-labelledby="revocabilite">
         <h2 id="revocabilite">Peut-on revenir sur la case 2OP ?</h2>
         <p>
-          La réponse a changé en 2026 : la loi de finances pour 2026 a
-          <strong>supprimé le caractère irrévocable</strong> de l'option. Mais pas
-          pour toutes les années en même temps — et c'est précisément ce décalage
-          qui piège.
+          La réponse a changé en 2026, mais elle ne concerne qu'un seul sens :
+          la loi de finances pour 2026 a <strong>supprimé le caractère
+          irrévocable</strong> de l'option, ce qui ouvre la possibilité d'y
+          <strong>renoncer</strong> après coup pour les revenus 2026 et
+          suivants. Elle ne change rien à l'<strong>exercice</strong> de
+          l'option elle-même, qui reste conditionné au dépôt dans les délais.
+          Et le changement ne s'applique pas à toutes les années en même temps
+          — d'où le piège.
         </p>
         <dl class="cases">
-          <dt>Revenus 2025 (déclarés au printemps 2026) → c'est définitif</dt>
+          <dt>Revenus 2025 (déclarés au printemps 2026) → irrévocable dans un seul sens</dt>
           <dd>
             L'ancienne règle s'applique encore : l'option pouvait être ajoutée ou
             retirée <strong>tant que la date limite de dépôt n'était pas
-            passée</strong>, et devient <strong>irrévocable</strong> ensuite. Une
-            nuance souvent mal comprise : ce qui ferme la porte, c'est la
-            <strong>date limite</strong>, et non le fait d'avoir validé votre
-            déclaration. Tant que l'échéance n'était pas atteinte, vous pouviez
-            re-déposer une déclaration rectificative et changer d'avis.
+            passée</strong> — y compris en re-déposant une déclaration
+            rectificative pour changer d'avis. Passé cette date limite, la
+            situation devient <strong>asymétrique</strong> : si vous aviez
+            coché, l'option devient <strong>irrévocable</strong>, impossible
+            d'y renoncer. Si vous n'aviez pas coché, en revanche, une
+            <strong> tolérance administrative</strong> permet le plus souvent
+            de rattraper l'oubli même après cette date — voir la
+            <a href="#oubli">section dédiée</a> ci-dessous, qui détaille ce
+            mécanisme et ses limites.
           </dd>
-          <dt>Revenus 2026 (déclarés au printemps 2027) → c'est rattrapable</dt>
+          <dt>Revenus 2026 (déclarés au printemps 2027) → le retrait devient rattrapable</dt>
           <dd>
-            Le mot « irrévocable » a disparu du texte. L'option redevient donc
-            modifiable après coup, dans le <strong>délai de réclamation de droit
-            commun</strong> — jusqu'au 31 décembre de la deuxième année suivant
-            celle de la mise en recouvrement de l'impôt. Un choix fait au
-            printemps 2027 restera donc corrigeable pendant plus de deux ans.
+            Le mot « irrévocable » a disparu du texte : vous pourrez désormais
+            <strong> renoncer</strong> à une option déjà cochée après coup,
+            dans le <strong>délai de réclamation de droit commun</strong> —
+            jusqu'au 31 décembre de la deuxième année suivant celle de la mise
+            en recouvrement de l'impôt. Attention à ne pas confondre les deux
+            sens : cette réforme ouvre le <strong>retrait</strong>, pas
+            l'exercice tardif — la condition « au plus tard avant l'expiration
+            de la date limite de déclaration » subsiste à l'article 200 A. Un
+            oubli continuera de se rattraper par la même tolérance
+            administrative qu'avant la réforme, pas par cet article.
           </dd>
         </dl>
         <p class="note">
@@ -283,26 +337,48 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
           entièrement de l'année concernée.
         </p>
         <p>
-          <strong>Pour vos revenus 2025, la porte est fermée dans les deux
-          sens.</strong> Si vous n'avez pas coché, le texte exige que l'option soit
-          exercée « au plus tard avant l'expiration de la date limite de
-          déclaration » : la demander après, ce n'est plus exercer l'option. Si
-          vous aviez coché et le regrettez, c'est l'irrévocabilité qui interdit le
-          retour en arrière — le Conseil d'État l'a confirmé en 2024, y compris
-          dans le délai de réclamation. Le service de correction en ligne, ouvert
-          de l'été à l'automne, laisse matériellement manipuler la case, mais
-          l'administration reste fondée à opposer cette règle sur le fond. Vous
-          pouvez exposer votre situation à votre centre des finances publiques,
-          sans garantie.
+          <strong>Pour vos revenus 2025, la règle est asymétrique</strong> :
+          tout dépend si vous n'avez rien coché, ou si vous aviez coché et le
+          regrettez.
         </p>
         <p>
-          <strong>Pour vos revenus 2026 et suivants, l'oubli n'est plus
-          fatal :</strong> le caractère irrévocable ayant été supprimé, vous pourrez
-          revenir sur votre choix après la déclaration, dans le délai de
-          réclamation.
+          <strong>Vous n'avez pas coché :</strong> sur le strict texte, l'option
+          doit être exercée « au plus tard avant l'expiration de la date limite
+          de déclaration », donc la demander après n'est plus, juridiquement,
+          exercer l'option. Mais l'administration accepte cette régularisation
+          par <strong>tolérance constante</strong>, en dehors de tout texte de
+          loi : la réponse ministérielle Rabault (RM Rabault, JOAN 25/02/2020,
+          n° 24560) confirme que ces demandes sont acceptées « sans pénalité »,
+          et la réponse ministérielle Klinkert (RM Klinkert, JOAN 24/10/2023,
+          n° 3778) admet l'option après le dépôt de la déclaration, y compris en
+          cours de contrôle. Le Conseil d'État, saisi de cette dernière réponse
+          (CE, 5 avril 2024, n° 490411), a écarté le recours en jugeant que le
+          passage attaqué — celui sur l'irrévocabilité — ne fait que reprendre
+          la loi ; il ne s'est pas prononcé sur la tolérance elle-même, qui
+          reste une pratique administrative constante plutôt qu'un droit
+          inscrit dans un texte. Concrètement, pour les revenus 2025, le service de correction
+          en ligne reste ouvert du <strong>29 juillet au 30 novembre 2026
+          inclus</strong>, puis une réclamation reste possible jusqu'au
+          <strong> 31 décembre 2028</strong> (LPF, art. R*196-1).
         </p>
         <p>
-          Dans les deux cas, le bon réflexe est le même : chiffrer l'écart
+          <strong>Vous aviez coché et le regrettez :</strong> là, la porte est
+          bien fermée, sans la même tolérance en sens inverse. C'est
+          l'irrévocabilité de l'ancien régime qui interdit le retour en arrière
+          — le Conseil d'État l'a confirmé en 2024, y compris dans le délai de
+          réclamation (voir la note ci-dessous).
+        </p>
+        <p>
+          <strong>Pour vos revenus 2026 et suivants,</strong> ne confondez pas
+          les deux mécanismes. L'oubli continue de se rattraper exactement de
+          la même façon que ci-dessus — c'est la tolérance administrative
+          constante, pas un effet de la réforme de 2026. Ce que change la loi
+          de finances pour 2026, c'est l'autre sens : vous pourrez désormais
+          <strong> renoncer</strong> à une option déjà cochée, dans le délai de
+          réclamation — le cas qui, pour 2025, reste définitivement fermé.
+        </p>
+        <p>
+          Dans tous les cas, le bon réflexe est le même : chiffrer l'écart
           <strong>avant</strong> de déclarer, pas en découvrant son avis. C'est
           l'affaire de quelques secondes avec le
           <a href="#simulateur">simulateur ci-dessus</a>.
@@ -327,7 +403,10 @@ const noticeUrl = "https://www.service-public.gouv.fr/particuliers/vosdroits/F34
           n'est pas passée</strong> — y compris en re-déposant une déclaration
           rectificative après avoir validé. C'est le bon moment pour comparer ;
           pour les revenus 2025, c'est aussi
-          <a href="#revocabilite">le dernier</a>.
+          <a href="#revocabilite">le dernier moment où le choix reste
+          réversible dans les deux sens</a>. Passé ce délai, cocher devient
+          irrévocable, alors qu'un oubli reste rattrapable par tolérance
+          administrative (<a href="#oubli">voir la section dédiée</a>).
         </p>
       </section>
 

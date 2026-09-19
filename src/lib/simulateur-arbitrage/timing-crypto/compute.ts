@@ -14,6 +14,12 @@
  * plus-value crypto est, comme une plus-value mobilière, soumise au PFU ou, sur option globale au
  * barème — case 3CN, cessions depuis le 01/01/2023, distincte de la 2OP des titres ; LF 2022 art. 79).
  *
+ * ⚠️ Le régime `BAREME` n'est plus exposé par `SimulateurTimingCrypto` (UI) : en mode rapide (`tmiBp`
+ * seul), le barème est appliqué comme un taux fixe, sans progressivité réelle, ce qui rend le
+ * différentiel A/B nul par construction et ne reflète pas la réalité (l'option barème peut, en
+ * pratique, réellement avantager ou pénaliser le fractionnement selon les autres revenus du foyer).
+ * Le régime reste utilisable par l'API/tests, en mode précis (`revenuImposableHorsCapitalCents`).
+ *
  * RÈGLE D'OR : on travaille en **centimes** de bout en bout et on n'arrondit à l'euro qu'à la toute
  * fin. À taux constant (hypothèse du levier), l'impôt est linéaire en l'assiette : taxer le cumul
  * revient à taxer année par année, **mais sans accumuler les arrondis** — sommer des euros déjà

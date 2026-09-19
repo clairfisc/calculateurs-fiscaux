@@ -6,8 +6,10 @@
  *   - Scénario A « vendre puis donner le net » : on chiffre la plus-value de cession via `cessions-2074`
  *     (assiette 3VG), l'impôt + PS via `pfu-bareme.compareRegimes`, puis les droits de donation sur le
  *     **net d'impôt** donné.
- *   - Scénario B « donner les titres appréciés » : plus-value latente **purgée** (CGI 150-0 D, 1, non
- *     imposée à la donation), droits de donation sur la **valeur vénale** entière.
+ *   - Scénario B « donner les titres appréciés » : plus-value latente **purgée** — la donation est
+ *     hors du champ des cessions à titre onéreux (CGI 150-0 A), donc non imposée ; le donataire prend
+ *     pour prix de revient la valeur vénale (CGI 150-0 D, 1) —, droits de donation sur la **valeur
+ *     vénale** entière.
  *
  * RÈGLE D'OR : montants en centimes entiers ; on n'arrondit à l'euro que là où les moteurs composés le
  * font (3VG, impôt + PS) et pour les droits de donation (barème en euros, arrondi euro). Mode A
@@ -40,8 +42,8 @@ interface TrancheDroits {
 }
 
 /**
- * Barème **ligne directe** (CGI art. 777, tableau I) — enfant, petit-enfant, conjoint/PACS. Bornes en
- * euros, inchangé depuis 2011. cf. SOURCES-DONATION.md §2.1.
+ * Barème **ligne directe** (CGI art. 777, tableau I) — enfant, petit-enfant. Bornes en euros,
+ * inchangé depuis 2011. cf. SOURCES-DONATION.md §2.1.
  */
 const BAREME_LIGNE_DIRECTE: readonly TrancheDroits[] = [
   { jusqua: 8_072, taux: 0.05 },
@@ -53,13 +55,30 @@ const BAREME_LIGNE_DIRECTE: readonly TrancheDroits[] = [
   { jusqua: Infinity, taux: 0.45 },
 ];
 
-/** Barème **entre frères et sœurs** (CGI art. 777, tableau II). cf. SOURCES-DONATION.md §2.2. */
+/**
+ * Barème **époux et partenaires de PACS** (CGI art. 777, tableau II) — tarif propre, **distinct** de
+ * la ligne directe à partir de la 2ᵉ tranche (bornes 15 932 € puis 31 865 €, au lieu de 12 109 € puis
+ * 15 932 €) ; les tranches hautes (552 324 / 902 838 / 1 805 677) sont, elles, identiques aux deux
+ * tableaux. Vérifié Légifrance (LEGIARTI000030061736) et service-public.gouv.fr (F14203).
+ * cf. SOURCES-DONATION.md §2.2.
+ */
+const BAREME_CONJOINT_PACS: readonly TrancheDroits[] = [
+  { jusqua: 8_072, taux: 0.05 },
+  { jusqua: 15_932, taux: 0.1 },
+  { jusqua: 31_865, taux: 0.15 },
+  { jusqua: 552_324, taux: 0.2 },
+  { jusqua: 902_838, taux: 0.3 },
+  { jusqua: 1_805_677, taux: 0.4 },
+  { jusqua: Infinity, taux: 0.45 },
+];
+
+/** Barème **entre frères et sœurs** (CGI art. 777, tableau III). cf. SOURCES-DONATION.md §2.3. */
 const BAREME_FRERE_SOEUR: readonly TrancheDroits[] = [
   { jusqua: 24_430, taux: 0.35 },
   { jusqua: Infinity, taux: 0.45 },
 ];
 
-/** Abattement applicable au lien (euros, CGI 779/790). cf. SOURCES-DONATION.md §2.4. */
+/** Abattement applicable au lien (euros, CGI 779/790). cf. SOURCES-DONATION.md §2.5. */
 const ABATTEMENT_EUR: Record<LienDonataire, number> = {
   enfant: 100_000,
   "petit-enfant": 31_865,
@@ -87,7 +106,12 @@ function droitsDonationEur(taxableEur: number, lien: LienDonataire): number {
   if (lien === "neveu-niece") return Math.round(taxable * 0.55);
   if (lien === "tiers") return Math.round(taxable * 0.6);
 
-  const bareme = lien === "frere-soeur" ? BAREME_FRERE_SOEUR : BAREME_LIGNE_DIRECTE;
+  const bareme =
+    lien === "frere-soeur"
+      ? BAREME_FRERE_SOEUR
+      : lien === "conjoint-pacs"
+        ? BAREME_CONJOINT_PACS
+        : BAREME_LIGNE_DIRECTE;
   let droits = 0;
   let bas = 0;
   for (const t of bareme) {
@@ -164,7 +188,8 @@ export function calculeDonation(input: DonationInput): ComparatifArbitrage<Detai
     droitsDonationEur(assietteDroitsACents / 100, lien) * 100;
   const coutTotalACents = impotPlusValueACents + droitsDonationACents;
 
-  // === Scénario B : donner les titres appréciés (PV latente purgée, CGI 150-0 D 1) ===
+  // === Scénario B : donner les titres appréciés (PV latente purgée, CGI 150-0 A ; base de revient
+  // du donataire = valeur vénale, CGI 150-0 D 1) ===
   const plusValueLatentePurgeeCents = clampMin0(valeurVenaleCents - prixRevientCents);
   const assietteDroitsBCents = clampMin0(valeurVenaleCents - abattementDisponibleCents);
   const droitsDonationBCents =

@@ -180,22 +180,42 @@ describe("L5 donation — cas (g) : neveu/nièce (55 % proportionnel, abattement
   });
 });
 
-describe("L5 donation — cas (h) : conjoint/PACS (abattement 80 724 €, barème ligne directe)", () => {
+describe("L5 donation — cas (h) : conjoint/PACS (abattement 80 724 €, barème PROPRE — tableau II)", () => {
+  // Barème conjoint/PACS ≠ ligne directe à partir de la 2e tranche (8 072→15 932→31 865, au lieu de
+  // 8 072→12 109→15 932). Valeurs recalculées après correction de l'aiguillage (avant : le moteur
+  // appliquait à tort la ligne directe, d'où des montants erronés 12 630 €/22 050 €).
   const r = calculeDonation(
     input({ valeurVenaleCents: eur(200_000), prixRevientCents: eur(50_000), lienDonataire: "conjoint-pacs" }),
   );
 
-  it("A : droits sur 72 176 € = 12 630 €, coût total 59 730 €", () => {
+  it("A : droits sur 72 176 € = 11 642 €, coût total 58 742 €", () => {
     expect(r.details.abattementBaseCents).toBe(eur(80_724));
     expect(r.details.assietteDroitsACents).toBe(eur(72_176)); // 152 900 − 80 724
-    expect(r.details.droitsDonationACents).toBe(eur(12_630));
-    expect(r.scenarioA.impotEtPsCents).toBe(eur(59_730));
+    expect(r.details.droitsDonationACents).toBe(eur(11_642));
+    expect(r.scenarioA.impotEtPsCents).toBe(eur(58_742));
   });
 
-  it("B : droits sur 119 276 € = 22 050 € ; Δ = −37 680 €", () => {
+  it("B : droits sur 119 276 € = 21 062 € ; Δ = −37 680 €", () => {
     expect(r.details.assietteDroitsBCents).toBe(eur(119_276)); // 200 000 − 80 724
-    expect(r.details.droitsDonationBCents).toBe(eur(22_050));
-    expect(r.deltaImpotEtPsCents).toBe(eur(22_050) - eur(59_730));
+    expect(r.details.droitsDonationBCents).toBe(eur(21_062));
+    expect(r.deltaImpotEtPsCents).toBe(eur(21_062) - eur(58_742));
+  });
+});
+
+describe("L5 donation — cas (h-bis) : conjoint/PACS, taxable 100 000 € (non-régression audit)", () => {
+  // Assiette isolée du barème (pas de PV : valeur = revient) pour vérifier directement la tranche
+  // 20 % du tableau II sur une base ronde. Valeur vénale = abattement (80 724 €) + 100 000 € taxables.
+  it("assiette 100 000 € (après abattement 80 724 €) → droits 17 207 € (audit : 100 000 € → 17 207 €)", () => {
+    const r = calculeDonation(
+      input({
+        valeurVenaleCents: eur(180_724),
+        prixRevientCents: eur(180_724),
+        lienDonataire: "conjoint-pacs",
+      }),
+    );
+    expect(r.details.plusValueImposeeACents).toBe(0); // pas de PV : isole le barème des droits
+    expect(r.details.assietteDroitsBCents).toBe(eur(100_000));
+    expect(r.details.droitsDonationBCents).toBe(eur(17_207));
   });
 });
 

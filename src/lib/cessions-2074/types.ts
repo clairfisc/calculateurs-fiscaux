@@ -106,8 +106,20 @@ export interface Declaration2074 {
   readonly moinsValueAnneeEurCents: Cents;
   /** Moins-values antérieures effectivement imputées cette année (EUR centimes). */
   readonly moinsValuesAnterieuresImputeesEurCents: Cents;
-  /** Case 3VG : plus-value nette imposable de l'année, en **euros**. */
+  /**
+   * Case 3VG : plus-value nette imposable de l'année, en **euros**, **AVANT** abattement pour
+   * durée de détention (après imputation des moins-values, faite brut sur brut). L'abattement se
+   * déclare séparément en 3SG ; les prélèvements sociaux et le RFR restent assis sur ce montant
+   * (Brochure pratique IR 2026, p. 139-140). cf. SOURCES-2074.md §4-5.
+   */
   readonly case3VG: number;
+  /**
+   * Case 3SG : montant de l'abattement de droit commun pour durée de détention, en **euros**.
+   * Non nul uniquement sous barème (option 2OP) avec abattement actif ; 0 sinon (PFU, ou barème
+   * sans abattement). Ne joue que sur l'IR — sans effet sur les prélèvements sociaux ni le RFR.
+   * cf. SOURCES-2074.md §5.
+   */
+  readonly case3SG: number;
   /** Case 3VH : moins-value **de l'année** non imputée, en **euros** (positif). */
   readonly case3VH: number;
   /** Moins-value de l'année non imputée (EUR centimes) — la part reportable créée cette année. */

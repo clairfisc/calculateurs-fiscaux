@@ -181,20 +181,25 @@ describe("Cas F — abattement durée de détention (barème, titres pré-2018)"
     },
   };
 
-  it("PFU (défaut) : aucun abattement → 3VG = 6000", () => {
+  it("PFU (défaut) : aucun abattement → 3VG = 6000, 3SG absent (0)", () => {
     const r = calculeCession(cession, "PFU");
     expect(r.abattementPct).toBe(0);
     expect(r.resultatEurCents).toBe(600_000);
     const d = calculeDeclaration({ cessions: [cession] }); // PFU par défaut
     expect(d.case3VG).toBe(6000);
+    expect(d.case3SG).toBe(0);
   });
 
-  it("barème (2OP) : abattement 65 % → 3VG = 2100", () => {
+  it("barème (2OP) : abattement 65 % → 3VG = 6000 (AVANT abattement), 3SG = 3900", () => {
+    // Brochure pratique IR 2026, p. 140 : l'abattement se déclare en 3SG, et 3VG reste le montant
+    // AVANT abattement. Les PS et le RFR restent assis sur 3VG (p. 139) — seule l'assiette IR est
+    // réduite (3VG − 3SG = 2 100, appliqué par l'administration, pas par ce module).
     const r = calculeCession(cession, "BAREME");
     expect(r.abattementPct).toBe(65);
     expect(r.resultatApresAbattementEurCents).toBe(210_000); // 6 000 × 0,35
     const d = calculeDeclaration({ cessions: [cession], regime: "BAREME" });
-    expect(d.case3VG).toBe(2100);
+    expect(d.case3VG).toBe(6000);
+    expect(d.case3SG).toBe(3900); // abattement = 6 000 − 2 100
   });
 });
 
@@ -212,12 +217,13 @@ describe("Cas F′ — abattement tranche 50 % (≥ 2 et < 8 ans, pré-2018, bar
     },
   };
 
-  it("barème : abattement 50 % → 3VG = 3000", () => {
+  it("barème : abattement 50 % → 3VG = 6000 (AVANT abattement), 3SG = 3000", () => {
     const r = calculeCession(cession, "BAREME");
     expect(r.abattementPct).toBe(50);
     expect(r.resultatApresAbattementEurCents).toBe(300_000); // 6 000 × 0,50
     const d = calculeDeclaration({ cessions: [cession], regime: "BAREME" });
-    expect(d.case3VG).toBe(3000);
+    expect(d.case3VG).toBe(6000);
+    expect(d.case3SG).toBe(3000); // abattement = 6 000 − 3 000
   });
 });
 

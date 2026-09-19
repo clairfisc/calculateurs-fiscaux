@@ -50,6 +50,41 @@ si le donataire revend **immédiatement** au cours du jour de la donation, sa pr
   donation a bénéficié d'un abattement (ex. 100 000 €) ou d'une exonération : l'abattement réduit les
   **droits de donation**, **pas** le prix de revient.
 
+**Fondement précis (correction G10, audit du 19/09/2026).** La page/le code attribuaient parfois la
+**non-imposition** de la plus-value au moment de la donation à l'art. **150-0 D, 1** ; c'est inexact
+dans la lettre : c'est l'art. **150-0 A** qui **définit le champ** des plus-values imposables (les
+**cessions à titre onéreux**) — la donation, mutation à titre gratuit, en est **hors champ**, d'où
+l'absence d'imposition. L'art. **150-0 D, 1** intervient à l'**étape suivante** : il fixe la **base de
+revient du donataire** en cas de revente ultérieure (valeur retenue pour les droits de mutation à
+titre gratuit). Corrigé dans `compute.ts`, `types.ts` et la page.
+
+### 1.1 Hors périmètre (G4) — ce qui N'EST PAS purgé par la donation
+
+La purge de plus-value décrite ci-dessus vaut pour des **actions ordinaires détenues en pleine
+propriété sur un compte-titres ordinaire (CTO)**. Elle **ne s'applique pas** à :
+
+- **Actions gratuites** : la donation des actions gratuites **déclenche l'imposition du gain
+  d'acquisition chez le DONATEUR**, au titre de l'année de la donation — un impôt **sans trésorerie**
+  en face, puisque les titres sont donnés et non vendus. Sources : **CGI art. 80 quaterdecies** ;
+  BOFiP **BOI-RSA-ES-20-20-20**, §§ 150 et 185.
+- **Titres issus de BSPCE** : le prix d'acquisition retenu pour le calcul d'une plus-value ultérieure
+  reste le **prix d'exercice** des bons, quel que soit le mode de transmission. Source : BOFiP
+  **BOI-RPPM-PVBMI-20-10-20-30**, § 250.
+- **Titres retirés d'un PEA**. Source : BOFiP **BOI-RPPM-PVBMI-20-10-20-30**, § 190. (Le PEA est de
+  toute façon hors périmètre de ce levier, cf. encadré en tête de document.)
+- **Titres placés en report d'imposition (CGI art. 150-0 B ter)** : en cas de donation par le titulaire
+  du report, celui-ci est **transféré au donataire** si ce dernier **contrôle la société** bénéficiaire
+  de l'apport, sous un **délai de conservation** des titres reçus par le donataire de **6 ans**, porté
+  à **11 ans** dans certains cas (délais 5/10 ans portés à 6/11 par la **loi n° 2026-103 du
+  19 février 2026, art. 11**, en vigueur le 21/02/2026). ⚠️ **Point d'application non tranché** : la
+  clause d'entrée en vigueur (art. 11, III) vise « les cessions de titres apportés réalisées à
+  compter du lendemain de la publication », **pas** la date de la donation (contrairement à la LF 2020) ;
+  l'application aux donations antérieures au 21/02/2026 devra être confirmée par le BOFiP. Source :
+  **CGI art. 150-0 B ter** (LEGIARTI000053542872).
+
+Ce périmètre est reflété dans `GARDE_FOUS_DONATION` (dernier garde-fou) et dans un encadré dédié sur la
+page.
+
 ---
 
 ## 2. Droits de donation — barème et abattements (CGI art. 777, 779, 784, 790 G)
@@ -71,23 +106,52 @@ Appliqué à la part **taxable** = valeur transmise **après** abattement.
 Source : **CGI art. 777**, tableau I (tarif en ligne directe). Barème repris par impots.gouv.fr,
 service-public.gouv.fr (F14203), toutsurmesfinances, corrigetonimpot (millésimes 2025/2026).
 
-### 2.2 Barème **entre frères et sœurs**
+### 2.2 Barème **entre époux et partenaires de PACS**
+
+Tarif **propre**, distinct de la ligne directe (§2.1) à partir de la 2ᵉ tranche : les bornes
+intermédiaires sont 15 932 € puis 31 865 € (au lieu de 12 109 € puis 15 932 €) ; les tranches hautes
+(552 324 / 902 838 / 1 805 677 €) sont, elles, identiques aux deux tableaux.
+
+| Fraction taxable (après abattement 80 724 €) | Taux |
+|---|---|
+| ≤ 8 072 € | 5 % |
+| 8 072 → 15 932 € | 10 % |
+| 15 932 → 31 865 € | 15 % |
+| 31 865 → 552 324 € | 20 % |
+| 552 324 → 902 838 € | 30 % |
+| 902 838 → 1 805 677 € | 40 % |
+| > 1 805 677 € | 45 % |
+
+Source : **CGI art. 777**, tableau II. **Vérifié à la main** le 19/09/2026 sur deux sources
+indépendantes : Légifrance (article consolidé, LEGIARTI000030061736,
+https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000030061736) et service-public.gouv.fr
+(fiche F14203, https://www.service-public.gouv.fr/particuliers/vosdroits/F14203) — bornes 30/40/45 %
+identiques sur les deux sources.
+
+> **Correction (audit du 19/09/2026).** Le moteur appliquait auparavant, par erreur, le barème
+> **ligne directe** (§2.1) au lien conjoint/PACS — commentaire du code faux inclus. Corrigé :
+> `compute.ts` route désormais le lien `conjoint-pacs` sur `BAREME_CONJOINT_PACS` (ce tableau II).
+> Non-régression figée en test (`compute.test.ts`, cas h et h-bis) : 100 000 € taxables → 17 207 €.
+
+### 2.3 Barème **entre frères et sœurs**
 
 | Fraction taxable (après abattement 15 932 €) | Taux |
 |---|---|
 | ≤ 24 430 € | 35 % |
 | > 24 430 € | 45 % |
 
-Source : **CGI art. 777**, tableau II.
+Source : **CGI art. 777**, tableau III. (Corrigé le 19/09/2026 : cette page indiquait par erreur
+« tableau II » ; les frères et sœurs relèvent du **tableau III**, aux côtés des taux proportionnels
+ci-dessous §2.4.)
 
-### 2.3 Taux **proportionnels** (autres liens)
+### 2.4 Taux **proportionnels** (autres liens)
 
 - **Neveux / nièces** (et parents jusqu'au 4ᵉ degré) : **55 %** sur la part taxable.
 - **Au-delà du 4ᵉ degré et non-parents / tiers / concubin** : **60 %**.
 
 Source : **CGI art. 777**, tableau III. (impots.gouv.fr — F14203 / service-public.)
 
-### 2.4 Abattements (CGI art. 779, 790 B–D, 790 E–F) — **se renouvellent tous les 15 ans**
+### 2.5 Abattements (CGI art. 779, 790 B–D, 790 E–F) — **se renouvellent tous les 15 ans**
 
 | Bénéficiaire | Abattement | Source |
 |---|---|---|
@@ -105,20 +169,37 @@ Source : **CGI art. 777**, tableau III. (impots.gouv.fr — F14203 / service-pub
 > (CGI art. 790 G) **réservé aux espèces** : **hors périmètre** ici (on transmet des **titres**, pas des
 > espèces) — marqué **« à vérifier au cas par cas »** dans l'UI, non chiffré.
 
-### 2.5 Rappel fiscal des donations antérieures de **moins de 15 ans** (CGI art. 784)
+### 2.6 Rappel fiscal des donations antérieures de **moins de 15 ans** (CGI art. 784)
 
 **Règle.** Les donations consenties **depuis moins de 15 ans** entre les mêmes personnes **s'ajoutent**
 pour le calcul de l'abattement **et** pour la progressivité du barème : l'abattement est **réputé déjà
 consommé** à hauteur des donations antérieures, et les **tranches basses du barème** sont réputées déjà
-utilisées (« rappel fiscal »). Au-delà de 15 ans, l'antériorité est purgée.
+utilisées (« rappel fiscal », **CGI art. 784, al. 2**). Au-delà de 15 ans, l'antériorité est purgée.
 
 **Modélisation retenue (conservatrice, sourcée).** On expose un champ **« donations antérieures
 < 15 ans (même donateur → même donataire) »** qui **réduit d'autant l'abattement disponible**. Le
-rappel sur la **progressivité du barème** (réutilisation des tranches basses) est, en toute rigueur,
-plus complexe ; le moteur l'**approxime** en appliquant le barème à la part taxable **du seul don
-courant** une fois l'abattement résiduel imputé. Ce point est marqué **« à vérifier »** : pour un
-rappel important, les premiers euros taxables peuvent relever d'une tranche supérieure. Source :
+rappel sur la **progressivité du barème** (réutilisation des tranches basses, CGI art. 784, al. 2) est,
+en toute rigueur, plus complexe ; le moteur l'**approxime** en appliquant le barème à la part taxable
+**du seul don courant** une fois l'abattement résiduel imputé. Ce point est marqué **« à vérifier »** :
+pour un rappel important, les premiers euros taxables peuvent relever d'une tranche supérieure. Source :
 **CGI art. 784**.
+
+**Donations jamais enregistrées.** Indépendamment des 15 ans, une donation qui n'a **jamais été
+déclarée** à l'administration reste rappelable **quelle que soit son ancienneté** — le délai de 15 ans
+ne court qu'à compter de l'enregistrement ou de la déclaration du don. Source : notice
+**n° 2735-NOT-SD**, cadre VI (« Rappel des donations antérieures »). Non chiffré par le moteur (aucun
+champ ne distingue don déclaré / non déclaré) : marqué **« à vérifier »**, affiché en clair dans les
+garde-fous et sur la page.
+
+### 2.7 Don manuel — date de valorisation, tarif et abattements applicables (CGI art. 757)
+
+**Règle.** Pour un **don manuel** révélé ou déclaré à l'administration, les droits sont liquidés sur la
+valeur des biens **au jour de la déclaration** — sauf si leur valeur au jour du don était **supérieure**,
+auquel cas c'est cette dernière qui est retenue. Le **tarif** et les **abattements** applicables sont,
+eux, ceux **en vigueur au jour de la déclaration** (et non ceux du jour du don, s'ils diffèrent).
+Source : **CGI art. 757**. Non modélisé par le moteur (qui ne prend qu'**une** valeur, sans distinguer
+jour du don / jour de la déclaration) : point informatif affiché sur la page, marqué **« à vérifier au
+cas par cas »** en présence d'un écart de valeur ou de millésime entre don et déclaration.
 
 ---
 
@@ -126,24 +207,63 @@ rappel important, les premiers euros taxables peuvent relever d'une tranche sup�
 
 **Règle / jurisprudence.** La donation **avant** cession est **licite dans son principe** : le
 contribuable peut **transmettre les titres puis les laisser céder** par le donataire plutôt que vendre
-lui-même puis donner le prix (**CE, 30 déc. 2011, Motte-Sauvaige, n° 330940**). **MAIS** l'opération est
-**requalifiable en abus de droit** (LPF art. L64, et art. L64 A « principalement fiscal ») lorsque :
+lui-même puis donner le prix (**CE, 30 déc. 2011, Motte-Sauvaige, n° 330940**). Le critère déterminant
+est la **réalité** de la donation : un **dépouillement actuel et irrévocable** du donateur
+(**art. 894 du code civil**) et une **antériorité opposable** de la donation sur le transfert de
+propriété des titres. Cf. **CE, 30 déc. 2011, n° 330940** (précité) et **CE, 19 nov. 2014, n° 370564**.
 
-- la **cession était déjà convenue / parfaite AVANT la donation** (la donation porte alors en réalité
-  **sur le prix**, non sur les titres), **ou**
-- le **donateur se réapproprie le prix** de cession, directement ou indirectement
-  (réappropriation des fonds). Cf. **CE, 9 avr. 2014, n° 23872** ; **CE, 5 févr. 2018** ; jurisprudence
-  constante (118ᵉ Congrès des notaires, 2022).
+**Deux voies de redressement, aux conséquences différentes** — audit du 19/09/2026, à distinguer sur
+la page (précédemment amalgamées sous « abus de droit ») :
 
-**Conséquence si requalification :** la **purge de la plus-value est anéantie** — la plus-value latente
-**redevient imposable** chez le donateur (comme s'il avait vendu), **en plus** des droits de donation
-et de **pénalités** (majoration pour abus de droit, intérêts de retard).
+- **(a) La cession était déjà parfaite AVANT la donation** — le donateur était encore juridiquement
+  propriétaire des titres au fait générateur de la vente (la donation porte alors, en réalité, sur le
+  **prix**, non sur les titres). L'administration procède alors à une **rectification de droit
+  commun** : la plus-value est réimposée chez le donateur **sans** passer par les garanties propres à
+  la procédure d'abus de droit (pas de saisine du **comité de l'abus de droit fiscal**).
+- **(b) La donation est réelle et antérieure, mais le donateur se réapproprie le prix** de cession,
+  directement ou indirectement (absence de dépouillement). L'administration peut alors invoquer
+  l'**abus de droit** (LPF art. L64), par sa **branche « fictivité »** uniquement (la donation est
+  réputée fictive, l'opération requalifiée dans son ensemble). Cf. **CE, 9e-10e SSR, 9 avr. 2014,
+  n° 353822** (dépouillement immédiat et irrévocable en donation-cession) ; jurisprudence constante
+  (118ᵉ Congrès des notaires, 2022).
+
+**Conséquence si requalification (les deux voies) :** la **purge de la plus-value est anéantie** — la
+plus-value latente **redevient imposable** chez le donateur (comme s'il avait vendu), **en plus** des
+droits de donation. **En cas d'abus de droit (voie b)** s'ajoutent une **majoration de 80 %** des
+droits éludés, ramenée à **40 %** si le contribuable n'établit pas avoir eu l'initiative principale du
+ou des actes constitutifs de l'abus de droit ou en être le principal bénéficiaire (**CGI art. 1729,
+b**), ainsi que l'**intérêt de retard** (**CGI art. 1727**).
+
+**Antériorité opposable — date certaine (G5).** Pour être opposable à l'administration, l'antériorité
+de la donation doit reposer sur une **date certaine** : l'enregistrement ou la déclaration du don. Pour
+un **don manuel**, cette date certaine résulte de la **déclaration** du don via le formulaire
+**n° 2735** (« Déclaration de dons manuels et de sommes d'argent »). Attention au point de départ du
+délai : la déclaration est à souscrire dans le **mois qui suit la révélation du don à
+l'administration** (CGI art. 635 A), pas dans le mois du don lui-même — mais en donation-cession,
+c'est la déclaration qui crée la date certaine : la prudence commande donc de déclarer **sans
+attendre**, avant la cession. La démarche est possible **en ligne** (impots.gouv.fr, espace
+particulier). Source : notice **n° 2735-NOT-SD** (« dans le délai d'un mois qui suit la date à
+laquelle le donataire a révélé le don à l'administration »).
+
+**Le don manuel de titres est valable sans notaire (G6).** Contrairement à une idée reçue, une donation
+n'est **pas nécessairement un acte notarié** : le **don manuel** — remise directe des titres, via
+virement de compte à compte — est un mode de donation **valable sans notaire**, formalisé par la
+déclaration n° 2735 (cadre « Titres de sociétés »). Le passage par un **acte notarié** reste, dans ce
+contexte, une garantie utile de **date certaine** et de sécurisation de la preuve, mais n'est **pas une
+obligation légale** pour ce type de don ; c'est une précaution, pas un énoncé de droit. Sources : notice
+n° 2735-NOT-SD ; formulaire Cerfa n° 2735.
+
+> **Correction (audit du 19/09/2026).** La page et le composant affirmaient à tort, en 2 endroits (page
+> `donner-ou-vendre-des-actions.astro`, composant `SimulateurDonation.tsx`), qu'« une donation est un
+> acte notarié » — présenté comme un fait de droit. Un 3ᵉ endroit (garde-fou `GARDE_FOUS_DONATION[0]`,
+> `types.ts`) affirmait de même que la mise en œuvre « relève d'un notaire », sans nuance. Les trois
+> ont été reformulés : le don manuel est valable sans notaire ; le recours à un notaire reste une
+> précaution conseillée, non une obligation.
 
 **Garde-fou produit (mode A, non contournable) :** ce levier **ne présente jamais** la donation comme
 une stratégie d'optimisation. L'avertissement abus de droit est **affiché dans le calcul (gardeFous) et
 dans la page**, en clair : la donation doit être **réelle, antérieure et irrévocable**, sans
-réappropriation du prix ; la mise en œuvre relève d'un **notaire / conseil patrimonial**, hors de cette
-simulation.
+réappropriation du prix.
 
 ---
 

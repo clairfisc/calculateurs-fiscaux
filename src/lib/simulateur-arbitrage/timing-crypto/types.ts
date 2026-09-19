@@ -20,6 +20,12 @@ import type { Cents } from "../types";
  * mobilières, soumise au PFU (12,8 % IR + PS) ; `BAREME` = option globale pour le barème (case 3CN,
  * cessions depuis le 01/01/2023, distincte de la 2OP des titres ; LF 2022 art. 79). Repris de
  * `pfu-bareme` (même source de taux que la page /plus-values-crypto-2086).
+ *
+ * ⚠️ `BAREME` n'est **plus exposé côté UI** (`SimulateurTimingCrypto`) : en mode rapide (`tmiBp`
+ * seul, sans `revenuImposableHorsCapitalCents`), `compareRegimes` applique un taux marginal fixe à
+ * toute l'assiette — la progressivité réelle du barème n'est pas modélisée, ce qui rend le
+ * différentiel A/B structurellement nul (delta nul par construction, indépendamment de la réalité
+ * fiscale). Le type reste disponible pour un usage programmatique/tests avec le mode précis.
  */
 export type RegimeImposition = "PFU" | "BAREME";
 
@@ -119,26 +125,44 @@ export interface DetailsTimingCrypto {
 export const MAX_FRACTIONS = 20;
 
 /**
- * Garde-fous L3 en **texte neutre** (mode A). Points propres au timing de conversion crypto :
- * crypto→crypto non imposable (ne pas inciter au churn), revenus
- * (staking/lending/airdrops) hors périmètre, et le seuil 305 € présenté comme un fait — pas comme
- * un levier à exploiter de façon répétée (frontière de l'abus de droit). L'UI peut les porter à la
- * place ; on les expose ici pour qu'ils voyagent avec le calcul.
+ * Garde-fous L3 en **texte neutre** (mode A). Points propres au timing de conversion crypto, dans
+ * l'ordre : hors-périmètre NFT (150 VH ter depuis le 01/01/2026), faits générateurs de l'imposition
+ * (crypto→crypto non imposable, ne pas inciter au churn), revenus (staking/lending/airdrops) hors
+ * périmètre mais à inclure dans la valeur du portefeuille, seuil 305 € présenté comme un fait au
+ * niveau du foyer fiscal — pas comme un levier à exploiter de façon répétée (vendre réellement moins
+ * n'est pas un montage ; seuls des procédés artificiels exposent à requalification), et les limites
+ * de la neutralité PFU (option barème, CEHR/CDHR). L'UI peut les porter à la place ; on les expose
+ * ici pour qu'ils voyagent avec le calcul.
  */
 export const GARDE_FOUS_TIMING_CRYPTO: readonly string[] = [
-  "Seule la conversion d'un actif numérique en euros (ou en bien/service) est imposable. Un échange " +
-    "crypto → crypto sans soulte bénéficie d'un sursis (CGI art. 150 VH bis, II-A) : il n'est pas " +
-    "imposable et n'a pas à être déclaré. Multiplier les échanges crypto → crypto ne change donc rien " +
-    "à l'impôt et n'est pas une façon de le réduire.",
-  "Les revenus tirés du staking, du lending, du minage ou des airdrops relèvent de régimes distincts " +
-    "(BNC ou RCM) et ne sont pas couverts par cette simulation, qui ne porte que sur la plus-value de " +
-    "cession (formulaire 2086, 150 VH bis).",
+  "Les NFT ne relèvent plus de ce régime : pour les cessions réalisées depuis le 1ᵉʳ janvier 2026, les " +
+    "crypto-actifs uniques et non fongibles sont imposés selon le régime du bien qu'ils représentent " +
+    "(CGI art. 150 VH ter, loi n° 2026-534 du 25 juin 2026, art. 91) — ni méthode du portefeuille " +
+    "global, ni seuil 305 €, ni cases 3AN/3BN. Cette page ne couvre que les crypto-actifs fongibles.",
+  "Seule la conversion en une monnaie ayant cours légal (euro, dollar, franc suisse…), l'achat d'un " +
+    "bien ou d'un service, ou un échange crypto → crypto avec soulte rendent la plus-value imposable " +
+    "(BOI-RPPM-PVBMC-30-10, §70). Un échange crypto → crypto sans soulte — y compris vers un " +
+    "stablecoin, qui reste un crypto-actif et non une monnaie ayant cours légal — bénéficie d'un " +
+    "sursis (CGI art. 150 VH bis, II-A) : il n'est pas imposable et n'a pas à être déclaré. Multiplier " +
+    "les échanges crypto → crypto ne change donc rien à l'impôt et n'est pas une façon de le réduire.",
+  "La fiscalité des revenus de staking, de lending, du minage ou des airdrops (BNC ou RCM) est hors " +
+    "périmètre de cette simulation, qui ne porte que sur la plus-value de cession (formulaire 2086, " +
+    "150 VH bis). Les jetons ainsi reçus doivent néanmoins être comptés dans la valeur globale du " +
+    "portefeuille saisie ici, avec un prix d'acquisition nul : les exclure minore la plus-value " +
+    "déclarée et expose à un redressement.",
   "Le seuil d'exonération de 305 € s'apprécie sur le total des prix de cession imposables d'une même " +
-    "année ; il est si bas qu'il ne concerne que de très petites cessions. Il est rappelé ici comme un " +
-    "fait du calcul, et non comme un montant à viser : étaler ses ventes dans le seul but de passer sous " +
-    "305 € chaque année n'est pas une démarche que ce simulateur propose, et un montage à but uniquement " +
-    "fiscal peut être écarté par l'administration (LPF art. L64 / L64 A).",
-  "Cette simulation isole le seul effet du timing : elle suppose la valeur du portefeuille et le prix " +
-    "d'acquisition identiques d'une année à l'autre. Elle ne prédit ni l'évolution du cours, ni un " +
-    "changement futur de barème ou de taux, qui peuvent modifier le résultat réel.",
+    "année, au niveau du foyer fiscal tout entier — un couple ne dispose pas de 2 × 305 € " +
+    "(BOI-RPPM-PVBMC-30-10, §90). Tant que ce total n'excède pas 305 € (305,00 € compris), les " +
+    "plus-values de l'année sont exonérées. Il est rappelé ici comme un fait du calcul, et non comme " +
+    "un montant à viser : étaler ses ventes dans le seul but de passer sous 305 € chaque année n'est " +
+    "pas une démarche que ce simulateur propose. Vendre réellement moins n'est pas un montage ; seuls " +
+    "des procédés artificiels (cessions fictives, interposition de comptes) exposent à une " +
+    "requalification. Ce simulateur ne connaît pas vos autres cessions de l'année : le total réel à " +
+    "comparer au seuil peut différer de celui affiché ici.",
+  "Cette simulation isole le seul effet du timing sous PFU : elle suppose la valeur du portefeuille et " +
+    "le prix d'acquisition identiques d'une année à l'autre, sans autre cession dans l'année et sans " +
+    "franchissement des seuils CEHR (CGI art. 223 sexies) ou CDHR (CGI art. 224). Sous option barème " +
+    "(case 3CN), ou au-delà de ces seuils, le fractionnement peut réellement changer l'impôt dû — non " +
+    "modélisé ici. Elle ne prédit ni l'évolution du cours, ni un changement futur de barème ou de " +
+    "taux, qui peuvent modifier le résultat réel.",
 ];

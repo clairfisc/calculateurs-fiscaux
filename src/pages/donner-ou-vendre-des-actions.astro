@@ -45,16 +45,19 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
           <ul>
             <li>
               <strong>Vendre les titres, puis donner le montant net.</strong> La vente déclenche
-              l'imposition de la <strong>plus-value</strong> (PFU 30 % / 31,4 % en 2026, ou barème
-              progressif sur option). On donne ensuite le net, soumis aux <strong>droits de donation</strong>.
+              l'imposition de la <strong>plus-value</strong> — PFU <strong>31,4 %</strong> (12,8 % d'impôt
+              sur le revenu + 18,6 % de prélèvements sociaux), <strong>y compris pour les cessions
+              réalisées en 2025</strong> (LFSS pour 2026, loi n° 2025-1403, art. 12), ou barème progressif
+              sur option. On donne ensuite le net, soumis aux <strong>droits de donation</strong>.
             </li>
             <li>
               <strong>Donner les titres tels quels.</strong> La donation <strong>n'est pas une cession à
-              titre onéreux</strong> : la <strong>plus-value latente n'est pas imposée</strong> au moment
-              de la donation (CGI art. 150-0 D, 1). Le donataire reçoit pour <strong>prix de revient la
-              valeur des titres au jour de la donation</strong> : s'il revend aussitôt, il n'a quasiment
-              aucune plus-value. Restent dus les <strong>droits de donation</strong>, calculés sur cette
-              même valeur.
+              titre onéreux</strong> : elle est hors du champ de l'imposition des plus-values (CGI art.
+              150-0 A), donc la <strong>plus-value latente n'est pas imposée</strong> au moment de la
+              donation. Le donataire reçoit pour <strong>prix de revient la valeur des titres au jour de
+              la donation</strong> (CGI art. 150-0 D, 1) : s'il revend aussitôt, il n'a quasiment aucune
+              plus-value. Restent dus les <strong>droits de donation</strong>, calculés sur cette même
+              valeur.
             </li>
           </ul>
           <p>
@@ -64,41 +67,125 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
             décidez avec un professionnel.
           </p>
 
+          <aside class="my-6 rounded-md border border-slate-200 border-l-4 border-l-slate-500 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700">
+            <p class="m-0 font-semibold">Ce que ce simulateur ne couvre pas</p>
+            <p class="m-0 mt-2">
+              La purge de plus-value décrite ci-dessus vaut pour des <strong>actions ordinaires détenues
+              en pleine propriété sur un compte-titres ordinaire (CTO)</strong>. Elle ne s'applique pas :
+            </p>
+            <ul class="m-0 mt-2 list-disc pl-5">
+              <li>
+                aux <strong>actions gratuites</strong> : la donation déclenche l'imposition du
+                <strong>gain d'acquisition chez le donateur</strong>, l'année de la donation, sans
+                trésorerie en face (CGI art. 80 quaterdecies ; BOFiP BOI-RSA-ES-20-20-20, §§ 150 et 185) ;
+              </li>
+              <li>
+                aux titres issus de <strong>BSPCE</strong> : le prix d'acquisition retenu reste le prix
+                d'exercice (BOFiP BOI-RPPM-PVBMI-20-10-20-30, § 250) ;
+              </li>
+              <li>
+                aux titres logés dans un <strong>PEA</strong> (BOFiP BOI-RPPM-PVBMI-20-10-20-30, § 190) ;
+              </li>
+              <li>
+                aux titres placés en <strong>report d'imposition (CGI art. 150-0 B ter)</strong> : le
+                report est transféré au donataire s'il contrôle la société, sous un délai de conservation
+                de 6 ou 11 ans depuis l'entrée en vigueur de la loi de finances pour 2026 (le
+                21 février 2026 ; l'application exacte aux donations antérieures reste à confirmer
+                par la doctrine administrative).
+              </li>
+            </ul>
+          </aside>
+
           <h2 class="text-base font-semibold text-slate-900">Les droits de donation</h2>
           <p>
             Les droits dépendent du <strong>lien de parenté</strong> et d'un <strong>abattement</strong>
             renouvelable <strong>tous les 15 ans</strong> : <strong>100 000 €</strong> par parent et par
             enfant (CGI art. 779), 31 865 € pour un petit-enfant, 15 932 € entre frères et sœurs, 7 967 €
             pour un neveu ou une nièce, 80 724 € entre conjoints ou partenaires de PACS. Au-delà de
-            l'abattement, on applique le <strong>barème progressif</strong> en ligne directe (5 % à 45 %)
-            ou les taux propres aux autres liens (55 % pour un neveu/nièce, 60 % pour un tiers). Les
-            donations consenties à la même personne depuis <strong>moins de 15 ans</strong> réduisent
-            l'abattement disponible (rappel fiscal, CGI art. 784).
+            l'abattement, le barème dépend du lien : en <strong>ligne directe</strong> (enfant,
+            petit-enfant), <strong>5 % à 45 %</strong> par tranches (CGI art. 777, tableau I) ; entre
+            <strong>époux ou partenaires de PACS</strong>, un tarif qui leur est propre, également
+            progressif de 5 % à 45 % mais avec des tranches intermédiaires différentes (CGI art. 777,
+            tableau II) ; entre <strong>frères et sœurs</strong>, 35 % jusqu'à 24 430 € taxables puis
+            45 % au-delà (CGI art. 777, tableau III) ; pour un <strong>neveu, une nièce ou un parent
+            jusqu'au 4ᵉ degré</strong>, un taux proportionnel de 55 % ; au-delà du 4ᵉ degré et pour les
+            non-parents, 60 %. Exemple : un frère qui reçoit 100 000 € doit environ
+            <strong>35 388 €</strong> de droits (barème 35 %/45 % après abattement), et non un simple
+            taux uniforme plus faible. Les donations consenties à la même personne depuis
+            <strong>moins de 15 ans</strong> réduisent l'abattement disponible (rappel fiscal, CGI art.
+            784).
           </p>
           <p>
             Important : <strong>l'abattement réduit les droits de donation, pas le prix de revient</strong>
-            transmis au donataire. Même si la donation est exonérée, le donataire conserve comme base de
-            revient la <strong>valeur vénale entière</strong> au jour de la donation (BOFiP
-            BOI-RPPM-PVBMI-20-10-20-30).
+            transmis au donataire (CGI art. 150-0 D, 1). Même si la donation est exonérée, le donataire
+            conserve comme base de revient la <strong>valeur vénale entière</strong> au jour de la
+            donation (BOFiP BOI-RPPM-PVBMI-20-10-20-30).
+          </p>
+          <p>
+            En toute rigueur, une donation de moins de 15 ans ne fait pas que réduire l'abattement : elle
+            peut aussi faire remonter les premiers euros taxables dans une <strong>tranche supérieure</strong>
+            du barème (CGI art. 784, al. 2) — ce simulateur n'approxime que la réduction de l'abattement,
+            pas cet effet sur les tranches. Par ailleurs, une donation <strong>jamais enregistrée</strong>
+            reste rappelable quelle que soit son ancienneté, y compris au-delà de 15 ans (notice
+            n° 2735-NOT-SD, cadre VI).
+          </p>
+          <p>
+            Pour un <strong>don manuel</strong> (remise directe des titres, déclarée via le formulaire
+            n° 2735), les droits sont calculés sur la valeur des titres au jour de la
+            <strong>déclaration</strong> du don — ou au jour du don lui-même si elle est supérieure — et
+            c'est le <strong>tarif et les abattements en vigueur au jour de la déclaration</strong> qui
+            s'appliquent, même s'ils diffèrent de ceux du jour du don (CGI art. 757).
           </p>
 
-          <h2 class="text-base font-semibold text-slate-900">Le risque : l'abus de droit</h2>
+          <h2 class="text-base font-semibold text-slate-900">Le risque : rectification et abus de droit</h2>
           <p>
             La donation avant cession est <strong>licite dans son principe</strong> : le Conseil d'État
             admet que l'on transmette des titres avant qu'ils soient cédés plutôt que de vendre soi-même
-            puis donner le prix (CE, 30 déc. 2011, Motte-Sauvaige, n° 330940). <strong>Mais</strong>
-            l'opération est <strong>requalifiable en abus de droit</strong> (LPF art. L64) si la
-            <strong>vente était déjà convenue avant la donation</strong> (la donation porte alors en
-            réalité sur le prix, pas sur les titres) ou si le donateur <strong>se réapproprie les fonds</strong>.
-            Conséquence : la <strong>purge de la plus-value est anéantie</strong>, la plus-value redevient
-            imposable chez le donateur, avec <strong>pénalités</strong>. C'est pourquoi cette opération
-            relève d'un <strong>notaire</strong> et d'un conseil patrimonial, et non d'un simulateur.
+            puis donner le prix (CE, 30 déc. 2011, Motte-Sauvaige, n° 330940). Le critère déterminant est
+            la réalité de la donation : un <strong>dépouillement actuel et irrévocable</strong> du
+            donateur (art. 894 du code civil) et une <strong>antériorité opposable</strong> de la donation
+            sur le transfert de propriété des titres (CE, 30 déc. 2011, n° 330940 ; CE, 19 nov. 2014,
+            n° 370564).
+          </p>
+          <p>Deux situations, aux conséquences différentes, sont à distinguer :</p>
+          <ul>
+            <li>
+              si la <strong>cession était déjà parfaite avant la donation</strong> — le donateur était
+              encore propriétaire des titres au moment où la vente s'est juridiquement formée —
+              l'administration rectifie selon les règles de <strong>droit commun</strong> : la
+              plus-value est réimposée chez le donateur, <strong>sans</strong> les garanties propres à
+              l'abus de droit (pas de saisine du comité de l'abus de droit fiscal) ;
+            </li>
+            <li>
+              si la donation est réelle et antérieure mais que le donateur <strong>se réapproprie le
+              prix</strong> de cession (absence de dépouillement, directement ou indirectement),
+              l'administration peut invoquer l'<strong>abus de droit</strong> (LPF art. L64), par sa
+              branche « fictivité » : l'opération est alors réputée fictive et requalifiée dans son
+              ensemble.
+            </li>
+          </ul>
+          <p>
+            Dans les deux cas, la <strong>plus-value latente redevient imposable</strong> chez le
+            donateur. En cas d'abus de droit s'ajoutent une <strong>majoration de 80 %</strong> des
+            droits éludés — ramenée à <strong>40 %</strong> si le contribuable n'a pas eu l'initiative
+            principale du montage (CGI art. 1729, b) — et l'<strong>intérêt de retard</strong> (CGI art.
+            1727). C'est pourquoi cette opération relève d'un professionnel (notaire, avocat fiscaliste),
+            et non d'un simulateur.
+          </p>
+          <p>
+            Pour être opposable, l'antériorité de la donation doit reposer sur une
+            <strong>date certaine</strong> : l'enregistrement ou la déclaration du don. Pour un
+            <strong>don manuel</strong>, cela passe par le formulaire n° 2735 — la démarche est possible
+            en ligne. Le délai légal d'un mois court à compter de la révélation du don à
+            l'administration (CGI art. 635 A), pas du don lui-même ; mais comme c'est cette
+            déclaration qui donne date certaine à la donation, déclarez sans attendre,
+            <strong> avant</strong> la cession (notice n° 2735-NOT-SD).
           </p>
 
           <p>
             Pour aller plus loin :
             <a class="text-blue-700 underline" href="/plus-values-cession-titres-etrangers/"
-              >calculateur de plus-values de titres (2074)</a
+              >calculateur de plus-values de titres (2074-CMV)</a
             >, le comparateur
             <a class="text-blue-700 underline" href="/faut-il-cocher-2op/">PFU ou barème (case 2OP)</a> et le
             <a class="text-blue-700 underline" href="/purger-ses-moins-values/"
@@ -110,8 +197,10 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
         <aside class="mt-8 rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed text-slate-700">
           <p class="m-0">
             <strong>Aide informative, pas un conseil fiscal</strong> — ce simulateur compare des
-            scénarios chiffrés et ne constitue ni un conseil fiscal, juridique ni en investissement. Une
-            donation est un acte notarié irrévocable : il ne remplace pas un professionnel ni le
+            scénarios chiffrés et ne constitue ni un conseil fiscal, juridique ni en investissement. Le
+            don manuel de titres est valable sans notaire (formulaire n° 2735), mais le passage par un
+            notaire reste vivement conseillé dans ce contexte (date certaine, sécurisation) : ceci ne
+            remplace pas un professionnel ni le
             <a class="text-blue-700 underline" rel="noopener" target="_blank" href="https://www.impots.gouv.fr">site officiel des impôts</a>.
           </p>
           <p class="m-0 mt-3 text-slate-600">

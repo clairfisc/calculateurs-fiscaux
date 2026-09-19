@@ -22,15 +22,6 @@ const LIBELLE_MILLESIME: Record<2025 | 2026, string> = {
   2026: "Revenus 2026 (déclaration 2027)",
 };
 
-const LIBELLE_TMI: Record<number, string> = {
-  0: "0 % (non imposable)",
-  1100: "11 %",
-  3000: "30 %",
-  4100: "41 %",
-  4500: "45 %",
-};
-const TMI_BP = [0, 1100, 3000, 4100, 4500];
-
 /** Formate un montant signé en centimes : « −188,00 € », « +600,00 € », « 0,00 € ». */
 function formateCentsSigne(cents: number): string {
   if (cents === 0) return formateCents(0);
@@ -142,10 +133,13 @@ function Differentiel({ resultat }: { resultat: ComparatifArbitrage<DetailsTimin
       {nbExo > 0 && (
         <p className="m-0 mt-2 text-slate-700">
           Dans le scénario B, {nbExo === 1 ? "une année passe" : `${nbExo} années passent`} sous le
-          seuil d'exonération de 305 € de prix de cession. Ce seuil est un fait du calcul, pas un
-          montant à viser&nbsp;: étaler ses ventes dans le seul but de passer sous 305 € chaque année
-          n'est pas une démarche que ce simulateur propose, et un montage à but uniquement fiscal peut
-          être écarté par l'administration.
+          seuil d'exonération de 305 € de prix de cession (apprécié au niveau du <strong>foyer
+          fiscal</strong> tout entier, pas par personne). Ce seuil est un fait du calcul, pas un montant
+          à viser&nbsp;: étaler ses ventes dans le seul but de passer sous 305 € chaque année n'est pas
+          une démarche que ce simulateur propose. Vendre réellement moins n'est pas un montage&nbsp;;
+          seuls des procédés artificiels (cessions fictives, interposition de comptes) exposent à une
+          requalification. Ce simulateur <strong>ne connaît pas vos autres cessions</strong> de l'année :
+          le total réel à comparer au seuil peut être différent de celui affiché ici.
         </p>
       )}
     </div>
@@ -153,9 +147,10 @@ function Differentiel({ resultat }: { resultat: ComparatifArbitrage<DetailsTimin
 }
 
 export default function SimulateurTimingCrypto() {
-  const [millesime, setMillesime] = useState<2025 | 2026>(2025);
-  const [regime, setRegime] = useState<"PFU" | "BAREME">("PFU");
-  const [tmiBp, setTmiBp] = useState<number>(3000);
+  // Millésime par défaut 2026 : les années 2027+ du scénario B (fractionnement) sont chiffrées
+  // avec les paramètres du millésime sélectionné (taux PS, etc.), constants d'une année sur l'autre —
+  // le simulateur n'anticipe pas une évolution future du taux ou du barème.
+  const [millesime, setMillesime] = useState<2025 | 2026>(2026);
   const [montant, setMontant] = useState("");
   const [prixAcq, setPrixAcq] = useState("");
   const [valeurGlobale, setValeurGlobale] = useState("");
@@ -174,21 +169,12 @@ export default function SimulateurTimingCrypto() {
         prixAcquisitionTotalCents,
         valeurGlobalePortefeuilleCents: valeurGlobaleCents,
         nbFractions,
-        imposition: {
-          millesime,
-          regime,
-          ...(regime === "BAREME" ? { tmiBp } : {}),
-        },
+        // Comparaison sous PFU uniquement (voir l'avertissement affiché ci-dessous) : l'option
+        // barème (case 3CN) n'est pas exposée ici, le mode rapide (TMI seule) ne modéliserait pas
+        // sa progressivité réelle.
+        imposition: { millesime, regime: "PFU" },
       }),
-    [
-      montantTotalAConvertirCents,
-      prixAcquisitionTotalCents,
-      valeurGlobaleCents,
-      nbFractions,
-      millesime,
-      regime,
-      tmiBp,
-    ],
+    [montantTotalAConvertirCents, prixAcquisitionTotalCents, valeurGlobaleCents, nbFractions, millesime],
   );
 
   const valeurGlobaleSousMontant =
@@ -232,48 +218,13 @@ export default function SimulateurTimingCrypto() {
 
           <div className="flex flex-col gap-1">
             <span className="text-sm font-medium text-slate-700">Imposition de la plus-value</span>
-            <div className="flex rounded-md border border-slate-300 p-0.5 text-sm">
-              <button
-                type="button"
-                onClick={() => setRegime("PFU")}
-                aria-pressed={regime === "PFU"}
-                className={
-                  "flex-1 rounded px-3 py-1.5 transition " +
-                  (regime === "PFU" ? "bg-blue-600 font-medium text-white" : "text-slate-700 hover:bg-slate-100")
-                }
-              >
-                PFU (flat tax)
-              </button>
-              <button
-                type="button"
-                onClick={() => setRegime("BAREME")}
-                aria-pressed={regime === "BAREME"}
-                className={
-                  "flex-1 rounded px-3 py-1.5 transition " +
-                  (regime === "BAREME" ? "bg-blue-600 font-medium text-white" : "text-slate-700 hover:bg-slate-100")
-                }
-              >
-                Barème (case 3CN)
-              </button>
-            </div>
-            {regime === "BAREME" && (
-              <select
-                aria-label="Tranche marginale d'imposition"
-                value={tmiBp}
-                onChange={(e) => setTmiBp(Number(e.target.value))}
-                className="mt-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              >
-                {TMI_BP.map((bp) => (
-                  <option key={bp} value={bp}>
-                    TMI {LIBELLE_TMI[bp]}
-                  </option>
-                ))}
-              </select>
-            )}
-            <p className="text-xs text-slate-500">
-              Par défaut le PFU (12,8 % + prélèvements sociaux). Le barème suppose l'option globale pour
-              le barème — case 3CN, ouverte aux cessions depuis le 1ᵉʳ janvier 2023 et distincte de la
-              case 2OP des titres (loi de finances 2022).
+            <p className="rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+              PFU (12,8 % + prélèvements sociaux)
+            </p>
+            <p className="rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800">
+              Le simulateur compare <strong>sous PFU uniquement</strong>. Sous option barème (case 3CN),
+              la progressivité rend le fractionnement réellement avantageux ou pénalisant selon vos
+              autres revenus — non modélisé ici.
             </p>
           </div>
         </div>
@@ -317,7 +268,9 @@ export default function SimulateurTimingCrypto() {
               ))}
             </select>
             <p className="text-xs text-slate-500">
-              Scénario B : la conversion est répartie en parts égales, une par année.
+              Scénario B : la conversion est répartie en parts égales, une par année. Les années
+              suivant le millésime choisi sont chiffrées avec les <strong>mêmes paramètres</strong>{" "}
+              (taux, seuils) — le simulateur ne prédit pas leur évolution réelle.
             </p>
           </div>
         </div>

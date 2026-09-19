@@ -183,7 +183,7 @@ function AvertissementAbusDeDroit() {
 }
 
 export default function SimulateurDonation() {
-  const [millesime, setMillesime] = useState<2025 | 2026>(2025);
+  const [millesime, setMillesime] = useState<2025 | 2026>(2026);
   const [regime, setRegime] = useState<"PFU" | "BAREME">("PFU");
   const [tmiBp, setTmiBp] = useState<number>(3000);
   const [lien, setLien] = useState<LienDonataire>("enfant");
@@ -418,8 +418,9 @@ export default function SimulateurDonation() {
       </section>
 
       <p className="text-xs text-slate-400">
-        Aide informative — ne constitue pas un conseil fiscal, juridique ni en investissement. Une
-        donation est un acte notarié : faites-vous accompagner par un professionnel.
+        Aide informative — ne constitue pas un conseil fiscal, juridique ni en investissement. Le don
+        manuel de titres est valable sans notaire (formulaire n° 2735) ; un accompagnement par un
+        notaire ou un professionnel reste vivement recommandé dans ce contexte.
       </p>
     </div>
   );

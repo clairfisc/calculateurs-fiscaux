@@ -26,42 +26,114 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
             la quote-part de prix d'acquisition imputée à chaque vente est proportionnelle à la part
             cédée du portefeuille. Conséquence directe&nbsp;: <strong>répartir une même conversion sur
             plusieurs années n'augmente ni ne diminue, en règle générale, la plus-value nette totale</strong> —
-            elle est simplement étalée. À taux d'imposition constant, l'impôt total est alors le même.
+            elle est simplement étalée. Mais cette neutralité <strong>ne vaut que sous PFU, à cours
+            constant, sans autre cession ni rachat dans l'année, et en dessous des seuils CEHR/CDHR</strong>
+            (voir plus bas) : en dehors de ce cadre, fractionner peut réellement changer l'impôt dû.
           </p>
           <p>
             Le simulateur ci-dessus compare deux scénarios&nbsp;: <strong>tout convertir en une fois</strong>
-            cette année (scénario A) ou <strong>fractionner sur N années</strong> (scénario B). Il chiffre
-            la plus-value imposable (case 3AN) et l'impôt sur le revenu + prélèvements sociaux de chaque
-            scénario, et expose la différence. Il <strong>compare sans recommander</strong>.
+            cette année (scénario A) ou <strong>fractionner sur N années</strong> (scénario B). Il chiffre,
+            <strong>sous PFU</strong>, la plus-value imposable (case 3AN) et l'impôt sur le revenu +
+            prélèvements sociaux de chaque scénario, et expose la différence. Il
+            <strong>compare sans recommander</strong>.
           </p>
+
+          <aside class="not-prose my-6 rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed text-slate-700">
+            <p class="m-0">
+              <strong>Cette page ne couvre pas les NFT.</strong> Les NFT ne relèvent plus de ce régime :
+              pour les cessions réalisées depuis le 1ᵉʳ janvier 2026, les crypto-actifs uniques et non
+              fongibles sont imposés selon le régime du bien qu'ils représentent (CGI art. 150 VH ter, loi
+              n° 2026-534 du 25 juin 2026, art. 91) — ni méthode du portefeuille global, ni seuil 305 €, ni
+              cases 3AN/3BN. Cette page ne couvre que les <strong>crypto-actifs fongibles</strong>.
+            </p>
+          </aside>
+
+          <h2 class="text-base font-semibold text-slate-900">
+            Quand le fractionnement change vraiment le résultat
+          </h2>
+          <p>
+            La neutralité décrite plus haut est un cas particulier, pas une règle générale. Plusieurs
+            situations en sortent&nbsp;:
+          </p>
+          <ul>
+            <li>
+              <strong>Option pour le barème (case 3CN)</strong> — sur option globale pour le barème
+              progressif, l'impôt n'est plus proportionnel à l'assiette&nbsp;: étaler la plus-value peut la
+              faire rester dans une tranche plus basse, ou au contraire lui faire chevaucher un changement
+              de tranche marginale d'une année sur l'autre. Ce simulateur compare <strong>sous PFU
+              uniquement</strong> (voir l'avertissement dans le simulateur ci-dessus).
+            </li>
+            <li>
+              <strong>Contribution exceptionnelle sur les hauts revenus (CEHR)</strong> — au-delà de
+              250 000 € (personne seule) ou 500 000 € (couple) de revenu fiscal de référence, une
+              contribution de 3 à 4 % s'ajoute (CGI art. 223 sexies). Les plus-values crypto entrent dans
+              le RFR (CGI art. 1417, IV-1°)&nbsp;: une cession concentrée peut faire franchir ce seuil, là
+              où la même cession étalée resterait en dessous chaque année. Nuance&nbsp;: le mécanisme de
+              lissage prévu au II de l'article 223 sexies peut, à l'inverse, parfois favoriser une
+              plus-value concentrée sur une seule année plutôt qu'étalée — l'effet dépend des autres
+              revenus du foyer et n'est pas modélisé ici.
+            </li>
+            <li>
+              <strong>Contribution différentielle sur les hauts revenus (CDHR)</strong> — une imposition
+              minimale de 20 % (hors prélèvements sociaux) s'applique au-delà de 250 000 € (personne seule)
+              ou 500 000 € (couple) de revenu fiscal de référence retraité (CGI art. 224), pérennisée par
+              la loi de finances pour 2026 jusqu'au retour du déficit public sous le seuil qu'elle fixe
+              (BOI-IR-CDHR-10, version du 30/06/2026). Comme pour la CEHR,
+              concentrer ou étaler une même plus-value peut faire franchir ce seuil une année plutôt
+              qu'une autre.
+            </li>
+            <li>
+              <strong>Le seuil de 305 €</strong> — en dessous, l'année est totalement exonérée (voir plus
+              bas) : c'est l'effet de seuil le plus net du fractionnement, mais il ne concerne que de très
+              petites cessions.
+            </li>
+            <li>
+              <strong>Une moins-value réalisée la même année</strong> — la moins-value crypto ne s'impute
+              que sur des plus-values crypto de la <strong>même année</strong> (CGI art. 150 VH bis, IV),
+              sans report sur les années suivantes. En présence d'une moins-value une année donnée, il peut
+              y avoir intérêt à concentrer la plus-value imposable sur cette même année pour l'absorber,
+              plutôt que de l'étaler sur des années sans moins-value pour la compenser.
+            </li>
+          </ul>
 
           <h2 class="text-base font-semibold text-slate-900">Les points à garder en tête</h2>
           <p>
-            <strong>Seule la conversion en euros (ou en bien/service) est imposable.</strong> Un échange
-            <strong> crypto → crypto</strong> sans soulte bénéficie d'un sursis d'imposition (150 VH bis,
-            II-A)&nbsp;: il n'est ni imposable ni à déclarer. Multiplier ces échanges ne réduit pas l'impôt
-            et n'est pas un levier&nbsp;: ce n'est pas la fréquence des opérations internes qui compte, mais
-            la sortie vers la monnaie.
+            <strong>Quatre opérations seulement rendent la plus-value imposable</strong>
+            (BOI-RPPM-PVBMC-30-10, §70)&nbsp;: la conversion en une <strong>monnaie ayant cours légal</strong> (euro, dollar, franc
+            suisse…), l'achat d'un <strong>bien</strong>, l'achat d'une <strong>prestation de service</strong>,
+            ou un échange <strong>crypto → crypto avec soulte</strong>. Un échange
+            <strong> crypto → crypto sans soulte</strong> — y compris vers un <strong>stablecoin</strong>,
+            qui reste un crypto-actif et non une monnaie ayant cours légal — bénéficie d'un sursis
+            d'imposition (150 VH bis, II-A)&nbsp;: il n'est ni imposable ni à déclarer. Multiplier ces
+            échanges ne réduit pas l'impôt et n'est pas un levier&nbsp;: ce n'est pas la fréquence des
+            opérations internes qui compte, mais la sortie vers la monnaie (ou le bien/service).
           </p>
           <p>
-            <strong>Le seuil d'exonération de 305 €</strong> s'apprécie sur le total des prix de cession
-            <strong> d'une même année</strong>&nbsp;: en dessous, les plus-values de l'année sont exonérées
-            (150 VH bis, II-B). C'est le seul cas où le fractionnement change réellement le résultat — mais
-            le seuil est <strong>si bas</strong> qu'il ne concerne que de très petites cessions. Il est
-            rappelé ici comme un <strong>fait du calcul</strong>, pas comme un montant à viser&nbsp;: étaler
-            ses ventes dans le seul but de passer sous 305 € chaque année <strong>n'est pas une démarche que
-            ce site propose</strong>, et un montage à but uniquement fiscal peut être écarté par
-            l'administration (LPF art. L64 / L64 A).
+            <strong>Le seuil d'exonération de 305 €</strong> s'apprécie sur le total des prix des cessions
+            <strong> imposables</strong> (hors échanges en sursis)
+            <strong> d'une même année</strong>, au niveau du <strong>foyer fiscal</strong> tout entier — un
+            couple ne dispose pas de 2 × 305 € (150 VH bis, II-B ; BOI-RPPM-PVBMC-30-10, §90). Tant que ce
+            total <strong>n'excède pas</strong> 305 € (305,00 € compris), les plus-values de l'année sont
+            exonérées. Il est rappelé ici comme un <strong>fait du calcul</strong>, pas comme un montant à
+            viser&nbsp;: étaler ses ventes dans le seul but de passer sous 305 € chaque année
+            <strong>n'est pas une démarche que ce site propose</strong>. Vendre réellement moins n'est pas
+            un montage&nbsp;; seuls des <strong>procédés artificiels</strong> (cessions fictives,
+            interposition de comptes) exposent à une requalification. Ce simulateur
+            <strong>ne connaît pas vos autres cessions</strong> de l'année&nbsp;: le total réel à comparer
+            au seuil peut différer de celui affiché ici.
           </p>
           <p>
-            <strong>Les revenus de staking, lending, minage ou airdrops</strong> relèvent de régimes
-            distincts (BNC ou RCM) et <strong>ne sont pas couverts</strong> par cette simulation, qui ne
-            porte que sur la plus-value de cession. La <strong>moins-value</strong> crypto d'une année ne
-            s'impute que sur des plus-values crypto de la <strong>même année</strong> (pas de report).
+            <strong>La fiscalité des revenus de staking, lending, minage ou airdrops</strong> (BNC ou RCM)
+            est <strong>hors périmètre</strong> de cette simulation, qui ne porte que sur la plus-value de
+            cession. Les jetons ainsi reçus doivent néanmoins être comptés dans la
+            <strong>valeur globale du portefeuille</strong> saisie ci-dessus, avec un
+            <strong>prix d'acquisition nul</strong>&nbsp;: les exclure minore la plus-value déclarée et
+            expose à un redressement.
           </p>
           <p>
-            Cette simulation <strong>isole le seul effet du timing</strong>&nbsp;: elle suppose la valeur du
-            portefeuille et le prix d'acquisition identiques d'une année à l'autre. Elle ne prédit ni
+            Cette simulation <strong>isole le seul effet du timing, sous PFU</strong>&nbsp;: elle suppose la
+            valeur du portefeuille et le prix d'acquisition identiques d'une année à l'autre, sans autre
+            cession dans l'année et sans franchissement des seuils CEHR/CDHR ci-dessus. Elle ne prédit ni
             l'évolution du cours, ni un changement futur de barème ou de taux, qui peuvent modifier le
             résultat réel.
           </p>
@@ -74,7 +146,10 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
               >faut-il déclarer ses cryptos&nbsp;?</a
             >
             et le comparateur
-            <a class="text-blue-700 underline" href="/faut-il-cocher-2op/">PFU ou barème (case 2OP)</a>.
+            <a class="text-blue-700 underline" href="/faut-il-cocher-2op/">PFU ou barème (case 2OP)</a>
+            — attention, l'option pour le barème sur une plus-value crypto se fait via la case
+            <strong>3CN</strong> (CGI art. 200 C), <strong>indépendante</strong> de la case 2OP des valeurs
+            mobilières classiques&nbsp;; ce comparateur ne modélise pas la fiscalité crypto.
           </p>
         </article>
 

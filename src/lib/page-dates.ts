@@ -35,9 +35,9 @@ export const DATES_PAGES: Record<string, DatesPage> = {
 
   // Simulateur d'arbitrage
   "/purger-ses-moins-values/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
-  "/quand-convertir-ses-cryptos/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
+  "/quand-convertir-ses-cryptos/": { publiee: "2026-06-30", modifiee: "2026-09-19" },
   "/pea-ou-compte-titres/": { publiee: "2026-06-30", modifiee: "2026-09-19" },
-  "/donner-ou-vendre-des-actions/": { publiee: "2026-06-30", modifiee: "2026-06-30" },
+  "/donner-ou-vendre-des-actions/": { publiee: "2026-06-30", modifiee: "2026-09-19" },
 
   // Guides
   "/guide-credit-impot-dividendes-etrangers/": { publiee: "2026-06-24", modifiee: "2026-09-19" },

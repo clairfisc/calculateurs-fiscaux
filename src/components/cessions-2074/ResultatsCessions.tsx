@@ -4,7 +4,8 @@ import { formateCents, formateEurosEntiers } from "../fx";
 
 /**
  * Affichage des résultats du 2074-CMV : détail par cession (PMP, prix de revient, résultat signé,
- * abattement éventuel) + cases 3VG / 3VH copiables + imputation/report des moins-values.
+ * abattement éventuel) + cases 3VG / 3VH (et 3SG sous barème avec abattement) copiables +
+ * imputation/report des moins-values.
  */
 interface ResultatsCessionsProps {
   readonly declaration: Declaration2074;
@@ -63,7 +64,9 @@ function CarteCession({ resultat, numero }: { resultat: ResultatCession; numero:
       {resultat.abattementPct > 0 && (
         <p className="mt-3 rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-800">
           Abattement durée de détention {resultat.abattementPct} % (barème, titres acquis avant
-          2018) → résultat retenu {formateSigne(resultat.resultatApresAbattementEurCents)}.
+          2018) → assiette retenue pour l'impôt sur le revenu uniquement{" "}
+          {formateSigne(resultat.resultatApresAbattementEurCents)} (calculée par l'administration à
+          partir des cases 3VG et 3SG ; ce montant ne se déclare nulle part).
         </p>
       )}
     </div>
@@ -126,7 +129,7 @@ export default function ResultatsCessions({ declaration }: ResultatsCessionsProp
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <CarteCase
           code="3VG"
-          libelle="Plus-value nette imposable de l'année"
+          libelle="Plus-value nette imposable de l'année (avant abattement)"
           valeur={declaration.case3VG}
           ton="vert"
         />
@@ -136,7 +139,23 @@ export default function ResultatsCessions({ declaration }: ResultatsCessionsProp
           valeur={declaration.case3VH}
           ton="rouge"
         />
+        {declaration.case3SG > 0 && (
+          <CarteCase
+            code="3SG"
+            libelle="Abattement pour durée de détention de droit commun"
+            valeur={declaration.case3SG}
+            ton="vert"
+          />
+        )}
       </div>
+
+      {declaration.case3SG > 0 && (
+        <p className="rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-800">
+          L'abattement (case 3SG) ne joue que pour le calcul de l'impôt sur le revenu. Les
+          prélèvements sociaux et le revenu fiscal de référence restent assis sur le montant
+          avant abattement (case 3VG).
+        </p>
+      )}
 
       {/* Imputation / report des moins-values */}
       <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm">
@@ -176,8 +195,13 @@ export default function ResultatsCessions({ declaration }: ResultatsCessionsProp
       </div>
 
       <p className="rounded-md bg-slate-100 px-3 py-2 text-xs text-slate-600">
-        Reportez <span className="font-mono font-semibold">3VG</span> et{" "}
-        <span className="font-mono font-semibold">3VH</span> sur la déclaration{" "}
+        Reportez <span className="font-mono font-semibold">3VG</span>
+        {declaration.case3SG > 0 && (
+          <>
+            , <span className="font-mono font-semibold">3SG</span>
+          </>
+        )}{" "}
+        et <span className="font-mono font-semibold">3VH</span> sur la déclaration{" "}
         <span className="font-semibold">2042-C</span> ; le détail par cession se reporte sur le
         formulaire <span className="font-semibold">2074</span> / la fiche{" "}
         <span className="font-semibold">2074-CMV</span>. Régime{" "}
