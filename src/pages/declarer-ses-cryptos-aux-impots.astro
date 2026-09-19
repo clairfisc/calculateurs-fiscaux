@@ -42,11 +42,17 @@ const noticeUrl =
         <ul>
           <li>
             <strong>Déclarer les comptes</strong> (formulaire <strong>3916-bis</strong>) :
-            tout compte d'actifs numériques ouvert, détenu ou clôturé sur une
-            plateforme <strong>établie à l'étranger</strong> (Binance, Kraken,
-            Coinbase hors entité française…) doit être déclaré, <em>même sans
-            aucune vente</em>. C'est une obligation déclarative, pas un impôt ;
-            l'oublier expose à une amende forfaitaire.
+            tout compte d'actifs numériques ouvert, détenu, <strong>utilisé</strong> ou
+            clôturé sur une plateforme <strong>établie à l'étranger</strong> (Binance,
+            Kraken, Coinbase hors entité française…) doit être déclaré, <em>même sans
+            aucune vente</em>. Depuis la loi n° 2026-534 du 25 juin 2026, l'obligation
+            vise aussi les <strong>NFT détenus ou utilisés à l'étranger</strong> en tant
+            que tels, <strong>sans condition de compte</strong> (CGI art. 1649 bis C,
+            version du 01/07/2026). C'est une obligation déclarative, pas un impôt ;
+            l'oublier expose à une amende de <strong>750 €</strong> par compte non déclaré
+            (125 € par omission ou inexactitude), doublée au-delà de 50 000 € de valeur
+            vénale — la portée de l'amende pour les NFT (par portefeuille ou par NFT)
+            n'est tranchée par aucune source (CGI art. 1736, X).
           </li>
           <li>
             <strong>Déclarer les plus-values</strong> (formulaire <strong>2086</strong>) :
@@ -75,14 +81,23 @@ const noticeUrl =
         <ul>
           <li>
             une cession de crypto <strong>contre une monnaie ayant cours légal</strong>
-            (vente en euros, dollars…) ;
+            (euro, dollar, franc suisse…) ;
           </li>
           <li>
             une cession de crypto <strong>contre un bien ou un service</strong>
-            (payer un achat en bitcoin, par exemple).
+            (payer un achat en bitcoin, par exemple) ;
+          </li>
+          <li>
+            un échange <strong>crypto → crypto avec soulte</strong> : la soulte rend
+            l'opération imposable.
           </li>
         </ul>
-        <h3 id="crypto-crypto">Crypto → crypto : non imposable (sursis)</h3>
+        <p class="note">
+          Notre calculateur ne modélise pas les échanges avec soulte (ligne 222) :
+          dans ce cas, remplissez le 2086 directement ou vérifiez le calcul à la
+          main.
+        </p>
+        <h3 id="crypto-crypto">Crypto → crypto sans soulte : non imposable (sursis)</h3>
         <p>
           Échanger un actif numérique contre un autre <strong>sans soulte</strong>
           (BTC → ETH, vente d'un token contre un stablecoin…) <strong>n'est pas</strong>
@@ -92,12 +107,29 @@ const noticeUrl =
         </p>
         <p class="note">
           Concrètement : vous pouvez arbitrer entre cryptos toute l'année sans
-          générer d'impôt. Le compteur fiscal ne se déclenche qu'au moment où vous
-          <strong>sortez vers de l'euro</strong> (ou payez un bien/service). Inutile
-          de saisir vos échanges crypto→crypto dans le calculateur — ils n'entrent
-          ni dans le gain, ni dans le seuil des 305 €.
+          générer d'impôt <strong>tant qu'il s'agit d'une gestion privée
+          occasionnelle</strong>. Le compteur fiscal ne se déclenche qu'au moment où
+          vous <strong>sortez vers de l'euro</strong> (ou payez un bien/service).
+          Inutile de saisir vos échanges crypto→crypto sans soulte dans le
+          calculateur — ils n'entrent ni dans le gain, ni dans le seuil des 305 €.
+          Attention toutefois : des opérations menées dans des conditions analogues
+          à celles d'un professionnel relèvent des <strong>bénéfices non commerciaux</strong>,
+          régime dans lequel les échanges ne bénéficient
+          <strong> d'aucun sursis</strong> (CGI art. 92, 2, 1° bis et 150 VH bis, II-A —
+          le sursis ne vaut que pour le I de l'art. 150 VH bis ; sur le champ du
+          régime, BOI-BNC-CHAMP-10-10-20-40, § 1080).
         </p>
       </section>
+
+      <p class="note alerte">
+        <strong>Ce guide ne couvre pas les NFT.</strong> Pour les cessions
+        réalisées depuis le <strong>1ᵉʳ janvier 2026</strong>, les crypto-actifs
+        <strong>uniques et non fongibles</strong> ne relèvent plus de ce régime :
+        ils sont imposés selon le <strong>régime du bien qu'ils représentent</strong>
+        (CGI art. 150 VH ter, loi n° 2026-534 du 25 juin 2026, art. 91) — hors 2086,
+        hors seuil de 305 €, hors cases 3AN/3BN. Notre calculateur ne couvre que les
+        crypto-actifs <strong>fongibles</strong>.
+      </p>
 
       <section aria-labelledby="methode">
         <h2 id="methode">La méthode « valeur globale du portefeuille » (150 VH bis)</h2>
@@ -107,15 +139,26 @@ const noticeUrl =
           une formule à l'échelle de <strong>tout votre portefeuille</strong> :
         </p>
         <p class="formule">
-          plus-value = prix de cession − [ prix total d'acquisition × (prix de
-          cession ÷ valeur globale du portefeuille) ]
+          plus-value = (prix de cession − frais de cession) − [ prix total
+          d'acquisition × (prix de cession BRUT de frais ÷ valeur globale du
+          portefeuille) ]
+        </p>
+        <p class="note">
+          Les frais de cession réduisent le <strong>gain</strong> (premier terme) ;
+          ils n'entrent <strong>pas</strong> dans la proportion de portefeuille
+          cédée (second terme, qui reste au prix de cession brut). C'est la formule
+          du formulaire lui-même : ligne <strong>218</strong> (nette de frais)
+          moins [ligne <strong>223</strong> × (ligne <strong>217</strong>,
+          brute de frais, ÷ ligne <strong>212</strong>)] — notice 2086, CERFA
+          16043*07, rubrique lignes 213-218.
         </p>
         <p>Décodé :</p>
         <dl class="cases">
           <dt>Prix de cession</dt>
           <dd>
-            ce que vous encaissez à la vente (minoré des frais de cession, sur
-            justificatifs).
+            ce que vous encaissez à la vente. <strong>Brut</strong> dans la
+            proportion cédée (ligne 217), <strong>net des frais de cession</strong>,
+            sur justificatifs, dans le gain (ligne 218).
           </dd>
           <dt>Valeur globale du portefeuille</dt>
           <dd>
@@ -126,8 +169,14 @@ const noticeUrl =
           <dt>Prix total d'acquisition</dt>
           <dd>
             la somme de tout ce que vous avez réellement payé en euros pour
-            constituer ce portefeuille — diminué, à chaque vente, de la part de
-            capital déjà « consommée » par les ventes précédentes.
+            constituer ce portefeuille, diminué, à chaque sortie du portefeuille
+            (vente, mais aussi donation consentie : les cessions
+            <strong> « à titre gratuit ou onéreux »</strong> antérieures, ligne 221
+            du 2086), de la part de capital déjà « consommée ». À l'inverse, un
+            actif reçu à titre gratuit entre dans le prix d'acquisition, pour sa
+            valeur retenue pour les droits de mutation à titre gratuit ou, à
+            défaut, sa valeur réelle à l'entrée dans votre patrimoine (CGI
+            art. 150 VH bis, III-B).
           </dd>
         </dl>
         <p>
@@ -168,15 +217,27 @@ const noticeUrl =
       <section aria-labelledby="seuil">
         <h2 id="seuil">L'exonération des 305 €</h2>
         <p>
-          Si la <strong>somme de vos prix de cession</strong> de l'année (le total
-          de ce que vous avez vendu, pas le gain) <strong>ne dépasse pas 305 €</strong>,
-          <strong> toutes</strong> vos plus-values sont exonérées. Au-delà, elles
-          sont imposables <strong>dès le premier euro</strong> de gain.
+          Si la <strong>somme de vos prix de cession</strong> de l'année, nets de
+          frais et de soultes (le total de ce que vous avez vendu, pas le gain)
+          <strong>ne dépasse pas 305 €</strong>, <strong>toutes</strong> vos
+          plus-values sont exonérées. Au-delà, elles sont imposables
+          <strong> dès le premier euro</strong> de gain.
         </p>
         <p class="note">
           C'est un seuil « tout ou rien », pas un abattement : 305 € de ventes →
           exonéré ; 306 € → le gain entier est imposable. Les échanges
-          crypto→crypto ne comptent pas dans ce total.
+          crypto→crypto sans soulte ne comptent pas dans ce total. Le seuil
+          s'apprécie au niveau du <strong>foyer fiscal</strong> tout entier
+          (déclarant 1, déclarant 2, personnes à charge, et quotes-parts détenues
+          via des personnes interposées — formulaire 2086, ligne 51 ; CGI 150 VH
+          bis, II-B renvoyant au III-A) : un couple ne dispose <strong>pas</strong>
+          de 2 × 305 €. Deux cessions de 200 € chacune dans le même foyer
+          (400 € au total) sont donc imposables dès le premier euro.
+        </p>
+        <p class="note">
+          Même exonéré, le <strong>2086 reste dû</strong> : on y reporte les seuls
+          <strong> prix de cession</strong> de l'année, sans calcul de gain
+          (notice 2086, ligne 51).
         </p>
       </section>
 
@@ -211,7 +272,16 @@ const noticeUrl =
         </ul>
         <p>
           En revanche, le jour où vous <em>vendez</em> les jetons reçus par
-          staking ou airdrop, cette vente, elle, relève bien du 2086.
+          staking ou airdrop, cette vente, elle, relève bien du 2086. Le prix
+          d'acquisition à retenir n'est pas nécessairement nul : la loi prévoit
+          qu'en cas d'acquisition à titre gratuit, le prix d'acquisition s'entend
+          de la valeur retenue pour les droits de mutation à titre gratuit ou, à
+          défaut, de la valeur réelle des actifs à leur entrée dans votre
+          patrimoine (CGI art. 150 VH bis, III-B). La notice 2086 ne commente pas
+          le cas des jetons reçus par airdrop ou staking : conservez la
+          valorisation retenue à la réception (celle déjà déclarée en BNC/RCM, le
+          cas échéant). La valeur d'acquisition nulle ne vaut expressément que
+          pour le minage imposé en BNC (BOI-BNC-CHAMP-10-10-20-40, § 1080).
         </p>
       </section>
 
@@ -229,7 +299,9 @@ const noticeUrl =
             moins-value nette → case <strong>3BN</strong> (valeur absolue) ;
           </li>
           <li>
-            exonéré (≤ 305 €) → 3AN = 3BN = 0.
+            exonéré (≤ 305 €) → 3AN = 3BN = 0, mais le <strong>2086 lui-même reste
+            à déposer</strong> avec les prix de cession de l'année (voir
+            ci-dessus).
           </li>
         </ul>
         <p>
@@ -243,8 +315,21 @@ const noticeUrl =
           hausse s'applique <strong>dès l'imposition des revenus 2025</strong> :
           une cession réalisée en 2025 est déjà taxée à 31,4 %, et non à 30 %.
           Vous pouvez opter pour le <strong>barème progressif</strong> (case 3CN)
-          si c'est plus avantageux — voir notre
-          <a href="/faut-il-cocher-2op/">comparateur PFU / barème</a>.
+          si c'est plus avantageux.
+        </p>
+        <p class="note">
+          L'option pour le barème sur les plus-values crypto (case <strong>3CN</strong>)
+          est <strong>expresse</strong>, <strong>irrévocable</strong> une fois
+          exercée, et <strong>globale</strong> : elle porte sur l'ensemble des
+          gains crypto de l'année pour <strong>tout le foyer</strong>, sans
+          sélection ligne par ligne (notice 2086, encadré « Quand remplir une
+          déclaration 2086 »). Elle est surtout <strong>indépendante</strong> de la
+          case <strong>2OP</strong> des valeurs mobilières classiques : cocher 2OP
+          ne fait <strong>pas</strong> basculer la crypto au barème, il faut cocher
+          les deux cases si vous voulez le barème pour les deux. Notre
+          <a href="/faut-il-cocher-2op/">comparateur PFU / barème (2OP)</a> ne
+          modélise <strong>pas</strong> la fiscalité crypto — ne l'utilisez pas pour
+          décider de la case 3CN.
         </p>
         <p class="note">
           À noter : la doctrine administrative n'a pas encore été mise à jour sur
@@ -335,6 +420,11 @@ const noticeUrl =
       background: #f6f6f4;
       padding: 0.75rem 1rem;
       border-radius: 6px;
+    }
+    .note.alerte {
+      background: #fffbeb;
+      border-left: 4px solid #d97706;
+      color: #333;
     }
     a {
       color: #1d4ed8;

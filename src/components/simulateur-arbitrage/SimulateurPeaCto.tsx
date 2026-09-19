@@ -149,7 +149,7 @@ function Differentiel({ resultat }: { resultat: ComparatifArbitrage<DetailsPeaCt
 }
 
 export default function SimulateurPeaCto() {
-  const [millesime, setMillesime] = useState<2025 | 2026>(2025);
+  const [millesime, setMillesime] = useState<2025 | 2026>(2026);
   const [regime, setRegime] = useState<"PFU" | "BAREME">("PFU");
   const [tmiBp, setTmiBp] = useState<number>(3000);
   const [horizon, setHorizon] = useState<HorizonPea>("APRES_5_ANS");
@@ -208,7 +208,8 @@ export default function SimulateurPeaCto() {
               ))}
             </select>
             <p className="text-xs text-slate-500">
-              Détermine le taux des prélèvements sociaux (17,2 % en 2025, 18,6 % en 2026).
+              Détermine le taux des prélèvements sociaux côté PEA (17,2 % en 2025, 18,6 % en
+              2026) ; côté compte-titres, le taux est de 18,6 % dès 2025.
             </p>
           </div>
 

@@ -23,10 +23,18 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
           <p>
             En fin d'année, si vous avez réalisé des <strong>plus-values</strong> sur un compte-titres
             ordinaire, vous pouvez <strong>réaliser des moins-values latentes</strong> (vendre des
-            lignes en perte) pour les <strong>imputer sur ces plus-values</strong> et réduire votre
-            base imposable de l'année. C'est ce qu'on appelle la <em>purge</em> ou
-            <em>tax-loss harvesting</em>. La décision se prend <strong>avant le 31 décembre</strong> :
-            l'imputation joue sur les plus-values <strong>de la même année</strong>.
+            lignes en perte) pour les <strong>imputer sur ces plus-values</strong> et réduire la
+            base imposable de vos <strong>plus-values de même nature</strong> pour l'année — pas
+            votre revenu global, sur lequel aucune imputation n'est possible. C'est ce qu'on appelle
+            la <em>purge</em> ou <em>tax-loss harvesting</em>. Le fait générateur n'est pas la date
+            d'ordre mais le <strong>dénouement effectif de l'opération</strong> (règlement-livraison,
+            transfert de propriété) : la vente doit être dénouée avant le <strong>31 décembre</strong>
+            pour compter sur l'année. Le délai de règlement-livraison est de <strong>J+2 jours
+            ouvrés</strong> sur les marchés européens (Euronext) jusqu'en octobre 2027, puis
+            <strong> J+1</strong> ensuite — en pratique, le dernier jour utile pour vendre se situe
+            donc quelques jours avant le 31 décembre (environ le 29 décembre avec la règle actuelle) ;
+            vérifiez le calendrier de votre courtier, les places nord-américaines étant elles déjà à
+            J+1 (BOFiP BOI-RPPM-PVBMI-30-10-10, § 1 et 50 ; § 30 pour la liquidation de décembre en SRD).
           </p>
           <p>
             Le simulateur ci-dessus compare deux scénarios — <strong>réaliser</strong> ou
@@ -37,11 +45,57 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
 
           <h2 class="text-base font-semibold text-slate-900">Les points à garder en tête</h2>
           <p>
+            <strong>Champ de cette page : le compte-titres ordinaire (CTO).</strong> En
+            <strong>PEA</strong>, vendre une ligne à perte à l'intérieur du plan ne crée aucune
+            moins-value imputable — seules la clôture du plan (après 5 ans) ou un retrait/rachat
+            avant 5 ans font apparaître une moins-value fiscale (brochure pratique de l'impôt sur le
+            revenu 2026, p. 142 ; BOFiP BOI-RPPM-PVBMI-20-10-40, § 310). Sur les
+            <strong> cryptoactifs</strong>, l'imputation des moins-values (CGI art. 150 VH bis, IV)
+            est <strong>seulement intra-annuelle</strong> : il n'y a <strong>aucun report</strong> sur
+            les années suivantes, la règle des « 10 ans » décrite ici ne s'y applique pas.
+          </p>
+          <p>
             <strong>Sans plus-value à effacer, la purge ne réduit pas l'impôt de l'année</strong> : la
             moins-value est alors simplement <strong>reportée</strong> et reste imputable
-            <strong>pendant 10 ans</strong> sur des plus-values <strong>de même nature</strong>. L'ordre
-            d'imputation est fixé par la loi : moins-values de l'année d'abord, puis moins-values
-            antérieures, le reliquat étant reporté (case <strong>3VH</strong>).
+            <strong>pendant 10 ans</strong> sur des plus-values <strong>de même nature</strong>.
+            L'ordre d'imputation retenu par l'administration et le formulaire 2074 est : moins-values
+            de l'année d'abord, puis moins-values antérieures en commençant par les plus anciennes
+            (brochure p. 142 ; BOFiP BOI-RPPM-PVBMI-20-10-40, § 470). Vous choisissez en revanche
+            <strong> sur quelles plus-values</strong> imputer (fiche 2074-CMV, imputation des
+            moins-values « sur les plus-values de votre choix » ; BOFiP BOI-RPPM-PVBMI-20-10-40, § 480 ;
+            CE 12 novembre 2015, n° 390265). Seule la moins-value <strong>de l'année</strong> non
+            imputée figure en case <strong>3VH</strong> : le reliquat de vos moins-values antérieures
+            ne se déclare pas sur la 2042-C, il se suit via la fiche <strong>2074-CMV</strong>
+            (situation au 31 décembre) — voir notre page
+            <a class="text-blue-700 underline" href="/reporter-ses-moins-values-bourse/"
+              >reporter ses moins-values de bourse</a
+            > pour le détail.
+          </p>
+          <p>
+            <strong>La purge peut aussi détruire de la valeur.</strong> Les moins-values de l'année
+            s'imputent en priorité, avant les moins-values antérieures en report. Si votre stock
+            contient des moins-values arrivant à leur <strong>dernière année d'imputation</strong>
+            (la 10ᵉ), les faire évincer par une purge de l'année en cours les fait
+            <strong> expirer sans avoir servi</strong>. Dans ce cas, mieux vaut ne pas purger cette
+            année-là et laisser vos plus-values absorber en priorité le stock qui expire (BOFiP
+            BOI-RPPM-PVBMI-20-10-40, § 430 et 470 ; 2074-CMV, situation 3 : l'imputation y est totale
+            et obligatoire, sans mise en réserve possible).
+          </p>
+          <p>
+            <strong>Le prix de revient utilisé est le prix moyen pondéré (PMP)</strong>, pas le prix
+            d'achat d'un lot précis (CGI art. 150-0 D, 3 ; BOFiP BOI-RPPM-PVBMI-20-10-20-40, § 20 et
+            40) : si vous détenez la même valeur en plusieurs tranches d'achat, vous ne pouvez pas
+            choisir de « purger » seulement la tranche en perte — la moins-value se calcule sur le
+            PMP de l'ensemble de la ligne. L'<strong>ordre des opérations compte</strong> : racheter
+            avant de vendre recalcule le PMP à la baisse et ampute la moins-value dégagée. Exemple :
+            100 titres à un PMP de 100 €, rachat de 100 titres à 60 € → nouveau PMP de 80 € → une
+            vente à 60 € ne dégage plus que 2 000 € de moins-value, au lieu de 4 000 € si l'on avait
+            vendu avant de racheter. D'où la règle de prudence : <strong>vendez d'abord, rachetez
+            ensuite</strong> — par précaution, pas le même jour, l'ordre des opérations
+            intra-journalières n'étant tranché par aucune doctrine connue. Le PMP
+            <strong> peut être calculé de manière autonome par chaque intermédiaire</strong>, compte
+            par compte (tolérance administrative, BOFiP BOI-RPPM-PVBMI-20-10-20-40, § 40) : répartir
+            une ligne entre deux courtiers peut éviter la fusion des PMP.
           </p>
           <p>
             <strong>Réaliser une moins-value latente n'est pas toujours avantageux.</strong> Si vous

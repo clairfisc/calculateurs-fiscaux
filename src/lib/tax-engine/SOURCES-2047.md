@@ -221,8 +221,9 @@ sociétés UE/à convention).
 
 - **Notice 2047-NOT 2026**, « Modalités déclaratives » : « reportez obligatoirement le revenu
   **brut sans déduction de l'impôt étranger** ».
-- **Brochure pratique IR 2026**, p. 126 : « montant **brut**, majoré du crédit d'impôt
-  conventionnel ».
+- **Brochure pratique IR 2026**, p. 125 : « montant **brut**, majoré du crédit d'impôt
+  conventionnel ». (Correction 19/09/2026 : cette citation était précédemment attribuée à la
+  p. 126 — la pagination de ce chapitre de la brochure était décalée de +1 dans nos notes.)
 - **Arithmétique du formulaire 2047** : ligne **208** (« Revenus crédit d'impôt inclus total
   lignes 203 + 207 ») = ligne 203 (net) + ligne 207 (crédit **retenu**, pas le 205 théorique).
 
@@ -270,8 +271,11 @@ le montant affiché intègre déjà l'impôt étranger réellement supporté.
   Le moteur porte aujourd'hui le net encaissé, **avant** abattement ; toute correction est
   conditionnée à une confirmation chiffrée officielle (§6.3).
 - **Anomalie « ligne 8VL sans code 8PL » (code 833)** : déclencher en ligne un 8VL sans 8PL
-  associé lève une **incohérence non bloquante** — l'administration peut la corriger ensuite,
-  potentiellement au détriment du contribuable. D'où l'intérêt de toujours produire les deux.
+  associé lève une incohérence signalée par le contrôle. Son caractère **bloquant** n'est établi
+  par aucune source officielle publique, mais les témoignages usagers (Services Publics +,
+  fil 7326751 : « impossibilité de valider ma déclaration ») pointent vers un **blocage effectif**
+  de la validation — revue du 19/09/2026 ; la qualification « non bloquante » retenue auparavant
+  ne reposait sur rien de sourçable. D'où l'intérêt de toujours produire les deux lignes.
 - Sources : notice 2047-NOT 2026 (`2047_5490.pdf`, section « 8VL et 8PL ») ; formulaire 2026
   (`2047_5488.pdf`, légende cadre 7) ; forum DGFiP `plus.transformation.gouv.fr` (anomalie).
 
@@ -286,21 +290,61 @@ le montant affiché intègre déjà l'impôt étranger réellement supporté.
   retenue statutaire de 30 % mais **seuls 15 % crédités** côté FR (l'excédent n'est pas récupérable
   via le 2047 — à régulariser auprès de l'IRS). Le moteur reçoit le **net réellement encaissé** et
   l'**impôt réellement supporté**, donc gère les deux cas via `min(205,206)`.
+- 🐛 **Coquille repérée dans la notice (mesure de fiabilité, audit du 19/09/2026)** : la notice
+  2047-NOT, p. 1, section « 8VM, 8WM, 8UM et 8PM », écrit que le montant concerné « doit être
+  indiqué en 8PL » — c'est manifestement une erreur de frappe : le formulaire lui-même et la
+  Brochure IR 2026 (p. 366) désignent bien la case **8PM** pour cette rubrique (8PL est réservée
+  aux plus-values et revenus de capitaux mobiliers du cadre 70, pas aux revenus du cadre 71). À
+  retenir comme indice que la notice n'est pas totalement fiable au mot près, y compris sur les
+  points qui semblent les plus mécaniques.
 
-### 6.3 8PL × abattement 40 % — tranché *probable*, calcul NON modifié (recherche juin 2026)
+### 6.3 8PL × abattement 40 % — tranché (audit adversarial du 19/09/2026), calcul NON modifié
 
-- 🟡 **Verdict probable : 8PL = net imposable APRÈS abattement de 40 %** (quand l'abattement
-  s'applique, c.-à-d. **option barème / 2OP cochée**). Le libellé du formulaire en ligne dit
-  « revenus nets imposables étrangers **après abattement éventuel**, sans déduction de l'impôt
-  étranger » ; « après abattement éventuel » = après l'abattement 40 % de l'art. 158-3 CGI. La
-  notice 2047/2042-C ne dit que « nets » (ambigu). **Niveau de preuve = praticien** (libellé en
-  ligne relayé par 2 guides concordants), **pas une source primaire chiffrée** ; le **simulateur
-  officiel n'intègre pas la 8PL** → impossible à confirmer à la source.
-- ⚠️ **Le moteur n'est PAS modifié** (décision : ne pas toucher une valeur qui alimente le crédit
-  d'impôt sur preuve non primaire). Il porte aujourd'hui le net **avant** abattement → s'il faut
-  confirmer « après abattement », `case8plEur` sera **surévaluée** quand 2OP est cochée. **À
-  confirmer sur un cas chiffré officiel (DE/US/NL)**, puis corriger.
-- ❓ **Sous-question RÉELLEMENT ouverte (base brute vs nette d'impôt étranger)** : le libellé dit
-  « sans déduction de l'impôt étranger » (≈ **brut** de retenue), mais l'auto-remplissage en ligne
-  applique le forfait pays sur le **net** → contradiction non résolue, simulateur muet. Reste
-  `⚠️ à vérifier` sur **cet axe uniquement**.
+- ✅ **Verdict révisé : 8PL = montants BRUTS, AVANT abattement de 40 %.** L'ancien verdict de ce
+  paragraphe (« probable : après abattement ») reposait sur le seul libellé de l'outil de
+  déclaration en ligne relayé par deux guides — un niveau de preuve « praticien », pas une source
+  primaire. Il est **infirmé** par une réponse publique de la DGFiP, de meilleur rang que ce
+  relais : le 28/05/2026, sur la plateforme **Services Publics+** (fil « Nouveau champ 8PL du
+  formulaire 2047 », <https://www.plus.transformation.gouv.fr/experiences/7376169_nouveau-champ-8pl-du-formulaire-2047>),
+  un agent DGFiP (pseudonyme « Tristan ») répond à un usager qui demandait explicitement s'il
+  fallait porter le brut, le net d'impôt étranger, ou le montant après abattement de 40 % :
+  > « Généralement, cette case se réfère aux montants bruts (avant abattement) des plus-values et
+  > revenus de capitaux mobiliers nets »
+  La réponse commence par « Généralement » et renvoie elle-même à la notice officielle : ce n'est
+  pas une affirmation catégorique, à traiter avec la prudence que cela implique. À la parenthèse
+  « (avant abattement) » près, la réponse **recopie le libellé imprimé de la ligne 8PL**
+  (« Montant des plus-values et revenus de capitaux mobiliers nets ») — le seul apport informatif
+  réel de cette réponse est donc cette parenthèse.
+  Réserve sur la force probante de cette source : réponse de forum d'entraide (58 % générée par
+  IA puis vérifiée par un agent, d'après la plateforme elle-même), jugée « pas utile » par 28
+  usagers, **pas une doctrine BOFiP** ; le simulateur officiel n'intègre toujours pas la 8PL. C'est
+  néanmoins la meilleure source publique disponible à ce jour, et elle est cohérente avec le sens
+  de lecture le plus naturel du mot « bruts » qu'elle emploie elle-même.
+- ✅ **`compute.ts` est CONFORME au nouveau verdict, sans modification.** Le moteur porte déjà le
+  net encaissé **avant** abattement dans `case8plEur` (`case8plEur += arrondiEuro(ligne.netEncaisseCents)`,
+  compute.ts) — exactement ce que confirme la réponse DGFiP. L'ancienne préoccupation (« le moteur
+  sera surévalué si la bonne réponse est après abattement ») est donc caduque : aucun changement
+  de code requis.
+- ✅ **Sous-question de l'axe brut/net D'IMPÔT ÉTRANGER (distinct de l'abattement) : étayée
+  (audit adversarial du 19/09/2026).** La formulation initiale de ce point (« le formulaire 2047
+  se contredit ») reposait sur un artefact de lecture : les lignes 8VL et 8PL du cadre 70 sont des
+  lignes de **total pleine largeur**, hors des colonnes de saisie du cadre — il n'y a donc pas de
+  contradiction formelle de mise en page. Un flou textuel réel, mais plus modeste, subsiste
+  néanmoins : les lignes de détail du cadre 70 (page 4, `2047_5488.pdf`) se renseignent dans une
+  colonne intitulée « REVENU AVANT DÉDUCTION DE L'IMPÔT ÉTRANGER » (donc **brut** de la retenue
+  étrangère), alors que la ligne de total 8PL parle, elle, de revenus « **nets** ». Les deux
+  formulations coexistent dans le même cadre. La réponse DGFiP du 28/05/2026 reprend d'ailleurs la
+  même formulation ambiguë (« montants bruts … de capitaux mobiliers **nets** »), sans lever ce
+  point.
+  Ce qui tranche réellement cet axe, c'est la notice 2047-NOT (p. 1, NOTA final) :
+  > « les taux indiqués pour chaque pays dans cette notice sont déterminés par rapport au revenu
+  > net perçu (après déduction de l'impôt étranger) alors que les taux prévus dans la convention
+  > sont les taux applicables au revenu brut. »
+  Combinée à la ligne 203 (« Montant net encaissé ») et à la légende du cadre 20 (revenus « après
+  déduction de l'impôt supporté à l'étranger »), cette précision établit que la chaîne 203→8PL
+  travaille sur le **net d'impôt étranger** — conforme à `compute.ts`, qui porte le net encaissé
+  (`netEncaisseCents`) dans `case8plEur`. L'axe « avant/après abattement 40 % » (traité au point
+  précédent) reste, lui, indépendant de cette conclusion.
+- Sources consultées pour cette révision : formulaire 2047 rev. 2025 (`2047_5488.pdf`, cadre 7 /
+  cadre 70, p. 4) et notice 2047-NOT rev. 2025 (`2047_5490.pdf`, p. 1-2) lus directement ; fil
+  Services Publics+ cité ci-dessus, consulté et lu le 19/09/2026.

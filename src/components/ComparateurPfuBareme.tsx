@@ -177,7 +177,7 @@ interface Props {
 }
 
 export default function ComparateurPfuBareme({ entete = true }: Props) {
-  const [millesime, setMillesime] = useState<Millesime>(2025);
+  const [millesime, setMillesime] = useState<Millesime>(2026);
   const [tmiBp, setTmiBp] = useState<number>(3000);
   const [dividendes, setDividendes] = useState("");
   const [interets, setInterets] = useState("");

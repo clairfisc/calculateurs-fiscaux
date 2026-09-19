@@ -40,9 +40,15 @@ const brochureUrl =
           banque, votre courtier ou votre assureur vous les a versés ou les a
           inscrits en compte : <strong>17,2 %</strong> pour les revenus 2025
           (ceux qui remplissent les cases 2BH, 2CG et 2DF de la déclaration
-          2026). Ce taux ne monte à <strong>18,6 %</strong> que pour les
-          dividendes et intérêts versés à compter du 1ᵉʳ janvier 2026 ;
-          l'<strong>assurance-vie</strong> reste, elle, soumise au taux de
+          2026). Ce taux ne monte à <strong>18,6 %</strong> qu'à compter du
+          1ᵉʳ janvier 2026 pour les <strong>dividendes et les intérêts</strong>
+          (produits de placement). Pour les <strong>revenus du
+          patrimoine</strong> — au premier rang desquels vos plus-values de
+          cession de valeurs mobilières — la hausse s'applique en revanche dès
+          les <strong>revenus 2025</strong>, déclarés en 2026 : c'est donc
+          18,6 %, et non 17,2 %, qu'il faut retenir pour calculer l'impôt
+          d'une plus-value réalisée en 2025.
+          L'<strong>assurance-vie</strong> reste, elle, soumise au taux de
           17,2 % (CSG à 9,2 %, non concernée par la hausse). C'est pourquoi
           ces cases sont <strong>préremplies</strong> sur votre déclaration,
           à partir des informations que ces établissements ont transmises à
@@ -54,7 +60,11 @@ const brochureUrl =
           (LFSS 2026) ne s'applique aux produits de placement que pour les
           revenus versés à compter du 1ᵉʳ janvier 2026 ; « les revenus
           fonciers, les plus-values immobilières, l'assurance-vie, l'épargne
-          logement restent soumis au taux de 9,2 % [de CSG] ».
+          logement restent soumis au taux de 9,2 % [de CSG] ». Sur l'entrée en
+          vigueur, la même page précise : « La hausse de la CSG s'applique à
+          compter des revenus 2025 déclarés en 2026 pour les revenus du
+          patrimoine et à compter du 1.1.2026 pour les produits de
+          placement. »
         </p>
         <p>
           Problème : si l'administration recalculait les prélèvements
@@ -79,7 +89,7 @@ const brochureUrl =
           notamment :
         </p>
         <dl class="cases">
-          <dt>Les revenus distribués et les produits de placement à taux fixe</dt>
+          <dt>Les revenus distribués et les produits de placement à revenu fixe</dt>
           <dd>
             en clair, vos dividendes et vos intérêts (ceux qui, avant
             prélèvement, alimentent les cases 2DC et 2TR) pour la part déjà
@@ -103,19 +113,28 @@ const brochureUrl =
           <strong> si vous avez opté pour le barème</strong>. Sans 2OP, la
           case 2BH n'ouvre aucun droit à déduction.
         </p>
+        <p>
+          <strong>À ne pas faire</strong> : cette CSG déductible est calculée
+          puis déduite <strong>automatiquement</strong> par l'administration
+          lors du traitement de votre déclaration. Ne la reportez surtout
+          pas vous-même case <strong>6DE</strong> page 4 de la 2042 : elle
+          serait alors déduite une seconde fois, ce qui expose à une
+          rectification, avec intérêts de retard.
+        </p>
         <p class="note">
           Sources : <a href={brochureUrl} rel="noopener" target="_blank"
             >brochure pratique de l'impôt sur le revenu 2026</a
           > (déclaration des revenus 2025), section « Revenus déjà soumis aux
           prélèvements sociaux, avec CSG déductible en cas d'option pour le
-          barème » (case 2BH), p. 132-133 — « Le montant des revenus indiqué
+          barème » (case 2BH), p. 132 — « Le montant des revenus indiqué
           ligne 2BH est exclu de la base de calcul des prélèvements sociaux.
           [...] retenu pour le calcul du montant de CSG à déduire [...] si
           vous avez opté pour l'imposition au barème [...] (case 2OP
-          cochée). » « Le taux de CSG déductible reste à 6,8 %. » Base légale
-          de la fraction déductible : CGI, art. 154 quinquies, II. Intitulé de
-          case confirmé sur le formulaire 2042, CERFA n° 10330*30 (revenus
-          2025).
+          cochée). » « Le taux de CSG déductible reste à 6,8 %. » « N'indiquez
+          pas cette fraction de CSG déductible ligne 6DE page 4 de la
+          2042. » Base légale de la fraction déductible : CGI, art. 154
+          quinquies, II. Intitulé de case confirmé sur le formulaire 2042,
+          CERFA n° 10330*30 (revenus 2025).
         </p>
       </section>
 
@@ -146,10 +165,17 @@ const brochureUrl =
             de la fraction des revenus distribués et des intérêts de comptes
             courants d'associés de sociétés soumises à l'IS qui excède 10 %
             du capital social, des primes d'émission et des sommes versées en
-            compte courant, déjà soumise aux cotisations sociales au titre
-            des revenus d'activité — une situation propre aux associés de
-            sociétés d'exercice libéral notamment ; la fraction qui
-            n'excède pas ce seuil, elle, va en case 2BH.
+            compte courant — à la <strong>double condition</strong> que
+            l'associé <strong>exerce son activité dans la société</strong> et
+            <strong> relève à ce titre du régime social des
+            indépendants</strong> (gérant majoritaire de SARL, associé de
+            société d'exercice libéral notamment) : cette fraction est alors
+            déjà soumise aux cotisations sociales au titre des revenus
+            d'activité. Les dirigeants assimilés salariés (un président de
+            SAS, par exemple) ne sont pas concernés par cette case : leurs
+            revenus restent intégralement en 2BH, quel qu'en soit le
+            montant. Pour un associé concerné, la fraction qui n'excède pas
+            le seuil de 10 %, elle, va en case 2BH.
           </li>
         </ul>
         <p>
@@ -177,7 +203,11 @@ const brochureUrl =
           La case 2DF regroupe des revenus déjà soumis aux prélèvements
           sociaux qui <strong>ouvrent toujours droit à la CSG déductible</strong>,
           <strong> y compris en l'absence d'option pour le barème</strong>
-          (case 2OP non cochée). C'est la différence essentielle avec la case
+          (case 2OP non cochée). Ce sont des revenus
+          <strong> imposables de droit au barème progressif</strong> —
+          l'option pour le prélèvement libératoire n'a pas été exercée lors
+          de leur versement — ce qui explique cette CSG déductible acquise
+          sans même cocher 2OP. C'est la différence essentielle avec la case
           2BH. Elle contient :
         </p>
         <dl class="cases">
@@ -198,15 +228,38 @@ const brochureUrl =
           retenu pour calculer la CSG déductible (6,8 % de ce montant) — mais
           sans qu'il soit nécessaire d'avoir coché 2OP.
         </p>
+        <p>
+          <strong>À ne pas faire</strong> : comme pour 2BH, cette CSG
+          déductible est calculée et déduite <strong>automatiquement</strong>
+          par l'administration. Ne la reportez pas non plus vous-même case
+          <strong> 6DE</strong> page 4 de la 2042 — même conséquence :
+          rectification et intérêts de retard.
+        </p>
+        <p>
+          Le même bloc de la 2042 comporte aussi les cases
+          <strong> 2DG</strong> et <strong>2DI</strong>. La 2DG est réservée
+          aux personnes relevant d'un régime de sécurité sociale d'un pays de
+          l'UE/EEE, du Royaume-Uni ou de la Suisse (redevables du seul
+          prélèvement de solidarité de 7,5 %). La 2DI, elle, correspond au
+          cas inverse : des revenus ayant bénéficié à tort de cette
+          exonération de prélèvements sociaux, qu'il faut alors resoumettre à
+          la CSG et à la CRDS (brochure p. 133) — deux cas particuliers que
+          cette fiche ne détaille pas.
+        </p>
         <p class="note">
           Source : <a href={brochureUrl} rel="noopener" target="_blank"
             >brochure pratique de l'impôt sur le revenu 2026</a
           >, section « Autres revenus déjà soumis aux prélèvements sociaux
           avec CSG déductible » (case 2DF), p. 133 — le montant est exclu de
           la base des prélèvements sociaux et retenu pour le calcul de la CSG
-          déductible (6,8 %), sans condition d'option pour le barème.
-          Intitulé de case confirmé sur le formulaire 2042, CERFA n°
-          10330*30 (revenus 2025).
+          déductible (6,8 %), sans condition d'option pour le barème ; il
+          s'agit de revenus « imposables de droit au barème progressif
+          (l'option pour le prélèvement libératoire n'ayant pas été exercée
+          lors de leur versement) », « déduit automatiquement de votre revenu
+          global ». La consigne « N'indiquez pas cette fraction de CSG
+          déductible ligne 6DE page 4 de la 2042 » figure p. 132 pour la case
+          2BH ; elle vaut par identité de motif pour la 2DF. Intitulé de case
+          confirmé sur le formulaire 2042, CERFA n° 10330*30 (revenus 2025).
         </p>
       </section>
 
@@ -245,6 +298,27 @@ const brochureUrl =
           IFU, comme pour toutes les cases de la rubrique 2.
         </p>
         <p>
+          Avant de corriger quoi que ce soit, un point de méthode : ces
+          trois cases ne peuvent contenir que des revenus sur lesquels les
+          prélèvements sociaux ont <strong>déjà été prélevés</strong> par un
+          établissement payeur français. Pour la case <strong>2BH</strong>
+          uniquement, ils peuvent aussi avoir été acquittés par vous-même via
+          une déclaration <strong>2778</strong> (revenus perçus à
+          l'étranger) ; pour 2CG et 2DF, seul le prélèvement par un
+          établissement payeur français est possible.
+          Si vos dividendes ou intérêts proviennent d'un courtier ou d'une
+          banque établis à l'étranger et que vous n'avez pas souscrit de
+          2778, ces cases restent à juste titre <strong>vides</strong> : les
+          prélèvements sociaux sur ces revenus seront liquidés par
+          l'administration à partir des cases 2DC ou 2TR, pas de 2BH. Ne
+          « complétez » donc jamais 2BH à partir d'un relevé de courtier
+          étranger : vous sortiriez ces revenus de la base de calcul des
+          prélèvements sociaux, ce qui expose à un redressement. Cas
+          inverse : si vous avez régularisé ces revenus via une 2778, vous
+          devez bien les faire figurer en 2BH — sinon vous payez les
+          prélèvements sociaux une seconde fois.
+        </p>
+        <p>
           Si un montant prérempli vous paraît inexact, la déclaration
           papier vous permet de le corriger directement (rayer le montant
           prérempli et indiquer le montant exact dans la case blanche) ; en
@@ -257,7 +331,11 @@ const brochureUrl =
             >brochure pratique de l'impôt sur le revenu 2026</a
           >, encadré « 2 I Revenus de capitaux mobiliers » : « Si un montant
           prérempli est inexact, rayez-le et indiquez le montant total exact
-          dans la case blanche. »
+          dans la case blanche. » Sur le périmètre de la case 2BH, p. 132 —
+          « Inscrivez ligne 2BH le montant des revenus perçus en 2025 sur
+          lesquels les prélèvements sociaux ont déjà été prélevés en 2025
+          par l'établissement payeur (ou lors de la souscription de la
+          2778) [...]. »
         </p>
       </section>
 

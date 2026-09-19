@@ -16,11 +16,11 @@ const noticeUrl =
         <header>
           <h1>Case 8PL et 8VL en 2026 : que faut-il vraiment y mettre&nbsp;?</h1>
           <p class="lede">
-            En 2026, des milliers de déclarants tombent sur le même blocage&nbsp;:
-            le message <strong>« ligne 8VL sans code 8PL »</strong> sur
-            impots.gouv.fr. La cause&nbsp;: une nouvelle case, <strong>8PL</strong>,
-            apparue cette année et mal documentée. Voici, simplement, ce que
-            chaque case attend.
+            En 2026, une nouvelle case du formulaire 2047 —
+            <strong>8PL</strong> — fait remonter sur impots.gouv.fr un
+            message d'anomalie&nbsp;: <strong>« ligne 8VL sans code 8PL »</strong>.
+            Le contrôle en ligne refuse alors de valider tant que 8PL reste
+            vide. Voici, simplement, ce que chaque case attend.
           </p>
         </header>
 
@@ -41,10 +41,20 @@ const noticeUrl =
           <h2 id="8vl">La case 8VL — le crédit d'impôt</h2>
           <p>
             La 8VL reçoit le <strong>total des crédits d'impôt</strong>
-            représentatifs de l'impôt déjà payé à l'étranger sur vos revenus de
-            capitaux mobiliers. Ce total vient de la <strong>ligne 207</strong>
-            du formulaire 2047 (le crédit retenu pour chaque revenu, plafonné par
-            la convention), additionnée sur toutes vos lignes.
+            représentatifs de l'impôt déjà payé à l'étranger. Ce total ne vient
+            pas de la seule <strong>ligne 207</strong>&nbsp;: c'est la somme de
+            tout le <strong>cadre 70</strong> de la 2047 — ligne 207
+            (dividendes, jetons de présence), ligne 237 (intérêts), ligne 276
+            (crédit conventionnel sur la fraction exonérée des revenus des
+            impatriés) et, le cas échéant, le crédit sur les plus-values et
+            gains logé dans ce même cadre. Si vous n'avez que des intérêts
+            étrangers, par exemple, oublier la ligne 237 sous-évalue votre 8VL.
+          </p>
+          <p>
+            Ce montant se reporte tel quel dans la rubrique 8 de votre 2042C
+            (pas dans le cadre 2)&nbsp;: le formulaire 2047 lui-même est
+            explicite (légende du cadre 7) — « Reportez les lignes 8VL et
+            8PL du cadre 70 dans la 2042C […] »
           </p>
           <p>C'est cette case qui vient en déduction de votre impôt français.</p>
         </section>
@@ -66,22 +76,96 @@ const noticeUrl =
           </p>
           <div class="note">
             <p>
-              <strong>Confusion fréquente, qu'on assume&nbsp;:</strong> selon les
-              situations, des sources hésitent entre le montant <em>net</em>
-              (après retenue étrangère), le montant <em>brut</em> (avant retenue)
-              et le montant après abattement de 40&nbsp;% (en cas d'option pour
-              le barème). La DGFiP n'a pas tranché publiquement de façon nette en
-              2026. Le libellé officiel parle de revenus «&nbsp;nets&nbsp;».
-              En cas de doute, vérifiez avec la
-              <a href={noticeUrl} rel="noopener" target="_blank">notice 2047</a>
-              ou un professionnel.
+              <strong>Mise à jour du 19/09/2026 — la DGFiP a répondu&nbsp;:</strong>
+              le 28 mai 2026, sur la plateforme Services Publics+ (fil
+              « Nouveau champ 8PL du formulaire 2047 »), un agent de la DGFiP a
+              indiqué que, «&nbsp;généralement&nbsp;», cette case «&nbsp;se
+              réfère aux montants bruts (avant abattement) des plus-values et
+              revenus de capitaux mobiliers nets&nbsp;» — la réponse renvoie
+              elle-même à la notice officielle. Concrètement&nbsp;: si vous
+              avez opté pour le barème (case 2OP), ne retranchez pas
+              l'abattement de 40&nbsp;% pour remplir 8PL.
+            </p>
+            <p>
+              Réserve honnête&nbsp;: cette réponse a été donnée sur un forum
+              d'entraide, pas dans une doctrine publiée (BOFiP) ni dans le
+              simulateur officiel — c'est le meilleur élément public disponible
+              à ce jour, mais elle n'a pas le rang d'une instruction. Et un
+              flou textuel subsiste, cette fois dans le formulaire lui-même,
+              sur un <em>autre</em> axe&nbsp;: les lignes de détail du cadre
+              70 se renseignent dans une colonne intitulée « Revenu avant
+              déduction de l'impôt étranger », alors que la ligne de total
+              8PL parle, elle, de revenus «&nbsp;nets&nbsp;». Les deux
+              formulations coexistent dans le même cadre (brut ou net
+              <em>d'impôt étranger</em>, indépendamment de la question de
+              l'abattement tranchée ci-dessus).
             </p>
           </div>
+          <p>
+            Un revenu <em>autre</em> qu'un dividende, un intérêt ou une
+            plus-value (un salaire ou une pension de source étrangère, cadre 71
+            de la 2047) ne passe pas par 8PL&nbsp;: sa base va en
+            <strong>8PM</strong>, et son crédit en <strong>8VM</strong>,
+            <strong>8WM</strong> ou <strong>8UM</strong> selon le bénéficiaire.
+          </p>
+        </section>
+
+        <section aria-labelledby="routage">
+          <h2 id="routage">Où va le revenu lui-même (pas seulement le crédit)</h2>
+          <p>
+            8VL et 8PL ne suffisent pas&nbsp;: il faut aussi déclarer le revenu
+            en tant que tel, crédit d'impôt inclus. Sur le 2047, la ligne 208
+            additionne le montant net encaissé (203) et le crédit retenu
+            (207)&nbsp;: <strong>208 = 203 + 207</strong>. Sur l'exemple
+            ci-dessous (1&nbsp;000&nbsp;€ net + 176&nbsp;€ de crédit), cela
+            donne 1&nbsp;176&nbsp;€ à reporter en case <strong>2DC</strong> de
+            votre 2042 — le revenu imposable se retient sans déduire l'impôt
+            étranger. Oublier ce report revient à ne déclarer que le crédit,
+            sans le revenu qui va avec.
+          </p>
+        </section>
+
+        <section aria-labelledby="courtier">
+          <h2 id="courtier">Votre courtier est en France&nbsp;? Pas de 2047</h2>
+          <p>
+            Tout ce qui précède suppose que vous avez encaissé vos dividendes
+            ou intérêts étrangers à l'étranger, ou via un intermédiaire
+            non-résident. Si au contraire vous détenez ces titres chez un
+            courtier ou une banque établi en France, la notice est claire&nbsp;:
+            reportez ces revenus directement sur votre 2042, sans passer par la
+            2047. Votre courtier a normalement déjà calculé le crédit d'impôt
+            étranger correspondant, imputé en case <strong>2AB</strong>.
+            Remplir en plus 8VL/8PL revient à demander le même crédit deux
+            fois.
+          </p>
+        </section>
+
+        <section aria-labelledby="perimetre">
+          <h2 id="perimetre">Ça ne concerne pas tous les pays</h2>
+          <p>
+            8VL/8PL ne s'appliquent que si la convention fiscale avec le pays
+            d'origine élimine la double imposition par un crédit d'impôt
+            <strong> égal à l'impôt étranger</strong>. Deux autres cas
+            existent&nbsp;:
+          </p>
+          <ul>
+            <li>
+              Si la convention prévoit un crédit égal à
+              <strong> l'impôt français</strong>, le revenu se reporte en case
+              <strong> 8TK</strong> de la 2042, pas en 8VL/8PL.
+            </li>
+            <li>
+              Certains pays, marqués «&nbsp;c/&nbsp;» dans la notice (l'Irlande,
+              par exemple), imposent exclusivement dans l'État de résidence du
+              bénéficiaire&nbsp;: aucun crédit d'impôt n'est dû, quel que soit
+              le montant retenu à la source.
+            </li>
+          </ul>
         </section>
 
         <section aria-labelledby="erreur">
           <h2 id="erreur">
-            Corriger l'erreur « ligne 8VL sans code 8PL »
+            Corriger l'anomalie « ligne 8VL sans code 8PL »
           </h2>
           <ol>
             <li>
@@ -89,15 +173,20 @@ const noticeUrl =
               c'est correct.
             </li>
             <li>
-              Le contrôle bloque car la case <strong>8PL</strong> est vide&nbsp;:
-              il manque la <em>base</em> correspondante.
+              Le contrôle en ligne signale une incohérence car la case
+              <strong>8PL</strong> — censée accompagner 8VL — est vide&nbsp;: il
+              manque la <em>base</em> correspondante.
             </li>
             <li>
               Renseignez <strong>8PL</strong> avec le montant des revenus
-              étrangers ouvrant droit au crédit (issu de votre 2047), puis
-              revalidez.
+              étrangers ouvrant droit au crédit (issu de votre 2047, cadre 70),
+              puis revalidez.
             </li>
           </ol>
+          <p>
+            Tant que 8PL reste vide, le contrôle en ligne signale
+            l'incohérence à chaque validation.
+          </p>
           <p>
             Règle à retenir&nbsp;: <strong
               >dès qu'il y a un montant en 8VL, il faut un montant en 8PL</strong
@@ -108,15 +197,39 @@ const noticeUrl =
         <section aria-labelledby="exemple">
           <h2 id="exemple">Exemple express</h2>
           <p>
-            Dividendes américains, 1&nbsp;000&nbsp;€ nets encaissés,
-            17,6&nbsp;% de forfait notice&nbsp;:
+            Dividendes américains, 1&nbsp;000&nbsp;€ nets encaissés (ligne 203
+            — après retenue américaine, mais <strong>avant</strong> tout
+            abattement)&nbsp;:
           </p>
           <ul>
-            <li>Crédit (ligne 207 du 2047) = 176&nbsp;€ → <strong>8VL</strong></li>
-            <li>Base des revenus ouvrant droit au crédit → <strong>8PL</strong></li>
+            <li>
+              Le taux notice pour les États-Unis est 17,6&nbsp;% du net&nbsp;:
+              1&nbsp;000 × 17,6&nbsp;% = 176&nbsp;€ (ligne 205).
+            </li>
+            <li>
+              Ce n'est pas un forfait automatique&nbsp;: la ligne 207 retient
+              le <strong>plus petit</strong> des deux montants — la ligne 205
+              (176&nbsp;€) et la ligne 206 (l'impôt réellement retenu aux
+              États-Unis). Si la retenue américaine réelle avait été
+              inférieure à 176&nbsp;€, c'est elle qui aurait compté.
+            </li>
+            <li>
+              En supposant une retenue réelle ≥ 176&nbsp;€&nbsp;: Crédit
+              (ligne 207) = 176&nbsp;€ → <strong>8VL</strong>.
+            </li>
+            <li>
+              Revenu correspondant, crédit inclus&nbsp;: 208 = 203 + 207 =
+              1&nbsp;000 + 176 = 1&nbsp;176&nbsp;€ → case <strong>2DC</strong>
+              de la 2042.
+            </li>
+            <li>
+              Base des revenus ouvrant droit au crédit, montant net avant
+              abattement (voir plus haut, réponse DGFiP du 28/05/2026) =
+              1&nbsp;000&nbsp;€ → <strong>8PL</strong>.
+            </li>
           </ul>
           <p>
-            Notre <a href="/dividendes-etrangers-2047/">calculateur</a> sort directement ces deux valeurs,
+            Notre <a href="/dividendes-etrangers-2047/">calculateur</a> sort directement ces valeurs,
             sans que vos données quittent votre navigateur.
           </p>
         </section>
@@ -169,6 +282,9 @@ const noticeUrl =
       }
       .note p {
         margin: 0;
+      }
+      .note p + p {
+        margin-top: 0.6rem;
       }
       a {
         color: #1d4ed8;

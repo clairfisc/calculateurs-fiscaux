@@ -34,19 +34,43 @@ const noticeUrl =
         <p>
           Contrairement à un déficit foncier (qui peut réduire votre revenu
           global), une moins-value de cession de valeurs mobilières <strong>ne
-          s'impute que sur des plus-values de même nature</strong> : d'autres
-          cessions de titres. Elle <strong>ne réduit ni votre salaire, ni vos
-          dividendes, ni vos plus-values crypto</strong> (régime distinct, voir
-          le <a href="/declarer-ses-cryptos-aux-impots/">2086</a>).
+          s'impute que sur des plus-values et gains de même nature</strong> :
+          les plus-values de cession de titres (cases <strong>3VG/3UA</strong>),
+          le gain de retrait ou de rachat d'un <strong>PEA de moins de 5
+          ans</strong> (case <strong>3VT</strong>), les gains de cession de
+          titres issus de <strong>BSPCE</strong> (cases 3SJ/3TJ/3SK), les gains
+          sur options sur titres attribuées avant le <strong>20 juin
+          2007</strong>, et les plus-values placées en report d'imposition qui
+          expire (brochure pratique de l'impôt sur le revenu 2026, p. 142). Elle
+          <strong> ne réduit ni votre salaire, ni vos dividendes, ni vos
+          plus-values crypto</strong> (régime distinct, voir le
+          <a href="/declarer-ses-cryptos-aux-impots/">2086</a>) — et elle ne
+          s'impute pas non plus sur le <strong>gain d'acquisition d'actions
+          gratuites</strong>, ni sur le gain de <strong>levée d'options sur
+          titres attribuées depuis le 20 juin 2007</strong>, qui relèvent d'un
+          régime distinct (même source).
+        </p>
+        <p class="note">
+          Cette page vise le <strong>compte-titres ordinaire (CTO)</strong>. En
+          <strong>PEA</strong>, vendre une ligne à perte à l'intérieur du plan
+          ne crée <strong>aucune moins-value imputable</strong> : seules la
+          clôture du plan (après 5 ans) ou un retrait/rachat avant 5 ans font
+          apparaître une moins-value fiscale (brochure p. 142 ; BOFiP
+          BOI-RPPM-PVBMI-20-10-40, § 310).
         </p>
         <p>
-          L'imputation se fait sur l'année, <strong>avant</strong> tout abattement
-          pour durée de détention (« montant brut sur montant brut »).
+          L'imputation se fait sur l'année, <strong>avant</strong> tout
+          abattement pour durée de détention. Cet abattement ne concerne
+          toutefois que les <strong>titres acquis avant 2018</strong> en cas
+          d'<strong>option pour le barème progressif</strong> : pour la
+          plupart des cessions récentes (titres achetés depuis 2018, imposées
+          au PFU), il n'existe <strong>aucun abattement</strong> — la question
+          ne se pose donc pas (brochure p. 139).
         </p>
       </section>
 
       <section aria-labelledby="obligatoire">
-        <h2 id="obligatoire">L'imputation est obligatoire — vous ne choisissez pas</h2>
+        <h2 id="obligatoire">L'imputation est obligatoire — mais vous choisissez les plus-values visées</h2>
         <p>
           Si vous réalisez des plus-values <em>et</em> des moins-values la même
           année, vous <strong>devez</strong> réduire vos plus-values de la
@@ -54,21 +78,38 @@ const noticeUrl =
           plus-values. Vous <strong>ne pouvez pas</strong> « garder » une partie
           de vos moins-values de l'année pour une année future plus chargée.
         </p>
-        <p>L'ordre d'imputation est figé :</p>
+        <p>L'ordre d'imputation est fixé :</p>
         <ol>
           <li>
             d'abord les <strong>moins-values de l'année</strong> en cours ;
           </li>
           <li>
             puis, sur le reliquat de plus-values, les <strong>moins-values
-            antérieures</strong> encore en report.
+            antérieures</strong> encore en report — en commençant
+            obligatoirement par les <strong>plus anciennes</strong> (brochure
+            p. 142 ; BOFiP BOI-RPPM-PVBMI-20-10-40, § 470) : ce n'est pas un
+            choix stratégique, c'est la règle.
           </li>
         </ol>
         <p class="note">
-          En pratique, les pertes les plus anciennes ont intérêt à être imputées
-          en priorité : une moins-value atteint sa <strong>10ᵉ année</strong> et
-          devient alors définitivement perdue si elle n'a pas trouvé de plus-value
-          à absorber.
+          Vous choisissez en revanche <strong>sur quelles plus-values</strong>
+          les moins-values s'imputent, lorsque plusieurs plus-values sont en
+          présence (fiche 2074-CMV, imputation des moins-values « sur les
+          plus-values de votre choix » ; BOFiP
+          BOI-RPPM-PVBMI-20-10-40, § 480 ; CE 12 novembre 2015, n° 390265).
+          Utile si vous êtes au barème avec des titres pré-2018 : mieux vaut
+          imputer d'abord sur les plus-values <strong>non abattues</strong>,
+          pour conserver le bénéfice de l'abattement sur les autres.
+        </p>
+        <p class="note">
+          Sur la durée : une moins-value de l'année N reste imputable sur les
+          plus-values réalisées de N à <strong>N+10 inclus</strong>. Une perte
+          réalisée en 2016, par exemple, est encore utilisable sur des
+          plus-values réalisées jusqu'au 31 décembre 2026 ; elle devient
+          définitivement perdue à partir de 2027 si elle n'a trouvé aucune
+          plus-value à absorber d'ici là (2074-CMV, cadre 5 ; BOFiP
+          BOI-RPPM-PVBMI-20-10-40, § 60 : « jusqu'à la dixième [année]
+          inclusivement »).
         </p>
       </section>
 
@@ -79,8 +120,12 @@ const noticeUrl =
         </p>
         <ul>
           <li>
-            la <strong>plus-value nette</strong> de l'année (après imputation des
-            moins-values) va en case <strong>3VG</strong> ;
+            la <strong>plus-value nette</strong> de l'année (après imputation
+            des moins-values, avant abattement) va en case <strong>3VG</strong>
+            — intitulé officiel « plus-value avant abattement » ; si vous êtes
+            au barème avec des titres achetés avant 2018, l'abattement pour
+            durée de détention se reporte séparément en case
+            <strong> 3SG</strong> (brochure p. 140-141) ;
           </li>
           <li>
             la <strong>moins-value de l'année</strong> qui n'a pas pu être imputée
@@ -90,9 +135,20 @@ const noticeUrl =
         <p class="note">
           Piège courant : la case <strong>3VH ne contient que la moins-value de
           l'année</strong> non imputée. Le <strong>reliquat de vos moins-values
-          des années précédentes</strong> n'y figure <em>pas</em> — il continue de
-          vivre dans votre « stock » de report, à suivre vous-même (c'est tout
-          l'intérêt de garder une trace pluriannuelle de vos pertes).
+          des années précédentes</strong> n'y figure <em>pas</em> — il ne se
+          déclare pas non plus ailleurs sur la 2042-C : c'est la fiche
+          <strong> 2074-CMV</strong> (cadres 1 et 5) qui sert à le déclarer et à
+          l'imputer, ou le formulaire 2074 complet si vous en souscrivez un.
+          Sans 2074-CMV jointe, ce stock antérieur n'est <strong>pas
+          imputé</strong> — ce n'est pas un simple suivi privé.
+        </p>
+        <p class="note">
+          Cas fréquent : le montant prérempli en case <strong>3VG</strong>,
+          calculé par votre établissement, <strong>ignore votre stock de
+          moins-values antérieures</strong>. Sans 2074-CMV jointe à
+          votre déclaration, ce stock reste en report mais n'est imputé sur
+          aucune plus-value de l'année (brochure p. 142 ; 2074-CMV,
+          cadres 1 et 5).
         </p>
       </section>
 
@@ -100,8 +156,12 @@ const noticeUrl =
         <h2 id="purge">« Purger » ses moins-values : l'arbitrage de fin d'année</h2>
         <p>
           Puisqu'une moins-value expire au bout de 10 ans et ne s'impute que sur
-          des plus-values de titres, deux situations classiques se gèrent
-          <strong> avant le 31 décembre</strong> :
+          des plus-values de titres, deux situations classiques se gèrent avant
+          la fin de l'année boursière — le fait générateur est le
+          <strong> dénouement effectif</strong> de l'opération (règlement-livraison),
+          pas la date d'ordre : voir notre
+          <a href="/purger-ses-moins-values/">simulateur de purge</a> pour le
+          calendrier précis à respecter avant le 31 décembre.
         </p>
         <dl class="cases">
           <dt>Vous avez réalisé de grosses plus-values cette année</dt>
@@ -146,8 +206,9 @@ const noticeUrl =
             global.
           </li>
           <li>
-            <strong>Cases</strong> : 3VG (plus-value nette) / 3VH (moins-value de
-            l'année non imputée).
+            <strong>Cases</strong> : 3VG (plus-value avant abattement) / 3VH
+            (moins-value de l'année non imputée) — 3SG pour l'abattement, au
+            barème avec des titres pré-2018.
           </li>
         </ul>
       </section>

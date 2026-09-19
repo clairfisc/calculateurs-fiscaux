@@ -5,7 +5,7 @@ import SimulateurPeaCto from "../components/simulateur-arbitrage/SimulateurPeaCt
 const title =
   "PEA ou compte-titres : fiscalité et impôt comparés (simulateur) — gratuit";
 const description =
-  "PEA ou CTO : quel impôt à la sortie ? Simulez gratuitement le coût fiscal de sortie d'une plus-value sur un compte-titres ordinaire (PFU 30 % / 31,4 %) ou sur un PEA, avant 5 ans (clôture + imposition) ou après 5 ans (exonération d'impôt sur le revenu, prélèvements sociaux 17,2 % / 18,6 %). Calcul 100 % local, open source, sans compte ni tracker.";
+  "PEA ou CTO : quel impôt à la sortie ? Simulez gratuitement le coût fiscal de sortie d'une plus-value sur un compte-titres ordinaire (PFU 31,4 % depuis 2025) ou sur un PEA, avant 5 ans (clôture + imposition) ou après 5 ans (exonération d'impôt sur le revenu, prélèvements sociaux 17,2 % / 18,6 %). Calcul 100 % local, open source, sans compte ni tracker.";
 const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
 ---
 
@@ -25,7 +25,8 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
             ordinaire (CTO)</strong> ou sur un <strong>plan d'épargne en actions (PEA)</strong>. À la
             sortie, l'<strong>impôt</strong> n'est pas le même. Sur un CTO, la plus-value est une
             plus-value mobilière de droit commun : <strong>PFU</strong> (12,8 % d'impôt sur le revenu
-            + prélèvements sociaux, soit 30 % en 2025 et 31,4 % en 2026) ou, sur option, le
+            + 18,6 % de prélèvements sociaux, soit 31,4 % pour une plus-value réalisée depuis 2025 —
+            loi n° 2025-1403 du 30 décembre 2025, art. 12) ou, sur option, le
             <strong>barème progressif</strong> (<a class="text-blue-700 underline" href="/faut-il-cocher-2op/">case 2OP</a>). Sur un PEA, tout dépend de la
             <strong>durée de détention</strong>.
           </p>
@@ -65,12 +66,18 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
             correspondant <strong>reste soumis aux prélèvements sociaux</strong>, prélevés par la banque.
             Le plan subsiste, <strong>sans aucun versement possible ensuite</strong>
             (BOI-RPPM-RCM-40-50-40, § 150 et 160).</li>
-            <li><strong>Titres de l'article 163 bis H du CGI</strong> : tant qu'il intervient
+            <li><strong>Titres de l'article 163 bis H du CGI</strong> — en pratique, ceux inscrits
+            sur le plan <strong>avant le 15 février 2025</strong> : tant qu'il intervient
             <strong>avant la réalisation du gain</strong>, le retrait de ces titres n'est
             <strong>pas imposé à l'impôt sur le revenu</strong> (CGI art. 150-0 A, II-2, dernier alinéa) et,
             pour les retraits effectués <strong>entre le 15 février 2025 et le 31 décembre 2027</strong>, n'est
-            <strong>pas soumis à la CSG</strong> (CSS art. L. 136-7, II-5°, dernier alinéa) — deux règles issues
-            de la loi de finances pour 2026 (loi n° 2026-103 du 19 février 2026, art. 24). Si le gain est
+            <strong>pas soumis à la CSG</strong> — deux règles issues de la loi de finances pour 2026
+            (loi n° 2026-103 du 19 février 2026, art. 24). Le texte ne neutralise expressément que la
+            CSG : le gain « n'est pas assujetti à la contribution prévue au I du présent article »
+            (CSS art. L. 136-7, II-5°, dernier alinéa). Le sort du <strong>CRDS</strong> et du
+            <strong>prélèvement de solidarité</strong>, assis par renvoi à l'assiette de l'article
+            L. 136-7, n'est tranché ni par le texte ni par la doctrine à ce jour — interrogez votre
+            teneur de compte. Si le gain est
             réalisé alors que les titres figurent encore sur le plan, <strong>le plan est clôturé</strong>
             (C. mon. fin. art. L221-32, II bis).</li>
           </ul>
@@ -88,10 +95,19 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
             <strong>Après 5 ans</strong>, les gains du PEA sont <strong>exonérés d'impôt sur le
             revenu</strong> (CGI art. 157, 5° bis). Restent dus les <strong>prélèvements
             sociaux</strong> au taux en vigueur au jour du retrait : <strong>17,2 % jusqu'en 2025,
-            18,6 % à compter du 1ᵉʳ janvier 2026</strong>. Sur un gain de 10 000 €, cette exonération
-            d'IR après 5 ans représente environ 1 280 € d'impôt sur le revenu en moins (la part PFU de
-            12,8 %) qu'une sortie en compte-titres — les prélèvements sociaux, eux, restent dus dans les
-            deux cas.
+            18,6 % à compter du 1ᵉʳ janvier 2026</strong>. Sur un gain de 10 000 €, pour une sortie
+            en <strong>2026</strong> — où les prélèvements sociaux sont à 18,6 % des deux côtés —,
+            cette exonération d'IR après 5 ans représente environ <strong>1 280 €</strong> d'impôt sur
+            le revenu en moins (la part PFU de 12,8 %) qu'une sortie en compte-titres. Pour une sortie
+            en <strong>2025</strong>, l'écart est plus important — <strong>1 420 €</strong> — car les
+            prélèvements sociaux du PEA sont encore à 17,2 % cette année-là, contre 18,6 % pour une
+            plus-value de compte-titres (c'est ce que chiffre le simulateur ci-dessus).
+          </p>
+          <p>
+            Autre différence avec le retrait avant 5 ans : passé ce délai, un <strong>retrait
+            partiel n'entraîne pas la clôture du plan</strong> (C. mon. fin. art. L221-32, I), et les
+            <strong> versements restent possibles</strong> (loi n° 2019-486 du 22 mai 2019, dite loi
+            PACTE, art. 91).
           </p>
           <p>
             Le simulateur ci-dessus compare deux scénarios — <strong>sortie en compte-titres</strong>
@@ -102,19 +118,47 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
 
           <h2 class="text-base font-semibold text-slate-900">Les points à garder en tête</h2>
           <p>
-            <strong>L'éligibilité au PEA conditionne tout.</strong> Seules les actions de sociétés
-            ayant leur siège dans l'<strong>Union européenne ou l'EEE</strong> (ou les fonds et ETF
-            investis à au moins 75 % en de telles actions) peuvent y être logées (C. mon. fin. art.
-            L221-31). Un titre américain ou un ETF non éligible ne peut tout simplement pas figurer
-            dans un PEA : la comparaison n'a alors pas d'objet.
+            <strong>L'éligibilité au PEA conditionne tout.</strong> Sont éligibles les titres
+            (actions, mais aussi <strong>parts de SARL</strong> ou <strong>certificats
+            d'investissement</strong>) de sociétés ayant leur <strong>siège dans un État de l'Union
+            européenne</strong>, ou dans un autre État de l'<strong>Espace économique européen</strong>
+            ayant conclu avec la France une <strong>convention d'assistance administrative</strong> en
+            vue de lutter contre la fraude et l'évasion fiscales, et <strong>soumises à l'impôt sur
+            les sociétés</strong> (ou un impôt équivalent) — ainsi que les fonds et ETF investis à au
+            moins 75 % en de tels titres (C. mon. fin. art. L221-31). Un titre américain ou un ETF non éligible ne peut tout
+            simplement pas figurer dans un PEA : la comparaison n'a alors pas d'objet.
           </p>
           <p>
-            Le PEA a un <strong>plafond de versements de 150 000 €</strong> (225 000 € cumulé avec un
-            PEA-PME). C'est un plafond de versements, pas de valorisation : le plan peut dépasser ce
-            montant par capitalisation. Enfin, pour un PEA <strong>ouvert avant 2018</strong>, une
-            partie des prélèvements sociaux peut relever de « <strong>taux historiques</strong> » par
-            couches — un cas particulier non traité par ce simulateur, qui applique un taux unique au
-            jour du retrait.
+            Cela n'exclut pas toute exposition hors UE/EEE : les <strong>ETF synthétiques</strong>,
+            qui répliquent un indice mondial ou américain par un contrat d'échange (swap) tout en
+            détenant en direct un panier d'au moins 75 % d'actions UE/EEE, restent éligibles au
+            PEA — le gouvernement l'a confirmé le 26 août 2026, après l'alerte de place de juillet
+            2026 (état du droit au 19 septembre 2026, dossier à suivre au PLF 2027).
+          </p>
+          <p>
+            <strong>Point à ne pas négliger pour un portefeuille orienté dividendes</strong> : le
+            <strong>crédit d'impôt conventionnel</strong> attaché à la retenue à la source étrangère
+            sur des dividendes de titres UE/EEE logés en PEA n'est <strong>pas restituable</strong> —
+            cette retenue est <strong>définitivement perdue</strong> dans le plan
+            (BOI-RPPM-RCM-40-50-30, § 10), alors qu'en compte-titres elle ouvre droit à un crédit
+            d'impôt (case 8VL du formulaire 2047). Voir le
+            <a class="text-blue-700 underline" href="/guide-credit-impot-dividendes-etrangers/"
+              >guide du crédit d'impôt sur les dividendes étrangers</a
+            >. Pour un portefeuille à fort rendement en dividendes allemands ou espagnols, cet effet
+            peut, à lui seul, renverser l'avantage apparent du PEA.
+          </p>
+          <p>
+            Le PEA a un <strong>plafond de versements de 150 000 € par personne</strong> (300 000 €
+            pour un couple, chacun disposant de son propre PEA ; 225 000 € cumulé avec un PEA-PME).
+            Pour les <strong>18-25 ans rattachés</strong> au foyer fiscal de leurs parents, le
+            <strong>PEA jeune</strong> est plafonné à <strong>20 000 €</strong> de versements. Dans
+            tous les cas, c'est un plafond de versements, pas de valorisation : le plan peut dépasser
+            ce montant par capitalisation — un versement excédentaire fait encourir la clôture du
+            plan et, en cas de manquement délibéré, une amende de <strong>2 %</strong> du montant des
+            versements surnuméraires (CGI art. 1765). Enfin, pour un PEA <strong>ouvert avant 2018</strong>,
+            une partie des prélèvements sociaux peut relever de « <strong>taux historiques</strong> »
+            par couches — un cas particulier non traité par ce simulateur, qui applique un taux
+            unique au jour du retrait.
           </p>
           <p>
             Pour aller plus loin : le comparateur

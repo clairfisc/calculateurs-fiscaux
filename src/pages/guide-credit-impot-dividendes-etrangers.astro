@@ -92,6 +92,18 @@ const description =
               demander le remboursement au pays source).
             </dd>
           </dl>
+          <p class="note">
+            Piège à connaître&nbsp;: un forfait renseigné en ligne 204 ne crée
+            <strong>aucun crédit si rien n'a été retenu à l'étranger</strong>.
+            Cas classique du <strong>Royaume-Uni</strong>&nbsp;: la notice 2047
+            indique un forfait de 17,6&nbsp;%, mais les dividendes britanniques
+            ne subissent en pratique aucune retenue à la source&nbsp;: la
+            ligne 206 (impôt réellement payé) est nulle, donc la ligne 207
+            (<code>min(205, 206)</code>) l'est aussi&nbsp;: crédit = 0. De même,
+            quand la notice porte la mention «&nbsp;c/&nbsp;» en face d'un pays
+            (cas de l'<strong>Irlande</strong>), aucun crédit n'est possible du
+            tout.
+          </p>
           <p>
             Les <strong>intérêts</strong> étrangers suivent exactement la même
             logique, sur les lignes <strong>233 à 237</strong> du même cadre.
@@ -112,21 +124,63 @@ const description =
           <p class="note">
             À noter&nbsp;: le critère qui détermine la case n'est pas l'option
             pour le <strong>barème progressif</strong>
-            (<a href="/faut-il-cocher-2op/">case 2OP</a>), mais la
-            localisation de l'<strong>établissement payeur</strong>. Si votre
-            banque française prélève et vous délivre un IFU prérempli, le
-            crédit peut apparaître en case <strong>2AB</strong> (non
-            restituable) sans passer par le 2047. Chez un <strong>courtier
-            étranger</strong>, le chemin est toujours 2047 → 8VL, que 2OP soit
-            cochée ou non&nbsp;: 8VL passe par le 2047 et est plafonné à
-            l'impôt français calculé sur ces revenus. Un éventuel excédent
-            n'est <strong>restitué ni pour 2AB ni pour 8VL</strong> (Brochure
-            IR 2026 p.&nbsp;367 : «&nbsp;si le crédit d'impôt est supérieur à
-            l'impôt dû, l'excédent n'est pas restituable&nbsp;» ; p.&nbsp;325 :
-            «&nbsp;l'excédent n'est pas restitué&nbsp;» ; notice 2047-NOT :
+            (<a href="/faut-il-cocher-2op/">case 2OP</a>), mais le lieu de
+            <strong>dépôt des titres</strong>. La Brochure pratique IR 2026
+            (p.&nbsp;368) invite à «&nbsp;reporter directement sur la 2042,
+            sans utiliser la 2047, les revenus […] encaissés en France par
+            l'intermédiaire d'établissements financiers dépositaires en
+            France de vos titres&nbsp;». Concrètement&nbsp;: titres logés
+            chez un <strong>dépositaire français</strong> avec IFU prérempli
+            → le crédit peut apparaître directement en case
+            <strong>2AB</strong>, sans passer par le 2047 — la même brochure
+            (p.&nbsp;134) fonde la case 2AB elle-même sur le cas «&nbsp;lorsque
+            l'établissement payeur est établi en France&nbsp;» (CGI art.
+            199 ter I). Titres logés chez un <strong>courtier ou dépositaire
+            étranger</strong> → le chemin est toujours 2047 → 8VL, que 2OP
+            soit cochée ou non.
+          </p>
+          <p class="note">
+            Le crédit d'impôt logé en case <strong>2AB</strong> n'est, lui
+            non plus, pas restituable au-delà de l'impôt dû&nbsp;: «&nbsp;s'il
+            excède le montant de l'impôt dû, ce crédit d'impôt n'est pas
+            restituable&nbsp;» (Brochure IR 2026, p.&nbsp;134).
+          </p>
+          <p class="note">
+            Dans les deux cas, le crédit conventionnel ne fait que
+            <strong>s'imputer sur l'impôt français afférent à ces
+            revenus</strong>. Un éventuel excédent est <strong>perdu</strong>&nbsp;:
+            il n'est ni reportable sur une autre année, ni imputable sur vos
+            autres revenus, ni remboursé (notice 2047-NOT 2026, p.&nbsp;1&nbsp;:
             «&nbsp;en cas d'excédent, il n'est procédé à aucun
-            remboursement&nbsp;» — seule la case <strong>2CK</strong> l'est,
-            Brochure p.&nbsp;126).
+            remboursement&nbsp;» ; Brochure IR 2026, p.&nbsp;366&nbsp;:
+            «&nbsp;l'excédent n'est pas restituable&nbsp;»). Seule la case
+            <strong>2CK</strong> (prélèvement forfaitaire non libératoire) fait
+            exception&nbsp;: son excédent, lui, est restitué (Brochure IR
+            2026, p.&nbsp;123).
+          </p>
+          <p class="note">
+            Cas des pays <strong>sans convention fiscale</strong> avec la
+            France&nbsp;: aucune élimination de la double imposition n'est
+            prévue. Le revenu est pleinement imposable en France, <strong>sans
+            aucun crédit d'impôt</strong> (ne remplissez ni le cadre 7 du 2047,
+            ni la case 8VL) (Brochure IR 2026, p.&nbsp;365). L'impôt retenu à
+            l'étranger, en revanche, se déduit&nbsp;: le revenu est imposé en
+            France pour son <strong>montant net d'impôt étranger</strong>
+            (CGI, art. 122, 1&nbsp;; BOI-RPPM-RCM-20-10-20-60 §&nbsp;20). C'est
+            la seule atténuation disponible — elle ne vaut pas crédit
+            d'impôt.
+          </p>
+          <p class="note">
+            Précision utile sur le plafond&nbsp;: «&nbsp;l'impôt français&nbsp;»
+            auquel le crédit est plafonné s'entend de l'<strong>impôt sur le
+            revenu augmenté des prélèvements sociaux</strong> (notice
+            2047-NOT 2026, p.&nbsp;1). Sous <strong>PFU</strong>, ce plafond
+            est donc de 12,8&nbsp;% d'impôt sur le revenu + 18,6&nbsp;% de
+            prélèvements sociaux, soit <strong>31,4&nbsp;%</strong> (30&nbsp;%
+            seulement pour des produits de placement versés jusqu'au
+            31/12/2025)&nbsp;: un crédit conventionnel de 15&nbsp;% (cas
+            fréquent) passe alors <strong>en entier</strong>, sans
+            écrêtement.
           </p>
         </section>
 
@@ -159,16 +213,25 @@ const description =
             >.
           </p>
           <p class="note">
-            Point d'attention honnête&nbsp;: le libellé officiel de 8PL
-            (2042&nbsp;C, cadre 8) est bien «&nbsp;<strong>revenus nets
-            étrangers</strong>&nbsp;», mais son articulation précise — net de
-            quoi, exactement (la seule retenue étrangère, ou aussi
-            l'abattement de 40&nbsp;% en cas d'option barème) — n'est pas
-            pleinement documentée par la DGFiP en 2026. Reportez-vous à la
+            Point d'attention&nbsp;: le libellé officiel de 8PL (2042&nbsp;C,
+            cadre 8) est «&nbsp;<strong>revenus nets étrangers</strong>&nbsp;»,
+            mais son articulation précise — net de quoi, exactement (la seule
+            retenue étrangère, ou aussi l'abattement de 40&nbsp;% en cas
+            d'option barème) — restait mal documentée. Une réponse publique de
+            la DGFiP du 28&nbsp;mai&nbsp;2026, sur le fil « Nouveau champ 8PL
+            du formulaire 2047 » de <em>Services Publics&nbsp;+</em>, oriente
+            vers les <strong>montants bruts avant abattement</strong>. La
+            doctrine BOFiP, elle, reste muette sur ce point à ce jour.
+            Reportez-vous à la
             <a
               href="https://www.impots.gouv.fr/sites/default/files/formulaires/2047/2026/2047_5490.pdf"
               rel="noopener"
               target="_blank">notice officielle 2047</a
+            >, à la
+            <a
+              href="https://www.plus.transformation.gouv.fr/experiences/7376169_nouveau-champ-8pl-du-formulaire-2047"
+              rel="noopener"
+              target="_blank">réponse DGFiP sur Services Publics&nbsp;+</a
             > et, en cas de doute, à un professionnel.
           </p>
         </section>
@@ -218,10 +281,22 @@ const description =
               clause d'assistance administrative ;
             </li>
             <li>
-              la distribution a été <strong>décidée régulièrement</strong>
-              (en règle générale, un dividende voté en assemblée).
+              la distribution résulte d'une <strong>décision régulière des
+              organes compétents</strong> (CGI art. 158, 3, 2°) — pas
+              nécessairement une assemblée générale&nbsp;: pour une société
+              étrangère, l'AG ne peut être exigée si le droit local ne
+              l'impose pas (BOI-RPPM-RCM-20-10-30-10 § 320-340). Un dividende
+              américain ou britannique décidé par le conseil d'administration
+              reste éligible à l'abattement.
             </li>
           </ul>
+          <p>
+            Ce troisième critère suppose tout de même un <strong>minimum de
+            formalisme</strong>&nbsp;: la décision doit être consignée sur un
+            registre ou un procès-verbal (BOI-RPPM-RCM-20-10-30-10 § 340&nbsp;;
+            Brochure IR 2026, p.&nbsp;368). Un dividende décidé sans aucune
+            trace écrite n'est pas éligible à l'abattement.
+          </p>
 
           <h3 id="cas-frequents">Les cas fréquents, case par case</h3>
           <table class="routage">
@@ -260,7 +335,7 @@ const description =
               </tr>
               <tr>
                 <td>REIT américain ou foncière cotée étrangère</td>
-                <td><strong>2TS</strong> — lecture d'usage, voir la réserve ci-dessous</td>
+                <td><strong>2TS</strong> — voir le fondement textuel ci-dessous</td>
               </tr>
               <tr>
                 <td>Jetons de présence</td>
@@ -297,12 +372,17 @@ const description =
             part va en <strong>2DC</strong>.
           </p>
           <p class="note">
-            Réserve REIT&nbsp;: le CGI exclut nommément les SIIC et SPPICAV
-            <strong>françaises</strong> de l'abattement de 40&nbsp;%, pas
-            leurs équivalents étrangers. Router un REIT américain ou une
-            foncière cotée étrangère en 2TS relève de l'usage et de la
-            logique de cette exclusion — aucun texte officiel ne le dit noir
-            sur blanc&nbsp;: si l'enjeu est significatif, faites-le valider.
+            Réserve REIT&nbsp;: l'exclusion de l'abattement de 40&nbsp;% pour
+            les SIIC et SPPICAV est une exclusion <strong>nommée</strong>,
+            visant des entités françaises (CGI art. 158, 3-3°-b bis&nbsp;;
+            BOI-RPPM-RCM-20-10-30-10 §&nbsp;130 et §&nbsp;150), et son motif
+            est que les revenus distribués n'ont pas fait l'objet d'une
+            imposition au niveau de ces sociétés. Un REIT américain est dans
+            la même situation économique, mais <strong>aucun texte ne
+            transpose l'exclusion aux foncières étrangères</strong>&nbsp;:
+            router un REIT en 2TS reste une <strong>lecture d'usage</strong>,
+            fondée sur l'analogie de motif. Si l'enjeu est significatif,
+            faites-le valider.
           </p>
 
           <h3 id="quel-montant">Quel montant, exactement&nbsp;?</h3>
@@ -312,7 +392,7 @@ const description =
             brut est égal au net). La notice 2047 est
             explicite&nbsp;: «&nbsp;reportez obligatoirement le revenu brut
             sans déduction de l'impôt étranger&nbsp;». La Brochure pratique
-            IR 2026 (p.&nbsp;126) précise&nbsp;: «&nbsp;montant brut, majoré
+            IR 2026 (p.&nbsp;125) précise&nbsp;: «&nbsp;montant brut, majoré
             du crédit d'impôt conventionnel&nbsp;». L'arithmétique du
             formulaire le confirme&nbsp;: <strong>ligne 208 = ligne 203 (net)
             + ligne 207 (crédit)</strong>.

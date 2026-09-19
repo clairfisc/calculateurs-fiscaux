@@ -9,9 +9,9 @@ const courtiersCites = ["degiro", "ibkr", "etoro", "trade-republic"]
   .filter((e) => e !== undefined);
 
 const title =
-  "Calculateur gratuit de plus-value de cession (compte-titres étranger, 2074-CMV, cases 3VG/3VH)";
+  "Calculateur gratuit de plus-value de cession (compte-titres étranger, 2074, cases 3VG/3VH)";
 const description =
-  "Calculez gratuitement vos plus ou moins-values de cession d'actions sur compte-titres étranger : prix moyen pondéré (PMP), change par opération, imputation et report des moins-values, cases 2042 3VG et 3VH. Calcul 100 % local, open source, sans compte ni tracker.";
+  "Calculez gratuitement vos plus ou moins-values de cession d'actions sur compte-titres étranger : prix moyen pondéré (PMP), change par opération, imputation et report des moins-values, cases 3VG/3VH de la 2042-C. Calcul 100 % local, open source, sans compte ni tracker.";
 
 const noticeUrl =
   "https://www.impots.gouv.fr/formulaire/2074/declaration-des-plus-ou-moins-values-realisee";
@@ -47,18 +47,39 @@ const ficheCmvUrl =
           </p>
           <p class="mb-3">
             Par défaut, la plus-value est imposée au <strong
-              >prélèvement forfaitaire unique (PFU, 12,8 %)</strong
-            >, sans abattement. Les <strong>moins-values</strong> de l'année s'imputent
-            sur les plus-values de même nature, puis le reliquat est reportable sur les
-            <strong>10 années suivantes</strong>. La plus-value nette va en case
-            <span class="font-mono font-semibold">3VG</span>, la moins-value de l'année
-            non imputée en case <span class="font-mono font-semibold">3VH</span> de la
-            déclaration 2042-C ; le détail se reporte sur le formulaire
+              >prélèvement forfaitaire unique (PFU)</strong
+            > : 12,8 % d'impôt sur le revenu + 18,6 % de prélèvements sociaux, soit <strong
+              >31,4 %</strong
+            >, sans abattement (hors cas particuliers, comme l'abattement fixe des
+            dirigeants de PME partant en retraite de l'article 150-0 D ter, applicable
+            quel que soit le régime d'imposition). Les <strong>moins-values</strong> de
+            l'année s'imputent sur les plus-values de même nature, puis le reliquat est
+            reportable sur les <strong>10 années suivantes</strong>. La plus-value nette
+            va en case <span class="font-mono font-semibold">3VG</span>, la moins-value
+            de l'année non imputée en case
+            <span class="font-mono font-semibold">3VH</span> de la déclaration 2042-C ;
+            le détail se reporte sur le formulaire
             <a class="text-blue-700 underline" href={noticeUrl} rel="noopener" target="_blank"
               >2074</a
-            > et la fiche
+            >. La fiche
             <a class="text-blue-700 underline" href={ficheCmvUrl} rel="noopener" target="_blank"
               >2074-CMV</a
+            > est une alternative réservée aux contribuables dispensés de 2074 (cas où
+            l'établissement financier a déjà calculé la plus-value, ce qui suppose un IFU
+            français) : pour un compte-titres ouvert chez un courtier étranger sans IFU
+            français, c'est la <strong>2074 qui est obligatoire</strong>.
+          </p>
+          <p class="mb-3">
+            La plus-value calculée sur la 2074 ne s'arrête pas là si elle a été encaissée
+            sur un compte à l'étranger : elle doit d'abord transiter par le
+            <strong>cadre 3</strong> de la déclaration <strong
+              >2047 (revenus encaissés à l'étranger)</strong
+            >, avant de reporter la plus-value en <span class="font-mono font-semibold"
+              >3VG</span
+            > sur la 2042-C. Le compte-titres lui-même, indépendamment des plus-values
+            qu'il génère, doit par ailleurs être
+            <a class="text-blue-700 underline" href="/comptes-etrangers-3916/"
+              >déclaré chaque année via le formulaire 3916</a
             >.
           </p>
           <p class="mb-3 text-slate-500">
@@ -66,6 +87,27 @@ const ficheCmvUrl =
             acquis <strong>avant 2018</strong> et seulement sur option pour le barème
             progressif (<a class="text-blue-700 underline" href="/faut-il-cocher-2op/">case 2OP</a>). Le PEA, les produits dérivés et les opérations sur
             titres (splits, fusions) sont hors périmètre de cet outil.
+          </p>
+          <p class="mb-3 text-slate-500">
+            Piège classique de l'option 2OP : la case <span
+              class="font-mono font-semibold">3VG</span
+            > contient la plus-value <strong>avant abattement</strong>, l'abattement se
+            déclarant séparément en case <span class="font-mono font-semibold"
+              >3SG</span
+            >. Surtout, l'abattement ne réduit que l'assiette de l'impôt sur le revenu :
+            les <strong>prélèvements sociaux</strong> et le
+            <strong>revenu fiscal de référence (RFR)</strong> restent calculés sur le montant
+            de plus-value avant abattement.
+          </p>
+          <p class="mb-3 text-slate-500">
+            Attention à ne pas confondre avec le régime des dividendes étrangers : une
+            plus-value de cession n'ouvre, en règle générale, droit à aucun crédit
+            d'impôt étranger (cases 8VL/8PL) — l'imposition de la plus-value revient en
+            principe entièrement à la France, État de résidence du cédant — sauf cas
+            particuliers prévus par certaines conventions (titres à prépondérance
+            immobilière, participations substantielles), auquel cas le cadre 70 de la
+            2047 prévoit bien une ligne « Plus-values et gains ». Ne pas remplir 8VL par
+            analogie avec le cas des dividendes, hors ces cas particuliers.
           </p>
           <p class="mb-3">
             Pour aller plus loin :

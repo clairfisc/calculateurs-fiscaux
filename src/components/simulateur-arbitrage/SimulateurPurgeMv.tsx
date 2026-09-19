@@ -158,7 +158,7 @@ function Differentiel({ resultat }: { resultat: ComparatifArbitrage<DetailsPurge
 }
 
 export default function SimulateurPurgeMv() {
-  const [millesime, setMillesime] = useState<2025 | 2026>(2025);
+  const [millesime, setMillesime] = useState<2025 | 2026>(2026);
   const [regime, setRegime] = useState<"PFU" | "BAREME">("PFU");
   const [tmiBp, setTmiBp] = useState<number>(3000);
   const [plusValue, setPlusValue] = useState("");
@@ -293,7 +293,7 @@ export default function SimulateurPurgeMv() {
           <ChampMontant
             id="mv-mobilisable"
             libelle="Moins-values latentes mobilisables"
-            aide="Lignes en perte que vous pourriez vendre avant le 31/12."
+            aide="Lignes en perte vendables suffisamment tôt pour être dénouées (règlement-livraison, J+2) avant le 31/12."
             valeur={mvMobilisable}
             onChange={setMvMobilisable}
           />

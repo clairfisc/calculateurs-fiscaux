@@ -8,7 +8,7 @@ import ComparateurPfuBareme from "../components/ComparateurPfuBareme.tsx";
 // simulateur — les deux pages se cannibalisaient sur ce mot-clé.
 const title = "Comparateur PFU (flat tax) ou barème progressif 2026 — gratuit";
 const description =
-  "Comparez gratuitement le PFU (flat tax : 30 %, 31,4 % en 2026) et le barème progressif sur vos dividendes, intérêts et plus-values de titres. Abattement de 40 %, CSG déductible, franchissement de tranche. Calcul 100 % local, open source, sans compte ni tracker.";
+  "Comparez gratuitement le PFU (flat tax 31,4 %, 30 % résiduel sur les dividendes/intérêts 2025) et le barème progressif sur vos dividendes, intérêts et plus-values de titres. Abattement de 40 %, CSG déductible, franchissement de tranche. Calcul 100 % local, open source, sans compte ni tracker.";
 const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
 ---
 
@@ -31,11 +31,15 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
           <p>
             Vos revenus du capital (dividendes, intérêts, plus-values de cession de titres) sont
             imposés par défaut au <strong>prélèvement forfaitaire unique (PFU)</strong>, aussi
-            appelé <em>flat tax</em> : <strong>12,8 % d'impôt sur le revenu + prélèvements
-            sociaux</strong>, soit <strong>30 %</strong> au total, porté à <strong>31,4 %</strong>
-            par la hausse de CSG de la LFSS 2026. Vous pouvez à la place opter pour le
-            <strong>barème progressif</strong> : c'est intéressant quand votre tranche marginale
-            (TMI) est faible. Le comparateur ci-dessus chiffre les deux régimes sur vos montants.
+            appelé <em>flat tax</em> : <strong>12,8 % d'IR + prélèvements sociaux</strong>, soit
+            <strong>31,4 %</strong> depuis la hausse de CSG de la LFSS 2026 (CSG 9,2 % → 10,6 %).
+            Le taux de <strong>30 %</strong> ne subsiste que pour les dividendes et intérêts versés
+            en 2025 : les plus-values mobilières sont à 31,4 % dès l'imposition des revenus 2025.
+            Vous pouvez à la place opter pour le <strong>barème progressif</strong> : en pratique,
+            TMI 0 % ou 11 % → le barème est gagnant ; TMI 30 % et au-delà → le PFU l'emporte, sauf
+            titres acquis avant 2018 (abattement de 65 % réservé au barème) — voir le guide 2OP
+            ci-dessous pour le détail. Le comparateur ci-dessus chiffre les deux régimes sur vos
+            montants.
           </p>
           <p>
             <strong>Vous vous demandez s'il faut cocher la case 2OP ?</strong> C'est exactement la
@@ -44,16 +48,19 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
               >faut-il cocher la case 2OP ?</a
             > y répond en détail — règle selon la TMI, abattement de 40 %, CSG déductible
             (<a class="text-blue-700 underline" href="/case-2bh-2cg/">case 2BH</a>), révocabilité de
-            l'option depuis la loi de finances pour 2026 et que faire en cas d'oubli — avec ce même
+            l'option (acquise pour les revenus 2026, mais pas pour les revenus 2025 : l'option
+            cochée au printemps 2026 reste définitive) et que faire en cas d'oubli — avec ce même
             simulateur intégré.
           </p>
         </article>
 
         <aside class="mt-8 rounded-md border border-slate-200 border-l-4 border-l-amber-600 bg-amber-50/40 px-4 py-3 text-sm leading-relaxed text-slate-700">
           <p class="m-0">
-            <strong>Aide informative, pas un conseil fiscal</strong> — ce comparateur estime l'impôt
-            au barème à votre TMI et ne remplace pas le
-            <a class="text-blue-700 underline" rel="noopener" target="_blank" href="https://www.service-public.gouv.fr/particuliers/vosdroits/F34913">simulateur officiel</a>
+            <strong>Aide informative, pas un conseil fiscal</strong> — en mode Rapide, ce
+            comparateur estime l'impôt au barème à votre TMI ; en mode Précis, il le calcule
+            tranche par tranche à partir de votre revenu imposable. Dans les deux cas, la décote et
+            le plafonnement du quotient familial ne sont pas modélisés. Il ne remplace pas
+            <a class="text-blue-700 underline" rel="noopener" target="_blank" href="https://www.impots.gouv.fr/simulateurs">les simulateurs officiels</a>
             ni un professionnel.
           </p>
           <p class="m-0 mt-3 text-slate-600">
