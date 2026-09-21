@@ -14,7 +14,20 @@
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # 3) Slash final géré par mod_rewrite plutôt que par mod_dir : ce dernier
+  # 3) /pfu-ou-bareme/ -> /faut-il-cocher-2op/ : les deux pages traitent la même
+  #    question (PFU ou barème / case 2OP) avec le même simulateur, et se
+  #    cannibalisaient sur les mêmes requêtes. La délégation de canonical (cf.
+  #    src/lib/seo-canonical.ts) n'a pas suffi : au recrawl du 18/09/2026, Google a
+  #    gardé /pfu-ou-bareme/ comme « URL canonique sélectionnée par Google : URL
+  #    inspectée », ignorant le <link rel="canonical"> déclaré. La 301 ferme le
+  #    sujet. Cible en dur sur l'apex https (jamais %{HTTP_HOST}, qui porterait
+  #    encore « www » si cette règle passait avant la 1) : ainsi ce saut-ci reste
+  #    unique une fois sur l'apex. Placée avant la règle de slash final (4) pour
+  #    qu'une URL sans / final ne coûte pas un second saut.
+  RewriteCond %{REQUEST_URI} ^/pfu-ou-bareme/?$
+  RewriteRule ^ https://clairfisc.fr/faut-il-cocher-2op/ [L,R=301]
+
+  # 4) Slash final géré par mod_rewrite plutôt que par mod_dir : ce dernier
   #    injecte un « :443 » disgracieux dans la redirection sur l'hébergement OVH.
   #    On désactive DirectorySlash et on ajoute le / nous-mêmes, avec le Host propre.
   DirectorySlash Off

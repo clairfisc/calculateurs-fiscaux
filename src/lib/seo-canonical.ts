@@ -14,14 +14,19 @@
  *    URL qu'on canonicalise ailleurs est contradictoire.
  *
  * Clés et valeurs : chemins à slash final (cf. `trailingSlash: 'always'`).
+ *
+ * Retour d'expérience : le canonical délégué n'est qu'un signal, que Google peut
+ * ignorer. Cas vécu — `/pfu-ou-bareme/` déléguait ici vers `/faut-il-cocher-2op/`
+ * depuis le 18/08/2026 ; au recrawl du 18/09/2026, Google a gardé
+ * `/pfu-ou-bareme/` comme « URL canonique sélectionnée par Google », toujours
+ * indexée et concurrente du guide sur les mêmes requêtes. Remplacé par une
+ * redirection 301 (`public/.htaccess`), bien plus contraignante pour Google.
+ * Leçon : quand les deux pages sont quasi identiques (même simulateur, contenu
+ * texte en grande partie redondant), préférer d'emblée la 301 à la délégation de
+ * canonical — celle-ci ne vaut vraiment que pour deux pages qui restent chacune
+ * utile de plein droit.
  */
-export const CANONIQUES_DELEGUEES: Record<string, string> = {
-  // « PFU ou barème » et « faut-il cocher la case 2OP » sont la même question, et
-  // les deux pages embarquent désormais le même simulateur : /pfu-ou-bareme/ est
-  // devenu un sous-ensemble strict du guide. Le guide est celui que Google classe
-  // (position 17 contre 67), c'est donc lui qui porte le cluster.
-  "/pfu-ou-bareme/": "/faut-il-cocher-2op/",
-};
+export const CANONIQUES_DELEGUEES: Record<string, string> = {};
 
 /**
  * Pages utilitaires sans intérêt de recherche, à exclure du sitemap.

@@ -31,7 +31,6 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   "/plus-values-cession-titres-etrangers/": { publiee: "2026-06-26", modifiee: "2026-09-19" },
   "/plus-values-crypto-2086/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
   "/comptes-etrangers-3916/": { publiee: "2026-06-26", modifiee: "2026-09-19" },
-  "/pfu-ou-bareme/": { publiee: "2026-06-26", modifiee: "2026-09-19" },
 
   // Simulateur d'arbitrage
   "/purger-ses-moins-values/": { publiee: "2026-06-30", modifiee: "2026-09-19" },

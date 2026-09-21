@@ -13,8 +13,8 @@
  *
  * L2 (PFU vs barème, case 2OP) est **déjà servi** par la page `/faut-il-cocher-2op` (composant
  * `ComparateurPfuBareme`, qui compose directement `pfu-bareme`) : pas de levier dédié ici tant
- * qu'un hub unifié multi-leviers n'existe pas. L'ancienne page `/pfu-ou-bareme` reste en ligne
- * mais délègue son canonical au guide et n'est plus référencée par la navigation.
+ * qu'un hub unifié multi-leviers n'existe pas. L'ancienne page `/pfu-ou-bareme` redirige
+ * désormais en 301 vers le guide (cf. public/.htaccess) et n'existe plus dans `src/pages`.
  */
 
 // Contrat partagé (forme du comparatif A/B, commune à tous les leviers).

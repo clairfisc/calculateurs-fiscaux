@@ -55,11 +55,10 @@ export const CALCULATEURS: LienOutil[] = [
   },
   {
     // Pointe vers le guide, qui embarque le comparateur depuis la consolidation du
-    // cluster « case 2OP ». /pfu-ou-bareme/ délègue son canonical à cette page (cf.
-    // seo-canonical.ts) : la laisser en cible de navigation ferait pointer 87 liens
-    // internes vers une URL qu'on demande à Google d'ignorer — le maillage interne
-    // est l'un des signaux dont il se sert pour choisir la canonique, et il
-    // contredirait alors la délégation. La page reste jointe par son URL directe.
+    // cluster « case 2OP ». /pfu-ou-bareme/ redirige désormais en 301 vers cette
+    // page (cf. public/.htaccess) : la délégation de canonical n'avait pas suffi
+    // (Google l'a ignorée au recrawl du 18/09/2026), la redirection remplace le
+    // signal par une contrainte. Plus aucun lien interne ne pointe vers l'ancienne URL.
     href: "/faut-il-cocher-2op/",
     court: "PFU ou barème",
     long: "PFU ou barème (case 2OP)",
