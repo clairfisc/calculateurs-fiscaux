@@ -47,7 +47,12 @@ moteurs ci-dessus** et exposent le différentiel d'impôt + prélèvements socia
 ## Vie privée
 
 - **Le calcul est 100 % local.** Vos montants ne quittent jamais le navigateur : aucun envoi, aucun compte, aucune analytics tierce, aucun tracker.
-- **Site entièrement statique, aucune requête runtime.** Les taux de change BCE sont **embarqués au build** ([`ecb-rates.json`](src/lib/tax-engine/fx/)) — le navigateur ne contacte aucun serveur, même pour le change.
+- **Site entièrement statique : aucune requête au chargement d'une page.** Les taux de change BCE sont **embarqués au build** ([`ecb-rates.json`](src/lib/tax-engine/fx/)) — le navigateur ne contacte aucun serveur pour calculer, même pour le change. Vérifiable dans l'onglet réseau.
+- **Les deux seules requêtes du site sont à votre initiative**, et vont sur notre propre hébergement, pas chez un tiers :
+  - le **vote « page utile ? »** ([`avis.php`](public/api/avis.php)) n'enregistre que la **date**, la **page** et le **vote** — **ni adresse IP, ni user-agent** ;
+  - le **formulaire de signalement** ([`signalement.php`](public/api/signalement.php)) envoie ce que vous écrivez par mail, et rien d'autre.
+
+  Les deux sont auto-hébergés et leur code est dans ce dépôt. **Aucun montant saisi dans un calculateur n'est jamais transmis.**
 
 ## Licence
 
