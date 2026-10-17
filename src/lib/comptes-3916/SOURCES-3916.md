@@ -386,7 +386,9 @@ même type > `entitesParType` > établissement) et par la fiche à recopier
 (`fiche.ts`). Corrige un défaut en production : une ligne crypto Revolut affichait
 « Revolut / Revolut Bank UAB, Vilnius » au lieu de Revolut Digital Assets Europe Ltd
 (Chypre, §12). Même correction pour le compte-titres Revolut (Revolut Securities Europe
-UAB, Lituanie, §11-§12). Adresses de ces deux entités Revolut **non sourcées** → absentes
+UAB, Lituanie, §11-§12). L'entrée `titres_cto` de Revolut repose sur Revolut Securities
+Europe UAB (Lituanie), entité tenant le compte-titres et relevant du 3916 (établie aux
+§11 et §12). Adresses de ces deux entités Revolut **non sourcées** → absentes
 (« à renseigner » sur la fiche).
 
 - **N26 — ÉTABLI.** N26 Crypto (lancé en France le 21/03/2024, communiqué N26) :
@@ -394,9 +396,9 @@ UAB, Lituanie, §11-§12). Adresses de ces deux entités Revolut **non sourcées
   et Conditions Particulières France v1 (mai 2026). Art. 12.2 : « *Les ordres sont exécutés
   par Bitpanda. Bitpanda assure également la conservation des crypto-actifs. Un contrat
   distinct entre l'Utilisateur et Bitpanda s'applique à cette conservation.* » Partie F
-  §2.2.1 : « *Pour les Utilisateurs Français, la société Bitpanda avec laquelle
+  point 2.2.1 : « *Pour les Utilisateurs Français, la société Bitpanda avec laquelle
   l'Utilisateur contracte pour le Service de Crypto est Bitpanda GmbH, Stella Klein Löw
-  Weg 17, 1020 Vienne, Autriche.* » §2.1.6 : obligation de déclarer le compte détenu
+  Weg 17, 1020 Vienne, Autriche.* » point 2.1.6 : obligation de déclarer le compte détenu
   auprès de Bitpanda en Autriche. Bitpanda GmbH sur la liste blanche AMF (FMA, effet
   14/04/2025). ⇒ compte crypto tenu hors de France, **3916-bis au nom de Bitpanda GmbH**,
   quel que soit l'IBAN (FR ou DE) du compte courant. Pas de code PSAN retenu.

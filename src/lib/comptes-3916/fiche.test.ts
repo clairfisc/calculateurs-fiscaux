@@ -7,7 +7,7 @@ import {
   typesDeEtablissement,
   descriptionFiche,
 } from "./etablissements";
-import { ficheChamps, type LigneFiche } from "./fiche";
+import { ficheChamps, paysApresChangementType, type LigneFiche } from "./fiche";
 import { evalueCompte, evalueDeclaration } from "./regles";
 import type { Compte, TypeCompte } from "./types";
 
@@ -190,5 +190,29 @@ describe("bunq — deux branches selon l'IBAN", () => {
     const d = descriptionFiche(bunq, r);
     expect(d.length).toBeLessThanOrEqual(160);
     expect(/^non d[ée]clarable|à déclarer\b/i.test(d)).toBe(false);
+  });
+});
+
+describe("Trade Republic — fiche crypto", () => {
+  it("nomme Trade Republic Bank GmbH, Berlin, DE, PSAN 029, 3916-bis, sans « ouvert via »", () => {
+    const { valeur, champs } = fiche({ etablissementId: "trade-republic", type: "exchange_crypto" });
+    expect(valeur("Formulaire")).toBe("3916-bis");
+    expect(valeur("Établissement")).toBe("Trade Republic Bank GmbH");
+    expect(valeur("Adresse de l'établissement")).toContain("10119 Berlin");
+    expect(valeur("Pays")).toBe("DE");
+    expect(valeur("Code PSAN (3916-bis)")).toBe("029");
+    expect(champs.some((c) => c.label === "Compte")).toBe(false);
+  });
+});
+
+describe("paysApresChangementType", () => {
+  it("garde le pays si le teneur ne change pas (Revolut neobanque ↔ paiement_emoney)", () => {
+    expect(paysApresChangementType({ etablissementId: "revolut", pays: "Lituanie" }, "neobanque", "paiement_emoney")).toBe("Lituanie");
+  });
+  it("efface le pays si le teneur change (Revolut neobanque → exchange_crypto)", () => {
+    expect(paysApresChangementType({ etablissementId: "revolut", pays: "Lituanie" }, "neobanque", "exchange_crypto")).toBeUndefined();
+  });
+  it("garde la saisie en saisie libre", () => {
+    expect(paysApresChangementType({ pays: "Suisse" }, "neobanque", "exchange_crypto")).toBe("Suisse");
   });
 });

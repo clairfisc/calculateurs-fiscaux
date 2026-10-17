@@ -6,6 +6,7 @@ import {
   teneurHorsDeFrancePourType,
   ficheChamps as ficheChampsLigne,
   teneurDeLigne,
+  paysApresChangementType,
   libelleVerdictCourt,
   conduiteATenir,
   CLASSE_VERDICT,
@@ -336,7 +337,11 @@ export default function ChecklistComptes() {
                                 type,
                                 sousCompteLibelle: gabarit?.libelle,
                                 note: gabarit?.note,
-                                pays: undefined,
+                                pays: paysApresChangementType(
+                                  { etablissementId: p.etablissementId, pays: l.pays },
+                                  l.type,
+                                  type,
+                                ),
                                 teneurHorsDeFrance: undefined,
                                 emoneyUsageAchatsOuVentesBiens:
                                   type === "paiement_emoney" ? false : undefined,

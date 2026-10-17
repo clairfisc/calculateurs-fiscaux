@@ -162,6 +162,17 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     typesCompatibles: ["titres_cto", "pea", "exchange_crypto"],
     formulaireParDefaut: "3916",
     codePsan: "029",
+    // Compte crypto : même entité (Trade Republic Bank GmbH, Berlin) que l'établissement
+    // principal, mais toujours tenu hors de France, quel que soit l'IBAN (SOURCES-3916 §11).
+    entitesParType: {
+      exchange_crypto: {
+        designation: "Trade Republic Bank GmbH",
+        pays: "DE",
+        adresse: "Trade Republic Bank GmbH, Brunnenstraße 19-21, 10119 Berlin, Allemagne",
+        teneurHorsDeFrance: true,
+        codePsan: "029",
+      },
+    },
     // Adresse de l'entité PARENTE (celle à reporter pour le compte crypto, tenu à Berlin).
     // Tranchée sur le REGAFI (ACPR), qui donne Brunnenstr. 19-21 — et non la Köpenicker
     // Straße retenue jusqu'au 18/09/2026, non confirmée par le registre.
@@ -231,7 +242,7 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     formulaireParDefaut: "3916",
     // N26 Crypto : N26 ne fait que transmettre les ordres (RTO) ; exécution et conservation
     // par Bitpanda GmbH, Vienne (conditions particulières France, art. 12.2 et Partie F
-    // §2.2.1 — SOURCES-3916 §14, 17/10/2026). Le compte 3916-bis est celui du conservateur.
+    // point 2.2.1 — SOURCES-3916 §14, 17/10/2026). Le compte 3916-bis est celui du conservateur.
     entitesParType: {
       exchange_crypto: {
         designation: "Bitpanda GmbH",
@@ -271,7 +282,8 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     note:
       "Tout dépend de l'IBAN de chaque compte : chez bunq, chaque sous-compte a son propre IBAN. " +
       "• IBAN français (FR) : compte tenu par bunq B.V., succursale française (REGAFI, SIREN 893 970 970, code banque 27633), que bunq attribue automatiquement depuis 2021 aux clients domiciliés en France — compte tenu en France, NON déclarable. " +
-      "• IBAN néerlandais (NL), y compris un ancien compte conservé après le passage à l'IBAN FR, ou IBAN d'un autre pays (DE, ES, IT, IE, BE, via les « International Bank Accounts ») : compte tenu hors de France, À DÉCLARER au 3916, même vide, y compris l'année de sa clôture.",
+      "• IBAN néerlandais (NL), y compris un ancien compte conservé après le passage à l'IBAN FR, ou IBAN d'un autre pays (DE, ES, IT, IE, BE, via les « International Bank Accounts ») : compte tenu hors de France, À DÉCLARER au 3916, même vide, y compris l'année de sa clôture. " +
+      "Pour un IBAN étranger non néerlandais, la fiche à recopier pré-remplit bunq B.V. / Pays-Bas : si votre relevé indique une autre entité ou un autre pays, reportez ceux-là (le champ pays est modifiable).",
   },
   { id: "wise", designation: "Wise Europe SA", pays: "BE", url: "https://wise.com", typeParDefaut: "neobanque", typesCompatibles: ["neobanque", "paiement_emoney"], formulaireParDefaut: "3916", teneurHorsDeFrance: true, adresse: "Rue du Trône 100, 1050 Bruxelles, Belgique", note: "Établissement de monnaie électronique établi en Belgique — compte tenu hors de France : à déclarer au 3916. La dispense du BOFiP §85 suppose un compte adossé à un compte ouvert en France, ce qui n'est pas le montage Wise (IBAN belge autonome, ouverture ne supposant la détention d'aucun compte français) : en pratique le compte est à déclarer au 3916.", descriptionSeo: "Wise (Belgique) : compte tenu hors de France, à déclarer au 3916. La dispense d'encaissements en ligne ne joue pas : aucun compte français adossé." },
 
@@ -331,7 +343,7 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     },
     note:
       "Ajoutez vos éventuels sous-comptes devises (AutoFX USD/GBP/CHF) s'ils ont un IBAN propre — à vérifier sur votre relevé. " +
-      "Compte crypto (proposé en France depuis septembre 2025) : DEGIRO transmet et fait exécuter vos ordres, mais ne conserve pas vos crypto-actifs. Ils sont conservés par Tangany GmbH (Munich), avec laquelle vous concluez un contrat distinct. C'est un compte distinct, tenu hors de France : À DÉCLARER au 3916-bis, au nom de Tangany GmbH, Brienner Straße 53, 80333 Munich, Allemagne.",
+      "Compte crypto (proposé en France depuis septembre 2025) : DEGIRO transmet et fait exécuter vos ordres, mais ne conserve pas vos crypto-actifs. Ils sont conservés par Tangany GmbH (Munich), avec laquelle les conditions crypto de DEGIRO prévoient un contrat distinct (version française de ces conditions non retrouvée : montage déduit de la FAQ française). C'est un compte distinct, tenu hors de France : À DÉCLARER au 3916-bis, au nom de Tangany GmbH, Brienner Straße 53, 80333 Munich, Allemagne.",
   },
 ] as const;
 
@@ -397,7 +409,8 @@ export function teneurPourType(e: Etablissement, type: TypeCompte): TeneurResolu
       codePsan: entite.codePsan,
       teneurHorsDeFrance: entite.teneurHorsDeFrance,
       note: entite.note,
-      intermediaire: e.nomCourt ?? e.designation,
+      // Pas d'intermédiaire si le teneur EST l'établissement (Trade Republic crypto).
+      intermediaire: entite.designation === e.designation ? undefined : (e.nomCourt ?? e.designation),
     };
   }
   return {

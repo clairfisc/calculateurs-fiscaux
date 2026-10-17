@@ -36,6 +36,21 @@ export function teneurDeLigne(l: Pick<LigneFiche, "etablissementId" | "type">): 
 }
 
 /**
+ * Pays saisi à conserver quand le type d'une ligne change : il n'est effacé que si le
+ * teneur résolu change (désignation ou pays). En saisie libre (aucun teneur), on le garde.
+ */
+export function paysApresChangementType(
+  l: Pick<LigneFiche, "etablissementId" | "pays">,
+  ancien: TypeCompte,
+  nouveau: TypeCompte,
+): string | undefined {
+  const a = teneurDeLigne({ etablissementId: l.etablissementId, type: ancien });
+  const b = teneurDeLigne({ etablissementId: l.etablissementId, type: nouveau });
+  if (!a || !b) return l.pays;
+  return a.designation === b.designation && a.pays === b.pays ? l.pays : undefined;
+}
+
+/**
  * Champs structurés de la fiche.
  *
  * `r` est OBLIGATOIRE et vient de `agregat.resultats` (jamais recalculé ici par un
