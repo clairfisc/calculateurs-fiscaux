@@ -103,7 +103,7 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
       "Un compte qui a existé en 2026 — même soldé, transféré ou clos en cours d'année — reste à déclarer au printemps 2027 ; si vous avez déplacé vos avoirs vers une autre plateforme, le compte d'arrivée se déclare en plus, au titre de la même année.",
   },
   { id: "coinbase", designation: "Coinbase", typeParDefaut: "exchange_crypto", formulaireParDefaut: "3916-bis", codePsan: "009", pays: "LU", url: "https://www.coinbase.com", teneurHorsDeFrance: true, adresse: "Coinbase Luxembourg S.A., 58 Boulevard Grande-Duchesse Charlotte, L-1330 Luxembourg", note: "Entité Coinbase Luxembourg S.A. — confirmer selon votre relevé." },
-  { id: "kraken", designation: "Kraken", typeParDefaut: "exchange_crypto", formulaireParDefaut: "3916-bis", codePsan: "020", pays: "IE", url: "https://www.kraken.com", teneurHorsDeFrance: true, adresse: "Payward Ireland Limited, 70 Sir John Rogerson's Quay, Dublin 2, D02 R296, Irlande" },
+  { id: "kraken", designation: "Kraken", typeParDefaut: "exchange_crypto", formulaireParDefaut: "3916-bis", codePsan: "020", pays: "IE", url: "https://www.kraken.com", teneurHorsDeFrance: true, adresse: "Payward Europe Solutions Limited, 70 Sir John Rogerson's Quay, Dublin 2, D02 R296, Irlande" },
   { id: "etoro", designation: "eToro", typeParDefaut: "exchange_crypto", typesCompatibles: ["exchange_crypto", "titres_cto"], formulaireParDefaut: "3916-bis", codePsan: "013", pays: "CY", url: "https://www.etoro.com", teneurHorsDeFrance: true, adresse: "eToro (Europe) Ltd, 4 Profiti Ilia Street, KIBC 7e étage, Germasogeia 4046, Limassol, Chypre", note: "Multi-produits : si vous détenez à la fois un compte actions/CFD (→ 3916) ET un compte crypto (→ 3916-bis), ce sont DEUX comptes distincts à déclarer." },
   {
     id: "trade-republic",
@@ -148,7 +148,7 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
         titre: "Quels comptes Revolut sont à déclarer ?",
         corps:
           "Tout dépend de l'entité qui tient le compte, et Revolut en a plusieurs. Le compte courant EUR / Épargne (Revolut France, succursale FR, IBAN FR) est tenu en France : il n'est PAS à déclarer. " +
-          "Depuis l'agrément bancaire français délivré le 10 août 2026 à Revolut Bank S.A., les clients français sont transférés progressivement depuis Revolut Bank UAB, chacun prévenu environ deux mois à l'avance : sans effet sur le 3916, le compte courant à IBAN FR étant tenu en France avant comme après.",
+          "Depuis l'agrément bancaire français délivré le 10 août 2026 à Revolut Bank S.A., les clients français sont transférés depuis Revolut Bank UAB (succursale française) : d'après le courriel de Revolut du 29 septembre 2026, chaque compte est transféré en une journée entre le 2 et le 5 décembre 2026 (IBAN et BIC conservés, nouvelles conditions générales dès le 2 décembre). Sans effet sur le 3916, le compte courant à IBAN FR étant tenu en France avant comme après.",
       },
       {
         titre: "Ce qui reste à déclarer chez Revolut",
@@ -196,7 +196,7 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
   { id: "ibkr", designation: "Interactive Brokers Ireland Limited", pays: "IE", url: "https://www.interactivebrokers.eu", typeParDefaut: "titres_cto", formulaireParDefaut: "3916", teneurHorsDeFrance: true, adresse: "North Dock One, 91/92 North Wall Quay, Dublin 1, D01 H7V7, Irlande" },
   {
     id: "degiro",
-    designation: "flatexDEGIRO Bank AG",
+    designation: "flatexDEGIRO Bank SE",
     pays: "DE",
     url: "https://www.degiro.fr",
     typeParDefaut: "titres_cto",
@@ -209,7 +209,7 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     // où la base SAIT, et où le moteur peut donc trancher sans rien demander.
     comptes: [
       { type: "titres_cto", libelle: "Compte-titres DEGIRO (succursale néerlandaise)", pays: "Pays-Bas", teneurHorsDeFrance: true, adresse: "flatexDEGIRO Bank Dutch Branch, Amstelplein 1, 1096 HA Amsterdam, Pays-Bas" },
-      { type: "banque", libelle: "Compte espèces flatex (Allemagne, IBAN DE)", pays: "Allemagne", teneurHorsDeFrance: true, adresse: "flatexDEGIRO Bank AG, Omniturm, Große Gallusstraße 16-18, 60312 Francfort-sur-le-Main, Allemagne", note: "Compte espèces distinct du compte-titres (depuis ~2020/2022)." },
+      { type: "banque", libelle: "Compte espèces flatex (Allemagne, IBAN DE)", pays: "Allemagne", teneurHorsDeFrance: true, adresse: "flatexDEGIRO Bank SE, Omniturm, Große Gallusstraße 16-18, 60312 Francfort-sur-le-Main, Allemagne", note: "Compte espèces distinct du compte-titres (depuis ~2020/2022). Ex-flatexDEGIRO Bank AG (forme changée le 30/12/2025)." },
     ],
     note: "Ajoutez vos éventuels sous-comptes devises (AutoFX USD/GBP/CHF) s'ils ont un IBAN propre — à vérifier sur votre relevé.",
   },

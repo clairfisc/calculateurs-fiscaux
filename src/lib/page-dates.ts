@@ -30,7 +30,7 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   "/dividendes-etrangers-2047/": { publiee: "2026-06-29", modifiee: "2026-09-19" },
   "/plus-values-cession-titres-etrangers/": { publiee: "2026-06-26", modifiee: "2026-09-19" },
   "/plus-values-crypto-2086/": { publiee: "2026-06-26", modifiee: "2026-06-29" },
-  "/comptes-etrangers-3916/": { publiee: "2026-06-26", modifiee: "2026-09-19" },
+  "/comptes-etrangers-3916/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
 
   // Simulateur d'arbitrage
   "/purger-ses-moins-values/": { publiee: "2026-06-30", modifiee: "2026-09-19" },
@@ -57,11 +57,15 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   // fausses corrigées) ; PayPal et Wise ont vu leur note réécrite (dispense ouverte aux
   // néobanques, seuil apprécié globalement) : les quatre sortent donc de la règle par préfixe.
   "/declarer-compte/binance/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
-  "/declarer-compte/revolut/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
+  "/declarer-compte/revolut/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
   "/declarer-compte/trade-republic/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
   "/declarer-compte/n26/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
   "/declarer-compte/paypal/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
   "/declarer-compte/wise/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
+  // Veille du 17/10/2026 : date de bascule Revolut (ci-dessus), DEGIRO AG → SE, Kraken (entité
+  // MiCA Payward Europe Solutions Ltd, recopiée sur le formulaire) : un fait change sur chaque fiche.
+  "/declarer-compte/degiro/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
+  "/declarer-compte/kraken/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
 
   // Divers
   "/le-projet/": { publiee: "2026-07-01", modifiee: "2026-07-01" },

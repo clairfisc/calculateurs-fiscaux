@@ -207,7 +207,7 @@ version 2019 « espèces ». Re-vérifier chaque millésime (règle « valider a
 | **N26** | IBAN **FR** (succursale France, REGAFI 72460) → **NON déclarable** ; IBAN **DE** (Berlin) → **à déclarer**, y compris l'année de la migration ; Espaces = même IBAN (sauf comptes ouverts hors France/Italie/Espagne) | non (note) | haute |
 | **PayPal** | 1 compte ; **dispense** BOFiP §85 (3 conditions) prime — « toujours déclarable car Luxembourg » **réfuté 0-3** | non | haute |
 | **Binance** | 1 compte 3916-bis ; **Binance France SAS = compte FR non déclarable** sinon entité étrangère (radiée AMF 02/07/2026, cf. addendum) | non (note) | moy. |
-| **Coinbase / Kraken** | 1 compte 3916-bis (entité Luxembourg / Payward Irlande) | non | moy. |
+| **Coinbase / Kraken** | 1 compte 3916-bis (entité Luxembourg / Kraken : Payward Europe Solutions Limited, Irlande, cf. addendum du 17/10/2026) | non | moy. |
 | **IBKR / bunq / Wise** | 1 compte par défaut ; sous-comptes (cash séparé, jars/IBAN devise) **non sourcés comme distincts** → question ouverte (§9) | non (note) | basse |
 
 **Sous-comptes NON auto-dépliés** (non fermement sourcés comme distincts) : devises AutoFX (DEGIRO),
@@ -329,3 +329,42 @@ deposit-taking with a French IBAN account, the execution of orders on behalf of 
 carried out by Trade Republic Bank GmbH through its French branch* » ; « *There are also
 customers for whom Trade Republic Bank GmbH provides all of the services on a
 cross-border basis.* » ; « *The custody of crypto-assets is also performed in Berlin.* »
+
+## 14. Addendum du 17/10/2026 — Revolut (date de bascule), DEGIRO (AG → SE), Kraken (entité MiCA)
+
+Lu le 17/10/2026.
+
+- **Revolut — date de bascule (précise le §12, qui disait « sans calendrier de fin
+  publié »)** : courriel de Revolut à ses clients du **29/09/2026** — chaque compte est
+  transféré de la succursale française de Revolut Bank UAB vers **Revolut Bank S.A.**
+  (Paris) **en une journée entre le 2 et le 5 décembre 2026** ; nouvelles CGU dès le
+  02/12 ; IBAN et BIC conservés ; garantie des dépôts par le FGDR ; le client qui refuse
+  doit clôturer son compte avant la bascule. **Niveau de preuve** : la page d'aide Revolut
+  est en 403 en lecture directe (contenu connu par extraction moteur) ; recoupée par
+  iGeneration du 01/10/2026, qui reproduit une capture du courriel — pas de lecture directe
+  d'une source primaire. **Conclusion inchangée** : déclarativement neutre (compte courant
+  IBAN FR tenu en France avant comme après). La bascule ne concerne **pas** le compte-titres
+  (Revolut Securities Europe UAB) ni le compte crypto (Revolut Digital Assets Europe Ltd) :
+  rien n'est affirmé à leur sujet.
+  <https://help.revolut.com/fr-FR/business/help/account-management-plans-and-billings/french-bank/when-will-my-account-be-migrated-fr-bank/>
+  <https://www.igen.fr/services/2026/09/revolut-passe-ses-clients-francais-sous-pavillon-bancaire-francais-en-decembre-158365>
+- **DEGIRO — AG → SE** : flatexDEGIRO Bank AG est devenue **flatexDEGIRO Bank SE** le
+  **30/12/2025** (communiqué officiel ; degiro.fr : « flatexDEGIRO Bank SE est une banque
+  allemande agréée », HRB 105687 ; liste blanche AMF). Adresse inchangée (Omniturm,
+  Francfort) ; le libellé de la succursale néerlandaise reste exact. Sans effet déclaratif
+  (même entité allemande, forme sociale seule modifiée).
+  <https://s206.q4cdn.com/770226284/files/doc_news/2025/251230-flatexDEGIRO_Press-Release_SE-change.pdf>
+- **Kraken — entité du compte crypto** : le prestataire MiCA servant la France pour la
+  garde et l'échange de crypto-actifs est **Payward Europe Solutions Limited** (Banque
+  centrale d'Irlande C468360), et non Payward Ireland Limited (C453020, établissement de
+  monnaie électronique). Date d'effet France sur la liste blanche AMF : 25/06/2025. Adresse
+  du siège inchangée (70 Sir John Rogerson's Quay, Dublin 2). **Question ouverte** (rien à
+  affirmer sur le site) : un portefeuille fiat chez Payward Ireland Ltd est-il un compte de
+  monnaie électronique distinct à déclarer au 3916 ?
+  <https://www.amf-france.org/en/warnings/white-lists/daspcasp/payward-europe-solutions-limited-kraken-digital-asset-exchange-kraken>
+  <https://www.kraken.com/learn/how-kraken-is-regulated>
+- **À NE PAS reprendre** : étendre la bascule du 2-5 décembre au compte-titres ou au
+  compte crypto Revolut ; une date de bascule individuelle autre que la fenêtre du 2 au
+  5 décembre ; toute qualification du portefeuille fiat Kraken (Payward Ireland Ltd) ;
+  toute conséquence déclarative de l'AG → SE chez DEGIRO.
+- **Limite de vérification** : `help.revolut.com` inaccessible en direct (403).
