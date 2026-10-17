@@ -4,11 +4,14 @@ import {
   etablissementParId,
   typesDeEtablissement,
   teneurHorsDeFrancePourType,
+  ficheChamps as ficheChampsLigne,
+  teneurDeLigne,
   libelleVerdictCourt,
   conduiteATenir,
   CLASSE_VERDICT,
   ETABLISSEMENTS,
   type Compte,
+  type FicheChamp,
   type ResultatCompte,
   type TypeCompte,
 } from "../../lib/comptes-3916";
@@ -61,9 +64,13 @@ interface CompteLigne {
   readonly type: TypeCompte;
   readonly sousCompteLibelle?: string;
   readonly note?: string;
-  /** Pays/adresse du compte (pré-remplis depuis l'établissement, éditables ; peuvent différer par compte). */
+  /**
+   * Pays saisi par l'utilisateur (surcharge). Absent = pays du TENEUR résolu pour ce type
+   * (`teneurPourType` : gabarit > `entitesParType` > établissement). L'adresse n'est plus
+   * copiée dans la ligne depuis le 17/10/2026 : elle se lit toujours sur le teneur du type
+   * courant, sinon une ligne changée de type gardait l'adresse de l'ancien teneur.
+   */
   readonly pays?: string;
-  readonly adresse?: string;
   /**
    * `undefined` = pas encore touché par l'utilisateur (le prérempli éventuel de la base
    * s'applique) ; `null` = l'utilisateur a explicitement choisi « Je ne sais pas encore »,
@@ -111,7 +118,7 @@ function buildCompte(p: Poste, l: CompteLigne): Compte {
     type: l.type,
     etablissementId: p.etablissementId,
     etablissementLibre: p.etablissementLibre,
-    pays: l.pays,
+    pays: l.pays ?? teneurDeLigne({ etablissementId: p.etablissementId, type: l.type })?.pays,
     // Réponse de l'utilisateur si elle existe, sinon valeur sourcée de la base — SAUF si
     // l'utilisateur a explicitement choisi « Je ne sais pas encore » (`null`), auquel cas on
     // n'applique PAS le prérempli : sans ce cas particulier, revenir sur « inconnu » après un
@@ -127,42 +134,23 @@ function buildCompte(p: Poste, l: CompteLigne): Compte {
   };
 }
 
-interface FicheChamp {
-  readonly label: string;
-  readonly value: string;
-  /** Champ que l'utilisateur doit compléter lui-même (affiché en grisé). */
-  readonly aRenseigner?: boolean;
-}
-
 /**
- * Champs structurés de la fiche à recopier sur impots.gouv.
- *
- * `r` est OBLIGATOIRE et vient de `agregat.resultats` (jamais recalculé ici par un
- * nouvel appel à `evalueCompte` sur la valeur brute de la ligne) : depuis I4, le verdict
- * d'une ligne `paiement_emoney`/`banque`/`neobanque` dépend du CUMUL réel sur toutes les
- * lignes éligibles, que seul `evalueDeclaration` connaît (I4-a, contre-vérification du
- * 19/09/2026 — un appel local à `evalueCompte` ignorait ce cumul et pouvait afficher
- * « Dispensé » sur une ligne que la synthèse comptait pourtant « à déclarer », sans
- * jamais rendre la fiche à recopier correspondante).
+ * Champs de la fiche à recopier : logique pure dans `lib/comptes-3916/fiche.ts` (testée),
+ * qui lit le TENEUR du type de la ligne (gabarit > `entitesParType` > établissement).
+ * `r` vient de `agregat.resultats` (I4-a) — jamais d'appel local à `evalueCompte`.
  */
 function ficheChamps(p: Poste, l: CompteLigne, r: ResultatCompte): FicheChamp[] {
-  const etab = p.etablissementId ? etablissementParId(p.etablissementId) : undefined;
-  const designation = etab?.designation ?? p.etablissementLibre ?? "";
-  const adresse = l.adresse ?? etab?.adresse ?? "";
-  const pays = l.pays ?? etab?.pays ?? "";
-  const champs: FicheChamp[] = [
-    { label: "Formulaire", value: r.formulaire ?? "—" },
-    { label: "Établissement", value: designation || "à renseigner", aRenseigner: !designation },
-  ];
-  if (l.sousCompteLibelle) champs.push({ label: "Compte", value: l.sousCompteLibelle });
-  champs.push(
-    { label: "Adresse de l'établissement", value: adresse || "à renseigner", aRenseigner: !adresse },
-    { label: "Pays", value: pays || "à renseigner", aRenseigner: !pays },
-    { label: "Type de compte", value: TYPE_LABELS[l.type] },
-    { label: "N° / identifiant du compte", value: "à renseigner", aRenseigner: true },
-    { label: "Dates d'ouverture / clôture", value: "à renseigner", aRenseigner: true },
+  return ficheChampsLigne(
+    {
+      etablissementId: p.etablissementId,
+      etablissementLibre: p.etablissementLibre,
+      type: l.type,
+      pays: l.pays,
+      sousCompteLibelle: l.sousCompteLibelle,
+    },
+    r,
+    TYPE_LABELS[l.type],
   );
-  return champs;
 }
 
 /** Version texte (presse-papiers) dérivée des champs structurés. */
@@ -189,7 +177,8 @@ export default function ChecklistComptes() {
     const etab = id ? etablissementParId(id) : undefined;
     let comptes: CompteLigne[];
     if (etab?.comptes && etab.comptes.length > 0) {
-      comptes = etab.comptes.map((g) => ({ ...ligneVide(g.type), sousCompteLibelle: g.libelle, note: g.note, pays: g.pays, adresse: g.adresse }));
+      // Pays et adresse ne sont plus copiés : ils se lisent sur le teneur du type (gabarit).
+      comptes = etab.comptes.map((g) => ({ ...ligneVide(g.type), sousCompteLibelle: g.libelle, note: g.note }));
     } else if (etab) {
       comptes = [ligneVide(etab.typeParDefaut)];
     } else {
@@ -326,6 +315,7 @@ export default function ChecklistComptes() {
                   // `compte.teneurHorsDeFrance` (déjà résolu par `buildCompte`, y compris le
                   // cas où l'utilisateur a explicitement écarté un prérempli via `null`).
                   const lieuEffectif = compte.teneurHorsDeFrance;
+                  const noteLigne = l.note ?? teneurDeLigne({ etablissementId: p.etablissementId, type: l.type })?.note;
                   return (
                     <div key={l.id} className="flex flex-col gap-2 rounded-md border border-slate-200 p-3">
                       <div className="flex items-end gap-3">
@@ -338,8 +328,15 @@ export default function ChecklistComptes() {
                             value={l.type}
                             onChange={(e) => {
                               const type = e.target.value as TypeCompte;
+                              // Le libellé, la note et le pays saisi décrivaient le compte de
+                              // l'ANCIEN type (ex. gabarit « Compte-titres DEGIRO » passé en
+                              // crypto) : on les reprend du gabarit du nouveau type s'il existe.
+                              const gabarit = etab?.comptes?.find((g) => g.type === type);
                               majLigne(p.id, l.id, {
                                 type,
+                                sousCompteLibelle: gabarit?.libelle,
+                                note: gabarit?.note,
+                                pays: undefined,
                                 teneurHorsDeFrance: undefined,
                                 emoneyUsageAchatsOuVentesBiens:
                                   type === "paiement_emoney" ? false : undefined,
@@ -358,7 +355,7 @@ export default function ChecklistComptes() {
                         </label>
                         <label className="flex w-40 flex-col gap-1 text-sm">
                           <span className="text-slate-700">Pays</span>
-                          <input type="text" autoComplete="off" value={l.pays ?? etab?.pays ?? ""} onChange={(e) => majLigne(p.id, l.id, { pays: e.target.value })} className="rounded-md border border-slate-300 px-2 py-1.5" />
+                          <input type="text" autoComplete="off" value={compte.pays ?? ""} onChange={(e) => majLigne(p.id, l.id, { pays: e.target.value })} className="rounded-md border border-slate-300 px-2 py-1.5" />
                         </label>
                         {p.comptes.length > 1 && (
                           <button type="button" onClick={() => supprimerCompte(p.id, l.id)} className="pb-2 text-xs text-slate-400 underline">retirer</button>
@@ -455,7 +452,7 @@ export default function ChecklistComptes() {
                           {r.verdict === "a_declarer" && r.formulaire ? ` · ${r.formulaire}` : ""}
                         </p>
                         <p className="mt-1">{r.motif}</p>
-                        {l.note && <p className="mt-1 italic">{l.note}</p>}
+                        {noteLigne && <p className="mt-1 italic">{noteLigne}</p>}
                         <p className="mt-1 text-xs opacity-80">Source : {r.source}</p>
                       </div>
 

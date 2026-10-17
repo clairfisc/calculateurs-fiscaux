@@ -27,6 +27,47 @@ export interface GabaritCompte {
   readonly teneurHorsDeFrance?: boolean;
 }
 
+/**
+ * Entité qui TIENT un compte d'un type donné quand ce n'est pas l'établissement
+ * principal, et sans que ce compte soit inhérent à l'ouverture (sinon : gabarit
+ * `comptes`, auto-déplié). Cas d'usage (addendum du 17/10/2026, SOURCES-3916 §14) :
+ * le compte crypto proposé par un intermédiaire qui ne fait que transmettre ou
+ * exécuter les ordres (N26, DEGIRO, IBKR) ou par une entité sœur (Revolut) — le
+ * compte 3916-bis est celui du CONSERVATEUR (CGI ann. III art. 344 G decies, I :
+ * « personne […] qui reçoit habituellement en dépôt des crypto-actifs »).
+ *
+ * N'est PAS auto-dépliée : ne sert qu'à remplir correctement la fiche à recopier et
+ * le lieu de tenue quand l'utilisateur ajoute lui-même une ligne de ce type.
+ */
+export interface EntiteTeneuse {
+  /** Raison sociale du teneur, celle à recopier sur le formulaire. */
+  readonly designation: string;
+  readonly pays: string;
+  /** Uniquement si sourcée (SOURCES-3916) ; absente = « à renseigner » sur la fiche. */
+  readonly adresse?: string;
+  /** Lieu de tenue SOURCÉ pour tous les clients (obligatoire : c'est la raison d'être de l'entrée). */
+  readonly teneurHorsDeFrance: boolean;
+  /** Code PSAN propre au teneur (jamais hérité de l'établissement principal). */
+  readonly codePsan?: string;
+  /** Mention affichée sous le verdict de la ligne. */
+  readonly note?: string;
+}
+
+/** Résolution (établissement, type) → ce que la fiche à recopier et le moteur doivent lire. */
+export interface TeneurResolu {
+  readonly designation: string;
+  readonly pays?: string;
+  readonly adresse?: string;
+  readonly codePsan?: string;
+  readonly teneurHorsDeFrance?: boolean;
+  readonly note?: string;
+  /**
+   * Nom de l'établissement par lequel le compte a été souscrit, quand il diffère du
+   * teneur (`entitesParType`) — pour l'afficher comme intermédiaire, jamais comme teneur.
+   */
+  readonly intermediaire?: string;
+}
+
 export interface Etablissement {
   readonly id: string;
   readonly designation: string;
@@ -48,6 +89,13 @@ export interface Etablissement {
    * Réservé aux structures fermement sourcées (ex. DEGIRO = titres + espèces flatex).
    */
   readonly comptes?: readonly GabaritCompte[];
+  /**
+   * Teneur propre à un type de compte FACULTATIF (non auto-déplié), quand il diffère de
+   * l'établissement principal — cf. `EntiteTeneuse`. Un type présent ici doit figurer dans
+   * `typesCompatibles`, différer de `typeParDefaut` et n'avoir aucun gabarit `comptes`
+   * (le gabarit primerait : l'entrée serait morte) — invariants gelés par les tests.
+   */
+  readonly entitesParType?: Partial<Record<TypeCompte, EntiteTeneuse>>;
   readonly formulaireParDefaut: Formulaire;
   /**
    * L'établissement teneur est-il situé hors de France ? (cf. `Compte.teneurHorsDeFrance`.)
@@ -141,6 +189,14 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     typesCompatibles: ["neobanque", "paiement_emoney", "titres_cto", "exchange_crypto"],
     formulaireParDefaut: "3916",
     adresse: "Revolut Bank UAB, Konstitucijos ave. 21B, 08130 Vilnius, Lituanie",
+    // Titres et crypto sont tenus par des entités sœurs, pas par Revolut Bank UAB
+    // (SOURCES-3916 §11 et §12) : sans ces entrées, la fiche à recopier d'une ligne crypto
+    // affichait « Revolut Bank UAB, Vilnius » (défaut corrigé le 17/10/2026). Adresses non
+    // sourcées → absentes (la fiche affiche « à renseigner »).
+    entitesParType: {
+      titres_cto: { designation: "Revolut Securities Europe UAB", pays: "LT", teneurHorsDeFrance: true },
+      exchange_crypto: { designation: "Revolut Digital Assets Europe Ltd", pays: "CY", teneurHorsDeFrance: true },
+    },
     // Réponse à la requête « compte Revolut IBAN français, faut-il déclarer » mise en
     // avant en sections (cf. [etablissement].astro) plutôt qu'enfouie dans `note`.
     sections: [
@@ -171,7 +227,19 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     pays: "DE",
     url: "https://n26.com",
     typeParDefaut: "neobanque",
+    typesCompatibles: ["neobanque", "exchange_crypto"],
     formulaireParDefaut: "3916",
+    // N26 Crypto : N26 ne fait que transmettre les ordres (RTO) ; exécution et conservation
+    // par Bitpanda GmbH, Vienne (conditions particulières France, art. 12.2 et Partie F
+    // §2.2.1 — SOURCES-3916 §14, 17/10/2026). Le compte 3916-bis est celui du conservateur.
+    entitesParType: {
+      exchange_crypto: {
+        designation: "Bitpanda GmbH",
+        pays: "AT",
+        adresse: "Bitpanda GmbH, Stella-Klein-Löw-Weg 17, 1020 Vienne, Autriche",
+        teneurHorsDeFrance: true,
+      },
+    },
     // Adresse de l'entité allemande (celle à reporter si le compte est resté en IBAN DE).
     // Confirmée au REGAFI (ACPR) le 18/09/2026.
     adresse: "N26 Bank SE, Voltairestraße 8, 10179 Berlin, Allemagne",
@@ -180,27 +248,67 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
     // l'IBAN FR est documenté par N26 (communiqué du 05/07/2023) et la succursale
     // française est inscrite au REGAFI depuis le 15/03/2018.
     note:
-      "Deux situations, selon votre IBAN. " +
+      "Deux situations pour votre compte courant, selon votre IBAN. " +
       "• IBAN français (FR) : votre compte est tenu par N26 Bank SE, Succursale France (17-21 rue Saint-Fiacre, 75002 Paris ; REGAFI 72460, SIREN 840 460 943) — compte tenu en France, NON déclarable. N26 attribue un IBAN français à ses nouveaux clients depuis juin 2023, et migre les clients existants sur invitation, par groupes. " +
       "• IBAN allemand (DE) : compte tenu par N26 Bank SE à Berlin, à déclarer au 3916, même vide — y compris au titre de l'année de la migration vers l'IBAN FR, puisque le compte allemand a existé pendant une partie de l'année. " +
       "Les « Espaces » : la fonction d'IBAN dédié n'est pas proposée aux comptes ouverts en France (N26 en exclut nommément la France, l'Italie et l'Espagne) — vos Espaces partagent donc l'IBAN principal, cela reste un seul compte. " +
-      "Ex-N26 Bank AG (forme changée en 2025).",
+      "Ex-N26 Bank AG (forme changée en 2025). " +
+      "• Compte crypto (N26 Crypto, depuis mars 2024) : N26 ne fait que transmettre vos ordres. L'exécution et la conservation sont assurées par Bitpanda GmbH (Vienne, Autriche), avec laquelle vous signez un contrat distinct, comme le précisent les conditions particulières France de N26. C'est un compte de crypto-actifs tenu hors de France : À DÉCLARER au 3916-bis, au nom de Bitpanda GmbH, Stella-Klein-Löw-Weg 17, 1020 Vienne, Autriche, quel que soit l'IBAN (FR ou DE) de votre compte courant.",
   },
-  { id: "bunq", designation: "bunq B.V.", pays: "NL", url: "https://www.bunq.com", typeParDefaut: "neobanque", formulaireParDefaut: "3916", teneurHorsDeFrance: true, adresse: "Naritaweg 131-133, 1043 BS Amsterdam, Pays-Bas" },
+  {
+    id: "bunq",
+    designation: "bunq B.V.",
+    pays: "NL",
+    url: "https://www.bunq.com",
+    typeParDefaut: "neobanque",
+    formulaireParDefaut: "3916",
+    // Adresse des mentions légales bunq FR (17/10/2026) ; le REGAFI et l'ancienne fiche
+    // donnent Naritaweg 131-133 — divergence consignée dans SOURCES-3916 §14.
+    adresse: "bunq B.V., Basisweg 32, 1043 AP Amsterdam, Pays-Bas",
+    // Volontairement `undefined` (était `true` jusqu'au 17/10/2026) : depuis 2021, bunq
+    // attribue un IBAN FR, tenu par sa succursale française (REGAFI, CIB 27633), aux clients
+    // domiciliés en France, et les IBAN NL/étrangers coexistent — modèle N26.
+    note:
+      "Tout dépend de l'IBAN de chaque compte : chez bunq, chaque sous-compte a son propre IBAN. " +
+      "• IBAN français (FR) : compte tenu par bunq B.V., succursale française (REGAFI, SIREN 893 970 970, code banque 27633), que bunq attribue automatiquement depuis 2021 aux clients domiciliés en France — compte tenu en France, NON déclarable. " +
+      "• IBAN néerlandais (NL), y compris un ancien compte conservé après le passage à l'IBAN FR, ou IBAN d'un autre pays (DE, ES, IT, IE, BE, via les « International Bank Accounts ») : compte tenu hors de France, À DÉCLARER au 3916, même vide, y compris l'année de sa clôture.",
+  },
   { id: "wise", designation: "Wise Europe SA", pays: "BE", url: "https://wise.com", typeParDefaut: "neobanque", typesCompatibles: ["neobanque", "paiement_emoney"], formulaireParDefaut: "3916", teneurHorsDeFrance: true, adresse: "Rue du Trône 100, 1050 Bruxelles, Belgique", note: "Établissement de monnaie électronique établi en Belgique — compte tenu hors de France : à déclarer au 3916. La dispense du BOFiP §85 suppose un compte adossé à un compte ouvert en France, ce qui n'est pas le montage Wise (IBAN belge autonome, ouverture ne supposant la détention d'aucun compte français) : en pratique le compte est à déclarer au 3916.", descriptionSeo: "Wise (Belgique) : compte tenu hors de France, à déclarer au 3916. La dispense d'encaissements en ligne ne joue pas : aucun compte français adossé." },
 
   // ── Paiement / encaissement en ligne (dispense BOFiP §85 possible) ──
   { id: "paypal", designation: "PayPal (Europe) S.à r.l. et Cie, S.C.A.", pays: "LU", url: "https://www.paypal.com", typeParDefaut: "paiement_emoney", formulaireParDefaut: "3916", teneurHorsDeFrance: true, adresse: "22-24 Boulevard Royal, L-2449 Luxembourg", note: "Compte tenu au Luxembourg : déclarable au 3916, SAUF si les trois conditions cumulatives de dispense sont réunies (voir ci-dessus). Le cas le plus fréquent — un compte servant uniquement à payer ses achats en ligne, adossé à un compte français — remplit les conditions (1) et (2) ; ses encaissements de ventes étant nuls, la condition (3) (seuil de 10 000 €) est elle aussi automatiquement remplie → dispensé.", descriptionSeo: "Compte PayPal : non déclarable s'il sert à payer vos achats, est adossé à un compte français et encaisse ≤ 10 000 €/an. Sinon, 3916." },
 
   // ── Courtiers étrangers (compte-titres ordinaire) ──
-  { id: "ibkr", designation: "Interactive Brokers Ireland Limited", pays: "IE", url: "https://www.interactivebrokers.eu", typeParDefaut: "titres_cto", formulaireParDefaut: "3916", teneurHorsDeFrance: true, adresse: "North Dock One, 91/92 North Wall Quay, Dublin 1, D01 H7V7, Irlande" },
+  {
+    id: "ibkr",
+    designation: "Interactive Brokers Ireland Limited",
+    pays: "IE",
+    url: "https://www.interactivebrokers.eu",
+    typeParDefaut: "titres_cto",
+    typesCompatibles: ["titres_cto", "exchange_crypto"],
+    formulaireParDefaut: "3916",
+    teneurHorsDeFrance: true,
+    adresse: "North Dock One, 91/92 North Wall Quay, Dublin 1, D01 H7V7, Irlande",
+    // IBIE n'est ni partie aux transactions ni conservateur : conservation chez zerohash
+    // europe B.V., dans un compte au nom du client (SOURCES-3916 §14, 17/10/2026).
+    entitesParType: {
+      exchange_crypto: {
+        designation: "zerohash europe B.V.",
+        pays: "NL",
+        adresse: "zerohash europe B.V., Herengracht 244-3, 1016 BT Amsterdam, Pays-Bas",
+        teneurHorsDeFrance: true,
+      },
+    },
+    note:
+      "Compte crypto (proposé aux clients européens éligibles depuis mars 2026, si l'offre vous est ouverte) : Interactive Brokers n'est ni partie aux transactions ni conservateur. Vos crypto-actifs sont conservés par zerohash europe B.V. (Amsterdam), dans un compte ouvert à votre nom. C'est un compte distinct de votre compte-titres, tenu hors de France : À DÉCLARER au 3916-bis, au nom de zerohash europe B.V., Herengracht 244-3, 1016 BT Amsterdam, Pays-Bas.",
+  },
   {
     id: "degiro",
     designation: "flatexDEGIRO Bank SE",
     pays: "DE",
     url: "https://www.degiro.fr",
     typeParDefaut: "titres_cto",
-    typesCompatibles: ["titres_cto", "banque"],
+    typesCompatibles: ["titres_cto", "banque", "exchange_crypto"],
     formulaireParDefaut: "3916",
     teneurHorsDeFrance: true,
     adresse: "Omniturm, Große Gallusstraße 16-18, 60312 Francfort-sur-le-Main, Allemagne",
@@ -211,7 +319,19 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
       { type: "titres_cto", libelle: "Compte-titres DEGIRO (succursale néerlandaise)", pays: "Pays-Bas", teneurHorsDeFrance: true, adresse: "flatexDEGIRO Bank Dutch Branch, Amstelplein 1, 1096 HA Amsterdam, Pays-Bas" },
       { type: "banque", libelle: "Compte espèces flatex (Allemagne, IBAN DE)", pays: "Allemagne", teneurHorsDeFrance: true, adresse: "flatexDEGIRO Bank SE, Omniturm, Große Gallusstraße 16-18, 60312 Francfort-sur-le-Main, Allemagne", note: "Compte espèces distinct du compte-titres (depuis ~2020/2022). Ex-flatexDEGIRO Bank AG (forme changée le 30/12/2025)." },
     ],
-    note: "Ajoutez vos éventuels sous-comptes devises (AutoFX USD/GBP/CHF) s'ils ont un IBAN propre — à vérifier sur votre relevé.",
+    // Compte crypto FACULTATIF (non auto-déplié) : DEGIRO transmet/fait exécuter, Tangany
+    // GmbH conserve (FAQ degiro.fr ; SOURCES-3916 §14, 17/10/2026).
+    entitesParType: {
+      exchange_crypto: {
+        designation: "Tangany GmbH",
+        pays: "DE",
+        adresse: "Tangany GmbH, Brienner Straße 53, 80333 Munich, Allemagne",
+        teneurHorsDeFrance: true,
+      },
+    },
+    note:
+      "Ajoutez vos éventuels sous-comptes devises (AutoFX USD/GBP/CHF) s'ils ont un IBAN propre — à vérifier sur votre relevé. " +
+      "Compte crypto (proposé en France depuis septembre 2025) : DEGIRO transmet et fait exécuter vos ordres, mais ne conserve pas vos crypto-actifs. Ils sont conservés par Tangany GmbH (Munich), avec laquelle vous concluez un contrat distinct. C'est un compte distinct, tenu hors de France : À DÉCLARER au 3916-bis, au nom de Tangany GmbH, Brienner Straße 53, 80333 Munich, Allemagne.",
   },
 ] as const;
 
@@ -240,7 +360,53 @@ export function etablissementsPourType(type: TypeCompte): readonly Etablissement
  * `typeParDefaut` — perdraient l'information portée par les gabarits.
  */
 export function teneurHorsDeFrancePourType(e: Etablissement, type: TypeCompte): boolean | undefined {
-  return e.comptes?.find((g) => g.type === type)?.teneurHorsDeFrance ?? e.teneurHorsDeFrance;
+  return teneurPourType(e, type).teneurHorsDeFrance;
+}
+
+/**
+ * Teneur d'un compte (établissement, type) : ce que la fiche à recopier doit afficher
+ * (raison sociale, adresse, pays, code PSAN) et le lieu de tenue prérempli.
+ *
+ * Priorité : gabarit `comptes` du même type (même raison sociale, pays/adresse/lieu
+ * propres au compte) > `entitesParType[type]` (teneur distinct, l'établissement
+ * principal n'étant qu'intermédiaire) > établissement principal. Sans ce résolveur, une
+ * ligne crypto Revolut affichait « Revolut / Revolut Bank UAB, Vilnius » au lieu de
+ * Revolut Digital Assets Europe Ltd (Chypre) — défaut corrigé le 17/10/2026.
+ *
+ * Le code PSAN d'une `entitesParType` n'est JAMAIS hérité de l'établissement principal :
+ * c'est le code du teneur, pas celui de l'intermédiaire.
+ */
+export function teneurPourType(e: Etablissement, type: TypeCompte): TeneurResolu {
+  const gabarit = e.comptes?.find((g) => g.type === type);
+  if (gabarit) {
+    return {
+      designation: e.designation,
+      pays: gabarit.pays ?? e.pays,
+      adresse: gabarit.adresse ?? e.adresse ?? undefined,
+      codePsan: e.codePsan,
+      teneurHorsDeFrance: gabarit.teneurHorsDeFrance ?? e.teneurHorsDeFrance,
+      note: gabarit.note,
+    };
+  }
+  const entite = e.entitesParType?.[type];
+  if (entite) {
+    return {
+      designation: entite.designation,
+      pays: entite.pays,
+      adresse: entite.adresse,
+      codePsan: entite.codePsan,
+      teneurHorsDeFrance: entite.teneurHorsDeFrance,
+      note: entite.note,
+      intermediaire: e.nomCourt ?? e.designation,
+    };
+  }
+  return {
+    designation: e.designation,
+    pays: e.pays,
+    adresse: e.adresse ?? undefined,
+    codePsan: e.codePsan,
+    teneurHorsDeFrance: e.teneurHorsDeFrance,
+  };
 }
 
 /**

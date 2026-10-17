@@ -136,7 +136,7 @@ réglementaire de l'exemption e-money : FERMÉE par cette vérification.)*
 | 3 | **PayPal** ventes de biens en ligne, adossé compte FR, encaissements **3 000 €/an** | **exonéré** | 3 conditions remplies (§6) |
 | 4 | **PayPal** encaissements **15 000 €/an** | **à déclarer** | dépasse 10 000 € (§6-3) |
 | 5 | **PayPal non adossé** à un compte FR | **à déclarer** | condition 2 manquante (§6-2) |
-| 6 | Néobanque **Revolut (LT)** / **N26 (DE)** / **bunq (NL)** | **à déclarer** *(sauf exemption e-money applicable)* | compte tenu hors de France (§4) |
+| 6 | Néobanque **tenue hors de France** : Revolut IBAN LT / N26 IBAN DE / bunq IBAN NL ou autre IBAN étranger | **à déclarer** *(sauf exemption e-money applicable)* ; IBAN **FR** (succursale française) → **hors champ** — par défaut, sans IBAN connu : **info manquante** (Revolut, N26, bunq depuis le 17/10/2026) | compte tenu hors de France (§4, §11, §14) |
 | 7 | **Wallet auto-hébergé** (Ledger/MetaMask, non custodial) | **à vérifier** *(lecture standard : non déclarable — pas de tiers teneur ; non confirmé par source primaire)* | §9 |
 | 8 | **PEA chez Trade Republic** (enveloppe FR, teneur étranger) | **à vérifier** | non tranché par les sources (§9) |
 | 9 | **Compte-titres ordinaire (CTO)** chez courtier étranger | **à déclarer** *(def. large 344 A I)* — afficher la nuance TR/PEA | §4 + §9 |
@@ -200,15 +200,16 @@ version 2019 « espèces ». Re-vérifier chaque millésime (règle « valider a
 
 | Établissement | Comptes déclarables | Auto-déplier ? | Conf. |
 |---|---|---|---|
-| **DEGIRO / flatexDEGIRO** | **2** : compte-titres (succursale NL, Amsterdam, 3916) + compte espèces **flatex** (Allemagne, IBAN DE, 3916) | **OUI (2)** | haute |
+| **DEGIRO / flatexDEGIRO** | **2** : compte-titres (succursale NL, Amsterdam, 3916) + compte espèces **flatex** (Allemagne, IBAN DE, 3916) ; **+ crypto si souscrit** : conservé par **Tangany GmbH** (Munich) → 3916-bis (§14) | **OUI (2)** ; crypto non | haute |
 | **Revolut** | courant EUR/Épargne (IBAN FR, tenu en France) **NON déclarable** ; titres/Flexible Cash Funds (Revolut Securities Europe UAB, Lituanie, 3916) + crypto (Revolut Digital Assets Europe Ltd, Chypre, 3916-bis) **si détenus** | non (note) | haute |
 | **eToro** | actions/CFD (3916) **et** crypto (3916-bis) = 2 comptes **si les deux** | non (note) | moy. |
 | **Trade Republic** | espèces + titres + **PEA** : succursale française (depuis le 09/01/2025) → **NON déclarables** ; crypto tenu à Berlin (3916-bis, PSAN 029) → **à déclarer** ; clients encore servis entièrement depuis l'Allemagne (IBAN DE) → à déclarer au 3916 | non (note) | haute |
-| **N26** | IBAN **FR** (succursale France, REGAFI 72460) → **NON déclarable** ; IBAN **DE** (Berlin) → **à déclarer**, y compris l'année de la migration ; Espaces = même IBAN (sauf comptes ouverts hors France/Italie/Espagne) | non (note) | haute |
+| **N26** | IBAN **FR** (succursale France, REGAFI 72460) → **NON déclarable** ; IBAN **DE** (Berlin) → **à déclarer**, y compris l'année de la migration ; Espaces = même IBAN (sauf comptes ouverts hors France/Italie/Espagne) ; **crypto (N26 Crypto)** : conservé par **Bitpanda GmbH** (Vienne) → **3916-bis** au nom de Bitpanda, quel que soit l'IBAN (§14) | non (note + `entitesParType`) | haute |
 | **PayPal** | 1 compte ; **dispense** BOFiP §85 (3 conditions) prime — « toujours déclarable car Luxembourg » **réfuté 0-3** | non | haute |
 | **Binance** | 1 compte 3916-bis ; **Binance France SAS = compte FR non déclarable** sinon entité étrangère (radiée AMF 02/07/2026, cf. addendum) | non (note) | moy. |
 | **Coinbase / Kraken** | 1 compte 3916-bis (entité Luxembourg / Kraken : Payward Europe Solutions Limited, Irlande, cf. addendum du 17/10/2026) | non | moy. |
-| **IBKR / bunq / Wise** | 1 compte par défaut ; sous-comptes (cash séparé, jars/IBAN devise) **non sourcés comme distincts** → question ouverte (§9) | non (note) | basse |
+| **IBKR / Wise** | 1 compte par défaut ; sous-comptes (cash séparé, soldes devise) **non sourcés comme distincts** → question ouverte (§9). **IBKR crypto** (si l'offre est ouverte au client) : conservé par **zerohash europe B.V.** (Amsterdam) → 3916-bis (§14) | non (note) | basse (sous-comptes) / haute (crypto) |
+| **bunq** | **1 compte par IBAN** (chaque sous-compte a son propre IBAN) : IBAN **FR** (succursale française, CIB 27633) → **NON déclarable** ; IBAN **NL** ou autre IBAN étranger → **à déclarer**, y compris l'année de clôture (§14) | non (note) | probable fort |
 
 **Sous-comptes NON auto-dépliés** (non fermement sourcés comme distincts) : devises AutoFX (DEGIRO),
 Espaces (N26), vaults (Revolut), soldes multi-devises (Wise), sous-comptes (IBKR/Binance).
@@ -368,3 +369,93 @@ Lu le 17/10/2026.
   5 décembre ; toute qualification du portefeuille fiat Kraken (Payward Ireland Ltd) ;
   toute conséquence déclarative de l'AG → SE chez DEGIRO.
 - **Limite de vérification** : `help.revolut.com` inaccessible en direct (403).
+
+### 14.2 Comptes crypto ouverts via un intermédiaire (N26, DEGIRO, IBKR, Revolut) et bunq — lu le 17/10/2026
+
+**Principe.** Un acteur agréé MiCA pour la seule **réception-transmission d'ordres (RTO)**
+ou la seule **exécution d'ordres** ne tient pas le compte de crypto-actifs. Le compte à
+déclarer au 3916-bis est celui ouvert auprès du **conservateur** : CGI ann. III art. 344 G
+decies, I — « *toute personne […] qui reçoit habituellement en dépôt des crypto-actifs* »
+(§13). Liste blanche AMF des PSCA, lue le 17/10/2026 : N26 = RTO ; flatexDEGIRO =
+exécution ; Interactive Brokers Ireland = RTO ; **aucun des trois n'a la conservation**.
+Lecture raisonnée (application de la lettre du 344 G decies), pas une doctrine publiée.
+
+Conséquence dans le code : champ `entitesParType` (`etablissements.ts`), non auto-déplié,
+lu par `teneurPourType` / `teneurHorsDeFrancePourType` (priorité : gabarit `comptes` du
+même type > `entitesParType` > établissement) et par la fiche à recopier
+(`fiche.ts`). Corrige un défaut en production : une ligne crypto Revolut affichait
+« Revolut / Revolut Bank UAB, Vilnius » au lieu de Revolut Digital Assets Europe Ltd
+(Chypre, §12). Même correction pour le compte-titres Revolut (Revolut Securities Europe
+UAB, Lituanie, §11-§12). Adresses de ces deux entités Revolut **non sourcées** → absentes
+(« à renseigner » sur la fiche).
+
+- **N26 — ÉTABLI.** N26 Crypto (lancé en France le 21/03/2024, communiqué N26) :
+  Documentation Client « Service de RTO sur Crypto-Actifs – N26 Bank SE » v1.1 (juin 2026)
+  et Conditions Particulières France v1 (mai 2026). Art. 12.2 : « *Les ordres sont exécutés
+  par Bitpanda. Bitpanda assure également la conservation des crypto-actifs. Un contrat
+  distinct entre l'Utilisateur et Bitpanda s'applique à cette conservation.* » Partie F
+  §2.2.1 : « *Pour les Utilisateurs Français, la société Bitpanda avec laquelle
+  l'Utilisateur contracte pour le Service de Crypto est Bitpanda GmbH, Stella Klein Löw
+  Weg 17, 1020 Vienne, Autriche.* » §2.1.6 : obligation de déclarer le compte détenu
+  auprès de Bitpanda en Autriche. Bitpanda GmbH sur la liste blanche AMF (FMA, effet
+  14/04/2025). ⇒ compte crypto tenu hors de France, **3916-bis au nom de Bitpanda GmbH**,
+  quel que soit l'IBAN (FR ou DE) du compte courant. Pas de code PSAN retenu.
+  <https://docs.n26.com/legal/04+FR/023+Crypto+Service/fr/01crypto-terms-and-conditions-FR-fr.pdf>
+  <https://docs.n26.com/legal/04+FR/023+Crypto+Service/fr/02crypto-BITPANDA-terms-and-conditions-France-fr.pdf>
+- **DEGIRO — conservateur ÉTABLI, montage français probable fort.** FAQ degiro.fr : les
+  crypto-actifs de votre compte DEGIRO « *sont conservés par Tangany GmbH, un dépositaire
+  allemand de crypto agréé* ». Crypto-Assets Conditions (Irlande) du 22/10/2025, art. 1 et
+  29 (conservation par Tangany, contrat distinct) — **version française des conditions non
+  trouvée** : le montage français est déduit de la FAQ FR + des conditions IE. Lancement
+  France : communiqué EQS du 08/09/2025. Tangany GmbH, Brienner Straße 53, 80333 Munich
+  (mentions légales tangany.com) ; liste blanche AMF (BaFin, conservation, effet
+  12/08/2025). ⇒ **3916-bis au nom de Tangany GmbH**. La dénomination flatexDEGIRO Bank SE
+  (§14 ci-dessus) est inchangée.
+  <https://www.degiro.fr/helpdesk/crypto/detention/comment-mes-cryptomonnaies-sont-elles-conservees-chez-degiro>
+  <https://www.degiro.ie/data/pdf/ie/Crypto-AssetsConditions.pdf> · <https://tangany.com/imprint>
+- **IBKR — montage ÉTABLI, ouverture aux résidents français probable.** Page produit
+  interactivebrokers.ie : « *IB is not party to any transactions in Crypto-assets and does
+  not custody Crypto-assets on your behalf. All Crypto-asset transactions occur on the
+  zerohash europe B.V. exchange. Your positions in Crypto-assets are custodied solely with
+  zerohash and held by zerohash in an account in your name.* » Lancement européen :
+  communiqué IBKR du 31/03/2026. zerohash europe B.V. sur la liste blanche AMF (AFM, effet
+  01/01/2026). Adresse **Herengracht 244-3, 1016 BT Amsterdam** obtenue via le LEI
+  724500G7QSOMFR1GQA47 — **non lue sur le registre néerlandais**. Éligibilité des résidents
+  français non confirmée nommément → la note dit « si l'offre vous est ouverte ».
+  <https://www.interactivebrokers.ie/en/trading/products-crypto-assets.php>
+- **Revolut crypto** : Revolut Digital Assets Europe Ltd (CY), déjà au §12 ;
+  `teneurHorsDeFrance: true` (entité chypriote, aucune succursale française connue pour la
+  crypto). Pas d'adresse sourcée.
+- **bunq — deux branches selon l'IBAN (probable fort ; décision du fondateur).** API
+  REGAFI : id 90337, « Succursale passeport », CIB **27633**, enregistrée le 05/01/2021,
+  SIREN **893 970 970**, parente bunq B.V. (id 72990). Aide bunq : « *the app automatically
+  connects you to your local branch, so you get a local IBAN (BE, DE, FR, ES, IE, or IT)
+  right from the start* » ; annonce « French IBANs, hello France ». Chaque sous-compte a son
+  propre IBAN ; IBAN étrangers possibles via les « International Bank Accounts ». ⇒ IBAN FR
+  = compte tenu par la succursale française, **non déclarable** ; IBAN NL ou autre IBAN
+  étranger = **à déclarer**, même vide, y compris l'année de clôture. Code :
+  `teneurHorsDeFrance` passe de `true` à `undefined` (modèle N26) → verdict par défaut
+  **info manquante** avec les deux branches. **Limite** : aucune clause des CG bunq lue ne
+  dit expressément que le compte à IBAN FR est tenu par la succursale ; c'est déduit du
+  REGAFI et des pages d'aide. **Adresse de bunq B.V.** : mentions légales bunq FR —
+  **Basisweg 32, 1043 AP Amsterdam** ; le REGAFI et l'ancienne fiche donnent **Naritaweg
+  131-133** : divergence, la fiche retient les mentions légales. SIRENE : l'établissement
+  du 27 avenue de l'Opéra est fermé au 01/06/2025 ; établissement actif c/o Patchwork SAS,
+  26 rue de Montholon, 75009 Paris — **aucune adresse de succursale n'est affichée** sur
+  le site.
+  <https://www.bunq.com/fr-fr/about/imprint>
+  <https://help.bunq.com/en-fr/articles/what-kind-of-iban-will-i-get-with-bunq>
+  <https://help.bunq.com/articles/french-ibans-hello-france>
+- **Limites de vérification** : interactivebrokers.ie en 403 via WebFetch (lu par
+  téléchargement direct) ; FAQ IBKR rendue en JavaScript, non lue ; version FR des
+  conditions crypto DEGIRO non trouvée ; adresse zerohash non lue au registre NL ; cerfa
+  3916-bis **non relu** pour d'éventuels codes PSAN de Bitpanda, Tangany ou zerohash
+  (aucun code affiché).
+- **À NE PAS reprendre** : « N26 Crypto fourni par Bitpanda Asset Management GmbH
+  (Francfort) » (le contrat France désigne Bitpanda GmbH, Vienne) ; « compte N26 IBAN DE →
+  3916-bis » (l'IBAN DE relève du 3916 ; le 3916-bis vise le compte Bitpanda) ; l'agrément
+  MiCA d'un intermédiaire comme preuve qu'il tient le compte ; « IBKR crypto via Paxos »
+  pour Interactive Brokers Ireland (concerne IB LLC / IB UK) ; le staking ETH chez IBKR
+  pour les Européens (IB LLC seulement) ; « bunq ne propose pas d'IBAN FR » ; « 27 avenue
+  de l'Opéra » comme adresse actuelle de la succursale bunq ; tout code PSAN pour
+  Bitpanda, Tangany ou zerohash ; la date ESMA « 14/05/2025 » pour N26.

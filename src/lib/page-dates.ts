@@ -48,7 +48,8 @@ export const DATES_PAGES: Record<string, DatesPage> = {
 
   // Hub des fiches établissement. Entrée explicite nécessaire : la règle par
   // préfixe ci-dessous ne couvre que les fiches filles, pas l'index lui-même.
-  "/declarer-compte/": { publiee: "2026-08-24", modifiee: "2026-09-18" },
+  // 17/10/2026 : le verdict de bunq affiché sur le hub passe de « à déclarer » à « selon l'IBAN ».
+  "/declarer-compte/": { publiee: "2026-08-24", modifiee: "2026-10-17" },
 
   // Fiches révisées individuellement (le match exact prime sur la règle par préfixe) :
   // radiation AMF de Binance France (02/07/2026), agrément bancaire FR de Revolut (10/08/2026) +
@@ -59,13 +60,18 @@ export const DATES_PAGES: Record<string, DatesPage> = {
   "/declarer-compte/binance/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
   "/declarer-compte/revolut/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
   "/declarer-compte/trade-republic/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
-  "/declarer-compte/n26/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
+  "/declarer-compte/n26/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
   "/declarer-compte/paypal/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
   "/declarer-compte/wise/": { publiee: "2026-06-26", modifiee: "2026-09-18" },
   // Veille du 17/10/2026 : date de bascule Revolut (ci-dessus), DEGIRO AG → SE, Kraken (entité
   // MiCA Payward Europe Solutions Ltd, recopiée sur le formulaire) : un fait change sur chaque fiche.
   "/declarer-compte/degiro/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
   "/declarer-compte/kraken/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
+  // Veille du 17/10/2026 (suite) : comptes crypto ouverts via un intermédiaire — N26 (Bitpanda
+  // GmbH, ci-dessus), DEGIRO (Tangany GmbH), IBKR (zerohash europe B.V.) — et bunq à deux
+  // branches selon l'IBAN (verdict par défaut et adresse changés) : un fait change sur chaque fiche.
+  "/declarer-compte/ibkr/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
+  "/declarer-compte/bunq/": { publiee: "2026-06-26", modifiee: "2026-10-17" },
 
   // Divers
   "/le-projet/": { publiee: "2026-07-01", modifiee: "2026-07-01" },
