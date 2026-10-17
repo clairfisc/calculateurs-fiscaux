@@ -1,7 +1,7 @@
 name: Deploy
 
 # Déploiement du site statique (dist/) vers l'hébergement OVH par SFTP (port 22).
-# Déclenché à chaque push sur main, après build + tests.
+# Déclenché à chaque push sur main, après les contrôles du CI (citations, types, tests) + build.
 #
 # Secrets requis (Settings → Secrets and variables → Actions) :
 #   FTP_SERVER   hôte SFTP (ex. ssh.clusterXXX.hosting.ovh.net)
@@ -33,6 +33,15 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Mêmes contrôles que ci.yml : les deux workflows tournent en parallèle et
+      # celui-ci ne l'attend pas — un commit qui cassait le CI partait donc quand
+      # même en production (constaté le 17/10/2026 sur check:citations).
+      - name: Citation hygiene
+        run: npm run check:citations
+
+      - name: Type check
+        run: npm run astro check
 
       - name: Test
         run: npm run test
