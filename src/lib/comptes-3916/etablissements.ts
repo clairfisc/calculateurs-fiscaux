@@ -108,7 +108,6 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
   {
     id: "trade-republic",
     designation: "Trade Republic Bank GmbH",
-    nomCourt: "Trade Republic",
     pays: "DE",
     url: "https://traderepublic.com",
     typeParDefaut: "titres_cto",
@@ -130,9 +129,6 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
       "• Compte crypto : il reste fourni par l'entité allemande Trade Republic Bank GmbH en libre prestation de services (agrément MiCA BaFin, liste blanche AMF, depuis le 28 avril 2025), la conservation des crypto-actifs étant assurée à Berlin — compte tenu hors de France, À DÉCLARER au 3916-bis (code PSAN 029), quel que soit l'IBAN du compte espèces. " +
       "• Certains clients sont restés entièrement servis depuis l'Allemagne, sur une base transfrontalière : si votre compte espèces a encore un IBAN allemand (DE), ou en a eu un avant migration, ce sont ces comptes-là (espèces ET titres) qui sont à déclarer au 3916, y compris au titre de l'année de leur clôture. " +
       "Adresse à confirmer sur votre relevé.",
-    descriptionSeo:
-      "Espèces, titres et PEA tenus par la succursale française depuis janvier 2025 : non déclarables. " +
-      "À déclarer : le compte crypto (3916-bis) et tout IBAN allemand.",
   },
 
   // ── Néobanques / banques étrangères (3916) ──
@@ -172,7 +168,6 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
   {
     id: "n26",
     designation: "N26 Bank SE",
-    nomCourt: "N26",
     pays: "DE",
     url: "https://n26.com",
     typeParDefaut: "neobanque",
@@ -190,9 +185,6 @@ export const ETABLISSEMENTS: readonly Etablissement[] = [
       "• IBAN allemand (DE) : compte tenu par N26 Bank SE à Berlin, à déclarer au 3916, même vide — y compris au titre de l'année de la migration vers l'IBAN FR, puisque le compte allemand a existé pendant une partie de l'année. " +
       "Les « Espaces » : la fonction d'IBAN dédié n'est pas proposée aux comptes ouverts en France (N26 en exclut nommément la France, l'Italie et l'Espagne) — vos Espaces partagent donc l'IBAN principal, cela reste un seul compte. " +
       "Ex-N26 Bank AG (forme changée en 2025).",
-    descriptionSeo:
-      "IBAN français (succursale FR) : non déclarable. IBAN allemand : à déclarer au 3916, même vide — " +
-      "et l'ancien compte DE se déclare l'année de la migration.",
   },
   { id: "bunq", designation: "bunq B.V.", pays: "NL", url: "https://www.bunq.com", typeParDefaut: "neobanque", formulaireParDefaut: "3916", teneurHorsDeFrance: true, adresse: "Naritaweg 131-133, 1043 BS Amsterdam, Pays-Bas" },
   { id: "wise", designation: "Wise Europe SA", pays: "BE", url: "https://wise.com", typeParDefaut: "neobanque", typesCompatibles: ["neobanque", "paiement_emoney"], formulaireParDefaut: "3916", teneurHorsDeFrance: true, adresse: "Rue du Trône 100, 1050 Bruxelles, Belgique", note: "Établissement de monnaie électronique établi en Belgique — compte tenu hors de France : à déclarer au 3916. La dispense du BOFiP §85 suppose un compte adossé à un compte ouvert en France, ce qui n'est pas le montage Wise (IBAN belge autonome, ouverture ne supposant la détention d'aucun compte français) : en pratique le compte est à déclarer au 3916.", descriptionSeo: "Wise (Belgique) : compte tenu hors de France, à déclarer au 3916. La dispense d'encaissements en ligne ne joue pas : aucun compte français adossé." },
