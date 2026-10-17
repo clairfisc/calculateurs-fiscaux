@@ -204,12 +204,18 @@ export default function SimulateurPurgeMv() {
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4">
       <header>
         <h1 className="text-2xl font-bold text-slate-900">
-          Purge de moins-values : simuler l'impact avant le 31 décembre
+          Vendre en moins-value avant le 31 décembre : l'effet sur vos plus-values de l'année
         </h1>
         <p className="mt-1 text-sm text-slate-600">
-          Visualisez la différence d'impôt entre réaliser ou non vos moins-values latentes avant la
-          fin de l'année, pour les imputer sur vos plus-values. Comparatif chiffré, calculé localement
-          dans votre navigateur (aucune donnée collectée).
+          Une moins-value réalisée avant le 31 décembre s'impute sur les plus-values de même nature
+          de la même année ; l'excédent reste reportable 10 ans. Le simulateur compare les deux
+          scénarios (réaliser ou non vos moins-values latentes) et chiffre la différence d'impôt et
+          de prélèvements sociaux, calculée localement dans votre navigateur (aucune donnée
+          collectée). Pour le côté déclaratif, voir la{" "}
+          <a className="underline" href="/reporter-ses-moins-values-bourse/">
+            case 3VH et le report des moins-values
+          </a>
+          .
         </p>
       </header>
 

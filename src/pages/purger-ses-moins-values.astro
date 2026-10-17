@@ -3,9 +3,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SimulateurPurgeMv from "../components/simulateur-arbitrage/SimulateurPurgeMv.tsx";
 
 const title =
-  "Purge de moins-values : simulateur avant le 31 décembre (impôt) — gratuit";
+  "Vendre en moins-value avant le 31 décembre : simulateur";
 const description =
-  "Faut-il vendre à perte avant le 31 décembre ? Simulez gratuitement l'impact fiscal de réaliser vos moins-values latentes pour effacer vos plus-values de l'année : différence d'impôt + prélèvements sociaux et report sur 10 ans. Calcul 100 % local, open source, sans compte ni tracker.";
+  "Simulez l'effet d'une moins-value réalisée avant le 31 décembre sur vos plus-values de l'année : impôt, prélèvements sociaux et report sur 10 ans.";
 const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
 ---
 
@@ -90,8 +90,8 @@ const repoUrl = "https://github.com/clairfisc/calculateurs-fiscaux";
             avant de vendre recalcule le PMP à la baisse et ampute la moins-value dégagée. Exemple :
             100 titres à un PMP de 100 €, rachat de 100 titres à 60 € → nouveau PMP de 80 € → une
             vente à 60 € ne dégage plus que 2 000 € de moins-value, au lieu de 4 000 € si l'on avait
-            vendu avant de racheter. D'où la règle de prudence : <strong>vendez d'abord, rachetez
-            ensuite</strong> — par précaution, pas le même jour, l'ordre des opérations
+            vendu avant de racheter. Seule une <strong>vente antérieure au rachat</strong> dégage
+            la moins-value entière — et sur des jours distincts, l'ordre des opérations
             intra-journalières n'étant tranché par aucune doctrine connue. Le PMP
             <strong> peut être calculé de manière autonome par chaque intermédiaire</strong>, compte
             par compte (tolérance administrative, BOFiP BOI-RPPM-PVBMI-20-10-20-40, § 40) : répartir
